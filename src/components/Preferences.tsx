@@ -32,7 +32,6 @@ const defaultRenderPreferences: PreferencesProps["renderPreferences"] = ({
   preferences,
   onChange,
   loading,
-  error,
 }) => {
   if (preferences)
     return (

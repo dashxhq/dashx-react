@@ -13,10 +13,10 @@ function DashXProvider({
   const dashX = React.useMemo(
     () =>
       DashX({
-        publicKey: publicKey || process.env.REACT_APP_DASHX_PUBLIC_KEY!,
-        baseUri: baseUri || process.env.REACT_APP_DASHX_BASE_URI,
+        publicKey: publicKey || import.meta.env.REACT_APP_DASHX_PUBLIC_KEY!,
+        baseUri: baseUri || import.meta.env.REACT_APP_DASHX_BASE_URI,
         targetEnvironment:
-          targetEnvironment || process.env.REACT_APP_TARGET_ENVIRONMENT,
+          targetEnvironment || import.meta.env.REACT_APP_TARGET_ENVIRONMENT,
       }),
     [publicKey, baseUri, targetEnvironment]
   );
