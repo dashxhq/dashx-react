@@ -9,11 +9,11 @@ function DashXProvider({
   publicKey,
   baseUri,
   targetEnvironment,
-}: React.PropsWithChildren<ClientParams>) {
+}: React.PropsWithChildren<Partial<ClientParams>>) {
   const dashX = React.useMemo(
     () =>
       DashX({
-        publicKey: publicKey || import.meta.env.REACT_APP_DASHX_PUBLIC_KEY!,
+        publicKey: publicKey || import.meta.env.REACT_APP_DASHX_PUBLIC_KEY,
         baseUri: baseUri || import.meta.env.REACT_APP_DASHX_BASE_URI,
         targetEnvironment:
           targetEnvironment || import.meta.env.REACT_APP_TARGET_ENVIRONMENT,
