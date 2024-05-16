@@ -4,6 +4,7 @@
   "version": "0.0.3",
   "description": "DashX SDK for the React",
   "license": "MIT",
+  "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
@@ -44,6 +45,6 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@dashx/browser": "^0.1.29"
+    "@dashx/browser": "../dashx-browser"
   }
 }

@@ -1,2 +1,1 @@
-export { default } from "./DashXProvider";
-export * from "./DashXProvider";
+export { default as DashXProvider } from "./DashXProvider";
