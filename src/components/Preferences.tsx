@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 
 import Preference from "./Preference";
-import { useDashXProvider } from "../providers/DashXProvider";
+import useDashXProvider from "../hooks/use-dashx-provider";
 
 interface StoredPreference {
   enabled?: boolean;
