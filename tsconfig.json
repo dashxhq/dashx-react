@@ -26,6 +26,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "heroicons-react-solid.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

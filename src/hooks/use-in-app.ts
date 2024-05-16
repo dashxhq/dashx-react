@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react"
-import type { InAppNotificationRecipient, Client } from '@dashx/browser'
+import type { Client, InAppNotificationRecipient } from '@dashx/browser'
 
 import useDashXProvider from "./use-dashx-provider"
 
 type UseInAppHookResponse = {
+  client: Client,
   notifications: InAppNotificationRecipient[],
-  trackNotification: typeof Client.prototype.trackNotification
 }
 
 const useInApp = (): UseInAppHookResponse => {
-  const dashX = useDashXProvider()
+  let dashX = useDashXProvider()
   const [ notifications, setNotifications ] = useState<InAppNotificationRecipient[]>([])
 
   useEffect(() => {
-      dashX.listInAppNotifications()
-        .then((response) => setNotifications(response))
-        .catch((err)=> console.error(err))
+    dashX.listInAppNotifications()
+      .then((response) => setNotifications(response))
+      .catch((err)=> console.error(err))
   }, [dashX]);
 
-  return { notifications, trackNotification: dashX.trackNotification }
+  return { client: dashX, notifications }
 }
 
 export default useInApp
