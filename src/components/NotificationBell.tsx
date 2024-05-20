@@ -15,7 +15,8 @@ const NotificationBell = () => {
     markNotificationAsRead,
     markNotificationAsUnread,
     notifications,
-    unreadNotificationsCount
+    unreadNotificationsCount,
+    refetchNotifications
   } = useInApp()
 
   return (
@@ -32,16 +33,16 @@ const NotificationBell = () => {
           ref={setPopperElement}
           style={styles.popper}
           {...attributes.popper}
-          className="bg-gray-800 rounded-xl text-white cursor-default overflow-hidden"
+          className="rounded-xl text-white cursor-default overflow-hidden"
         >
-          <div className="flex justify-between items-center border-y-2 border-white px-4 py-2">
+          <div className="flex justify-between items-center border-y-2 border-white px-4 py-2 bg-gray-900 text-white">
             <div className="flex items-center">
               <p>Notifications</p>
               {!!unreadNotificationsCount && <p className="pl-2 text-red-600">{unreadNotificationsCount}</p>}
             </div>
             <XMarkIcon height={20} width={20} className="cursor-pointer" onClick={() =>  setIsAppInboxOpen(false)} />
           </div>
-          <div className="h-96 w-96 overflow-scroll">
+          <div className="bg-gray-700 h-96 w-96 overflow-scroll">
             {notifications.map((notification) => {
               let sentAt = new Date(notification.sentAt).toLocaleString()
 
@@ -59,7 +60,7 @@ const NotificationBell = () => {
               )
             })}
           </div>
-          <p className="bold px-4 py-2">Powered by DashX</p>
+          <p className="bold px-4 py-2 bg-gray-900">Powered by DashX</p>
         </div>
       )}
     </React.Fragment>
