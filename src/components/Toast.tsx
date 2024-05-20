@@ -7,7 +7,9 @@ type ToastProps = ToasterProps
 const Toast = (props: ToastProps) => (
   <React.Fragment>
     <Toaster
-      position='top-right'
+      toastOptions={{
+        className: 'bg-gray-900 text-white'
+      }}
       {...props}
     />
   </React.Fragment>
