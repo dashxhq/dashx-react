@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
 import toast from 'react-hot-toast'
 import useWebSocket from 'react-use-websocket'
-import { WebsocketMessageType } from '@dashx/browser'
-import type { InAppNotification, WebsocketMessage } from '@dashx/browser'
+import { WebsocketMessage } from '@dashx/browser'
+import type { InAppNotifications, WebsocketMessageType } from '@dashx/browser'
 
 import useDashXProvider from "./use-dashx-provider"
 
 type UseInAppHookResponse = {
-  notifications: InAppNotification[],
+  notifications: InAppNotifications,
   unreadNotificationsCount: number | null,
-  markNotificationAsRead: (id: string) => Promise<Response>,
-  markNotificationAsUnread: (id: string) => Promise<Response>,
+  fetchInAppNotifications: () => void,
+  markNotificationAsRead: (id: string) => Promise<any>,
+  markNotificationAsUnread: (id: string) => Promise<any>,
 }
 
 const DASHX_CLOSE_CODES = [
@@ -22,23 +23,28 @@ const DASHX_CLOSE_CODES = [
 const useInApp = (): UseInAppHookResponse => {
   let dashX = useDashXProvider()
   const [connectWebsocket, setConnectWebsocket] = useState(false)
-  const [notifications, setNotifications] = useState<InAppNotification[]>([])
+  const [notifications, setNotifications] = useState<InAppNotifications>([])
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number | null>(null)
-  const [inAppChannel, setInAppChannel] = useState<string | null>(null)
 
   const markNotificationAsRead = (id: string) => dashX.trackNotification({ id, status: 'READ' })
 
-  const markNotificationAsUnread = async (id: string): Promise<Response> => dashX.trackNotification({ id, status: 'UNREAD' })
+  const markNotificationAsUnread = async (id: string) => dashX.trackNotification({ id, status: 'UNREAD' })
 
-  let { sendJsonMessage } = useWebSocket('ws://localhost:8082/websocket', {
+  const fetchInAppNotifications = () => dashX.fetchInAppNotifications()
+
+  useEffect(() =>{
+    dashX.watchFetchInAppNotifications(setNotifications)
+    dashX.watchFetchInAppNotificationsAggregate(setUnreadNotificationsCount)
+  }, [])
+
+  let { sendJsonMessage } = useWebSocket('ws://localhost:9999', {
     queryParams: {
-      'publicKey': dashX.publicKey,
+      publicKey: dashX.publicKey,
       ...(dashX.identityToken && { 'identityToken': dashX.identityToken }),
       ...(dashX.targetEnvironment && { 'targetEnvironment': dashX.targetEnvironment })
     },
     shouldReconnect: (closeEvent) => {
       if (DASHX_CLOSE_CODES.includes(closeEvent.code)) {
-        console.error(closeEvent.reason)
         return false
       }
 
@@ -46,32 +52,27 @@ const useInApp = (): UseInAppHookResponse => {
     },
     onError: errorEvent => console.error({ errorEvent }),
     onClose: closeEvent => console.log({ closeEvent }),
-    onMessage: (messageEvent) => {
-      // @ts-ignore
-      let message: WebsocketMessage = {}
-      try {
-        message = JSON.parse(messageEvent.data)
-      } catch(e) {
-        console.error(e)
-      }
+    onMessage: async (messageEvent) => {
+      let message:WebsocketMessageType = JSON.parse(messageEvent.data)
 
       switch (message?.type) {
-        case WebsocketMessageType.SUBSCRIBE:
+        case WebsocketMessage.SUBSCRIBE:
           break;
-        case WebsocketMessageType.IN_APP_NOTIFICATION:
-          dashX.trackNotification({ id: message.data.notificationId, status: 'DELIVERED' })
-          toast(message.data.body)
+        case WebsocketMessage.IN_APP_NOTIFICATION:
+          dashX.trackNotification({ id: message.data.id, status: 'DELIVERED' })
+          dashX.addInAppNotificationToCache(message.data)
+          toast(message.data.renderedContent.body)
           break;
-        case WebsocketMessageType.SUBSCRIPTION_SUCCEEDED:
-          setInAppChannel(message.data.channel)
+        case WebsocketMessage.SUBSCRIPTION_SUCCEEDED:
+          fetchInAppNotifications()
           break;
         default:
-          console.error('Unknown message type');
+          throw new Error(`Unknown message type ${message}`);
       }
     },
     onOpen: (_) => {
-      let subscriptionMessage: WebsocketMessage = {
-        type: WebsocketMessageType.SUBSCRIBE,
+      let subscriptionMessage: WebsocketMessageType = {
+        type: WebsocketMessage.SUBSCRIBE,
         data: {
           accountUid: dashX.accountUid! // accountUid should exist by this point
         }
@@ -85,20 +86,13 @@ const useInApp = (): UseInAppHookResponse => {
     setConnectWebsocket(true) // Ensure the webook connection request is made ONLY once
   }, [])
 
-
-  useEffect(() => {
-    if (inAppChannel) {
-      dashX.inAppNotificationsAggregate(inAppChannel)
-        .then((response) => setUnreadNotificationsCount(response.notificationsAggregate.count))
-        .catch((err)=> console.error(err))
-
-      dashX.fetchInAppNotifications(inAppChannel)
-        .then((response) => setNotifications(response.notifications))
-        .catch((err)=> console.error(err))
-    }
-  }, [inAppChannel]);
-
-  return { notifications, unreadNotificationsCount, markNotificationAsRead, markNotificationAsUnread }
+  return {
+    notifications,
+    unreadNotificationsCount,
+    fetchInAppNotifications,
+    markNotificationAsRead,
+    markNotificationAsUnread
+  }
 }
 
 export default useInApp
