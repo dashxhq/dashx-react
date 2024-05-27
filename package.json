@@ -1,7 +1,7 @@
 {
   "name": "@dashx/react",
   "title": "dashx-react",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "DashX SDK for the React",
   "license": "MIT",
   "main": "./dist/index.umd.js",
