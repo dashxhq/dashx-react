@@ -257,10 +257,10 @@
     "@babel/helper-validator-identifier" "^7.24.6"
     to-fast-properties "^2.0.0"
 
-"@dashx/browser@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@dashx/browser/-/browser-0.2.0.tgz#4ac6805f591b65159a81d8ab736173eda57df261"
-  integrity sha512-m0fXekmQc1J7ya7qp61YCnzAxelhqUamyGtL/PCjABY34ENVmP7s3mP73+KM5ypeWddWX95LmfVrr84iAbmKaw==
+"@dashx/browser@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@dashx/browser/-/browser-0.2.1.tgz#62b4ec1ddfe055ec13052612715478a03bbd7cea"
+  integrity sha512-DV0tLvmMZpsGzgY9+wgbizWWA1z7cxcOKc2L5j7I/wz5zha1NhD/Hxtdz7IRfCdQZAo6JCYdgR+6exmcrIx3LQ==
   dependencies:
     "@apollo/client" "^3.10.4"
     "@graphql-typed-document-node/core" "^3.2.0"

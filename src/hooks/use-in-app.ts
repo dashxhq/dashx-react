@@ -37,7 +37,7 @@ const useInApp = (): UseInAppHookResponse => {
     dashX.watchFetchInAppNotificationsAggregate(setUnreadNotificationsCount)
   }, [])
 
-  let { sendJsonMessage } = useWebSocket('ws://localhost:9999', {
+  let { sendJsonMessage } = useWebSocket(dashX.realtimeBaseUri, {
     queryParams: {
       publicKey: dashX.publicKey,
       ...(dashX.identityToken && { 'identityToken': dashX.identityToken }),

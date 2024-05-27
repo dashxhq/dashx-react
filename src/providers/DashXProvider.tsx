@@ -8,6 +8,7 @@ function DashXProvider({
   children,
   publicKey,
   baseUri,
+  realtimeBaseUri,
   targetEnvironment,
 }: React.PropsWithChildren<ClientParams>) {
   const dashX = React.useMemo(
@@ -15,6 +16,7 @@ function DashXProvider({
       DashX({
         publicKey: publicKey,
         baseUri: baseUri,
+        realtimeBaseUri: realtimeBaseUri,
         targetEnvironment: targetEnvironment,
       }),
     [publicKey, baseUri, targetEnvironment]
