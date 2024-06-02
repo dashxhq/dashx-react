@@ -1,24 +1,49 @@
-import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { filterDOMProps } from '@react-aria/utils';
+import { useFocusableRef } from '@react-spectrum/utils';
+import type { FocusableRef } from '@react-types/shared';
+import React, { forwardRef, isValidElement, type ElementType } from 'react';
+import {
+  mergeProps,
+  useButton,
+  useFocusRing,
+  useHover,
+  type AriaButtonProps,
+  type HoverEvents,
+} from 'react-aria';
 
-import { cn } from '../utils/cn.js';
+export interface ButtonProps extends AriaButtonProps, HoverEvents {
+  asChild?: boolean;
+}
 
-const Button = React.forwardRef<HTMLButtonElement, React.HTMLAttributes<HTMLButtonElement>>(
-  (props, ref) => {
-    const { className } = props;
+function _Button(props: ButtonProps, ref: FocusableRef<HTMLButtonElement>) {
+  let elementType = props.asChild
+    ? (isValidElement(props.children) && (props.children?.type as ElementType)) || 'button'
+    : 'button';
+  let domRef = useFocusableRef(ref);
+  let { buttonProps, isPressed } = useButton({ ...props, elementType }, domRef);
+  let { focusProps, isFocused, isFocusVisible } = useFocusRing(props);
+  let { hoverProps, isHovered } = useHover(props);
 
-    return (
-      <button
-        className={cn(
-          'hover:bg-accent-800 bg-accent-700 shadow-2 hover:shadow-6 rounded-3 px-4 py-2 text-white transition-all sm:px-8 sm:py-3',
-          className,
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
+  let Comp = props.asChild ? Slot : 'button';
 
-Button.displayName = 'Button';
+  return (
+    <Comp
+      {...filterDOMProps(props)}
+      {...mergeProps(buttonProps, focusProps, hoverProps)}
+      ref={domRef}
+      data-disabled={props.isDisabled || undefined}
+      data-pressed={isPressed || undefined}
+      data-hovered={isHovered || undefined}
+      data-focused={isFocused || undefined}
+      data-focus-visible={isFocusVisible || undefined}
+      className="bg-accent"
+    >
+      {props.children}
+    </Comp>
+  );
+}
+
+const Button = forwardRef(_Button);
 
 export { Button };

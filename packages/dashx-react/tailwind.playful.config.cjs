@@ -3,7 +3,10 @@ const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{tsx,jsx,js}"],
-  important: '.dx-ui',
+  important: '.dr',
+  plugins: [
+    require('tailwindcss-react-aria-components')
+  ],
   theme: {
     extend: {
       colors: {

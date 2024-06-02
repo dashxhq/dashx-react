@@ -1,6 +1,5 @@
-const colors = require('tailwindcss/colors')
-
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   // TODO: Do something about preflight
   // As a library we shouldn't be applying css reset globally
@@ -8,11 +7,16 @@ module.exports = {
   //   preflight: false,
   // },
   content: ["./src/**/*.{tsx,jsx,js}"],
-  important: '.dx-ui',
+  important: '.dr',
+  plugins: [
+    require('tailwindcss-react-aria-components')
+  ],
   theme: {
     extend: {
       colors: {
-        "accent": colors.zinc
+        "accent": {
+          DEFAULT: '#58efb1'
+        }
       },
       boxShadow: {
         '0': '0 0 #0000',

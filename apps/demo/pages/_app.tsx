@@ -1,7 +1,7 @@
-import { Flex } from '../../../packages/dashx-react/dist/cjs';
+import { Flex } from '@dashx/react';
 import type { AppProps } from 'next/app';
 
-import '../global.css';
+import '@dashx/react/styles.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

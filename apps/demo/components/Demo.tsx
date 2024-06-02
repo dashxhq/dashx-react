@@ -1,16 +1,8 @@
-import {
-  Button,
-  Card,
-  CardMedia,
-  Flex,
-  Header,
-  IconButton,
-  Text,
-} from '../../../packages/dashx-react/dist/cjs';
+import { Button, Card, CardMedia, Flex, Header, IconButton, Text } from '@dashx/react';
 
 function Demo() {
   return (
-    <div className="dx-ui mx-auto max-w-[480px]">
+    <div className="dr mx-auto max-w-[480px]">
       <Card>
         <CardMedia>
           <img src="https://picsum.photos/200/265" alt="media" />

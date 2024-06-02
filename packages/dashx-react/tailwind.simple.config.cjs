@@ -8,7 +8,10 @@ module.exports = {
   //   preflight: false,
   // },
   content: ["./src/**/*.{tsx,jsx,js}"],
-  important: '.dx-ui',
+  important: '.dr',
+  plugins: [
+    require('tailwindcss-react-aria-components')
+  ],
   theme: {
     extend: {
       colors: {
