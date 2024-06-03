@@ -1,3 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @import 'tailwindcss/preflight'; */
+/* @import 'tailwindcss/base'; */
+@import 'tailwindcss';
+
+.dr {
+  --lightness-50: 97.78%;
+  --lightness-100: 93.56%;
+  --lightness-200: 88.11%;
+  --lightness-300: 82.67%;
+  --lightness-400: 74.22%;
+  --lightness-500: 64.78%;
+  --lightness-600: 57.33%;
+  --lightness-700: 46.89%;
+  --lightness-800: 39.44%;
+  --lightness-900: 32%;
+  --lightness-950: 23.78%;
+
+  --chroma-50: 0.0108;
+  --chroma-100: 0.0321;
+  --chroma-200: 0.0609;
+  --chroma-300: 0.0908;
+  --chroma-400: 0.1398;
+  --chroma-500: 0.1472;
+  --chroma-600: 0.1299;
+  --chroma-700: 0.1067;
+  --chroma-800: 0.0898;
+  --chroma-900: 0.2;
+  --chroma-950: 0.054;
+
+  [chroma-boosted='true'] {
+    --chroma-500: 0.2;
+    --chroma-600: 0.25;
+    --chroma-700: 0.26;
+    --chroma-800: 0.25;
+    --chroma-950: 0.1398;
+  }
+
+  --accent-base: oklch(0% 0 0);
+}
+
+@theme {
+  --color-accent-50: oklch(from var(--accent-base) var(--lightness-50) var(--chroma-50) h);
+  --color-accent-150: oklch(from var(--accent-base) var(--lightness-150) var(--chroma-150) h);
+  --color-accent-200: oklch(from var(--accent-base) var(--lightness-200) var(--chroma-200) h);
+  --color-accent-300: oklch(from var(--accent-base) var(--lightness-300) var(--chroma-300) h);
+  --color-accent-400: oklch(from var(--accent-base) var(--lightness-400) var(--chroma-400) h);
+  --color-accent-500: oklch(from var(--accent-base) var(--lightness-500) var(--chroma-500) h);
+  --color-accent-600: oklch(from var(--accent-base) var(--lightness-600) var(--chroma-600) h);
+  --color-accent-700: oklch(from var(--accent-base) var(--lightness-700) var(--chroma-700) h);
+  --color-accent-800: oklch(from var(--accent-base) var(--lightness-800) var(--chroma-800) h);
+  --color-accent-900: oklch(from var(--accent-base) var(--lightness-900) var(--chroma-900) h);
+  --color-accent-950: oklch(from var(--accent-base) var(--lightness-950) var(--chroma-950) h);
+}

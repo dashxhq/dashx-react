@@ -1,16 +1,12 @@
 import { Slot } from '@radix-ui/react-slot';
 import { filterDOMProps } from '@react-aria/utils';
 import { useFocusableRef } from '@react-spectrum/utils';
+import React, { forwardRef, isValidElement } from 'react';
+import { mergeProps, useButton, useFocusRing, useHover } from 'react-aria';
+
+import type { ElementType } from 'react';
+import type { AriaButtonProps, HoverEvents } from 'react-aria';
 import type { FocusableRef } from '@react-types/shared';
-import React, { forwardRef, isValidElement, type ElementType } from 'react';
-import {
-  mergeProps,
-  useButton,
-  useFocusRing,
-  useHover,
-  type AriaButtonProps,
-  type HoverEvents,
-} from 'react-aria';
 
 export interface ButtonProps extends AriaButtonProps, HoverEvents {
   asChild?: boolean;
@@ -37,7 +33,7 @@ function _Button(props: ButtonProps, ref: FocusableRef<HTMLButtonElement>) {
       data-hovered={isHovered || undefined}
       data-focused={isFocused || undefined}
       data-focus-visible={isFocusVisible || undefined}
-      className="bg-accent"
+      className="bg-accent-500 text-gray-100"
     >
       {props.children}
     </Comp>
