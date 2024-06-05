@@ -16,8 +16,16 @@ const flexVariants = cva(['flex'], {
       2: ['gap-2'],
       3: ['gap-3'],
       4: ['gap-4'],
-      5: ['gap-5'],
       6: ['gap-6'],
+      8: ['gap-8'],
+      10: ['gap-10'],
+      12: ['gap-12'],
+      14: ['gap-14'],
+      16: ['gap-16'],
+      18: ['gap-18'],
+      24: ['gap-24'],
+      28: ['gap-28'],
+      32: ['gap-32'],
     },
     justify: {
       center: ['justify-center'],
@@ -29,13 +37,13 @@ type FlexProps = VariantProps<typeof flexVariants>;
 
 const Flex = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & FlexProps>(
   (props, ref) => {
-    const { className, direction, gap, justify } = props;
+    const { className, direction, gap, justify, ...rest } = props;
 
     return (
       <div
         className={cn(flexVariants({ direction, gap, justify }), className)}
         ref={ref}
-        {...props}
+        {...rest}
       />
     );
   },
