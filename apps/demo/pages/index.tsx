@@ -17,22 +17,68 @@ function Index() {
         data-chroma-boosted="true"
         style={{
           '--accent-base': baseColor,
+          '--density': 1,
+          '--roundness': 1.25,
         }}
       >
         <Flex justify="center">
-          <input type="color" value={baseColor} onChange={(e) => setBaseColor(e.target.value)} />
+          <input
+            type="color"
+            value={baseColor}
+            onChange={(e) => {
+              setBaseColor(e.target.value);
+            }}
+          />
         </Flex>
         <Flex>
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
+              className="test"
               style={{
                 display: 'inline-block',
-                height: 50,
-                width: 50,
+                height: 80,
+                width: 80,
                 backgroundColor: `var(--color-accent-${color})`,
+                color: 'var(--color-white-50)',
               }}
-            ></div>
+            >
+              {color}
+            </div>
+          ))}
+        </Flex>
+        <Flex>
+          {COLOR_SCALE.map((color) => (
+            <div
+              key={color}
+              className="test"
+              style={{
+                display: 'inline-block',
+                height: 80,
+                width: 80,
+                backgroundColor: `var(--color-gray-${color})`,
+                color: 'var(--color-white-50)',
+              }}
+            >
+              {color}
+            </div>
+          ))}
+        </Flex>
+        <Flex>
+          {COLOR_SCALE.map((color) => (
+            <div
+              key={color}
+              className="test"
+              style={{
+                display: 'inline-block',
+                height: 80,
+                width: 80,
+                backgroundColor: `var(--color-negative-${color})`,
+                color: 'var(--color-white-50)',
+              }}
+            >
+              {color}
+            </div>
           ))}
         </Flex>
         <Header>Button</Header>
@@ -155,16 +201,16 @@ function Index() {
         </Flex>
         <Text>Negative</Text>
         <Flex gap={4}>
-          <Button mode="negative" variant="fill">
+          <Button isDisabled mode="negative" variant="fill">
             fill
           </Button>
-          <Button mode="negative" variant="outline">
+          <Button isDisabled mode="negative" variant="outline">
             outline
           </Button>
-          <Button mode="negative" variant="simple">
+          <Button isDisabled mode="negative" variant="simple">
             simple
           </Button>
-          <Button mode="negative" variant="ghost">
+          <Button isDisabled mode="negative" variant="ghost">
             ghost
           </Button>
         </Flex>

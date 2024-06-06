@@ -23,7 +23,7 @@ const button = cva(
         extralarge: 'h-14 min-w-32 rounded-2xl px-5 md:h-14 md:min-w-28 md:rounded-xl',
       },
       variant: {
-        fill: 'text-gray-50',
+        fill: 'text-white-50',
         outline: 'border-2',
         simple: 'border-1 hover:ring-1 hover:ring-inset',
         ghost: '',
