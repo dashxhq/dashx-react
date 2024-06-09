@@ -3,24 +3,26 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 
 import '@dashx/react/styles.css';
+import { button, text } from '@dashx/react/variants';
 
 const onPress = () => console.log('pressed');
 
-const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 800, 900, 950];
+const QUICK_BROWN_FOX = 'The quick brown fox jumps over the lazy dog.';
+
+const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
   return (
-    <div className="dr">
-      <Flex
-        direction="column"
-        gap={4}
-        data-chroma-boosted="true"
-        style={{
-          '--accent-base': baseColor,
-          '--density': 1,
-          '--roundness': 1.25,
-        }}
-      >
+    <div
+      className="dr"
+      data-chroma-boosted="true"
+      style={{
+        '--accent-base': baseColor,
+        '--density': 1,
+        '--roundness': 1.25,
+      }}
+    >
+      <Flex direction="column" gap={4}>
         <Flex justify="center">
           <input
             type="color"
@@ -30,7 +32,7 @@ function Index() {
             }}
           />
         </Flex>
-        <Flex>
+        <Flex justify="center">
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -40,14 +42,14 @@ function Index() {
                 height: 80,
                 width: 80,
                 backgroundColor: `var(--color-accent-${color})`,
-                color: 'var(--color-white-50)',
               }}
             >
-              {color}
+              <p style={{ color: 'var(--color-white)' }}>{color}</p>
+              <p style={{ color: 'var(--color-black)' }}>{color}</p>
             </div>
           ))}
         </Flex>
-        <Flex>
+        <Flex justify="center">
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -57,14 +59,14 @@ function Index() {
                 height: 80,
                 width: 80,
                 backgroundColor: `var(--color-gray-${color})`,
-                color: 'var(--color-white-50)',
               }}
             >
-              {color}
+              <p style={{ color: 'var(--color-white)' }}>{color}</p>
+              <p style={{ color: 'var(--color-black)' }}>{color}</p>
             </div>
           ))}
         </Flex>
-        <Flex>
+        <Flex justify="center">
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -74,13 +76,20 @@ function Index() {
                 height: 80,
                 width: 80,
                 backgroundColor: `var(--color-negative-${color})`,
-                color: 'var(--color-white-50)',
               }}
             >
-              {color}
+              <p style={{ color: 'var(--color-white)' }}>{color}</p>
+              <p style={{ color: 'var(--color-black)' }}>{color}</p>
             </div>
           ))}
         </Flex>
+        <Header>Typography</Header>
+        {Object.keys(text.variants.size).map((size: any) => (
+          <Text size={size} key={size}>
+            {QUICK_BROWN_FOX}
+          </Text>
+        ))}
+
         <Header>Button</Header>
         <Flex gap={4}>
           <Button onPress={onPress}>Button</Button>
@@ -109,180 +118,48 @@ function Index() {
         </Flex>
         <Header>Sizes</Header>
         <Flex gap={4}>
-          <Button size="small" onPress={onPress}>
-            Small
-          </Button>
-          <Button size="medium" onPress={onPress}>
-            Medium
-          </Button>
-          <Button size="large" onPress={onPress}>
-            Large
-          </Button>
-          <Button size="extralarge" onPress={onPress}>
-            Extra Large
-          </Button>
+          {Object.keys(button.variants.size).map((size: any) => (
+            <Button key={size} size={size} onPress={onPress}>
+              {size}
+            </Button>
+          ))}
         </Flex>
         <Header>Variants</Header>
-        <Text>Distinct</Text>
-        <Flex gap={4}>
-          <Button mode="distinct" variant="fill">
-            fill
-          </Button>
-          <Button mode="distinct" variant="outline">
-            outline
-          </Button>
-          <Button mode="distinct" variant="simple">
-            simple
-          </Button>
-          <Button mode="distinct" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
-        <Text>Subtle</Text>
-        <Flex gap={4}>
-          <Button mode="subtle" variant="fill">
-            fill
-          </Button>
-          <Button mode="subtle" variant="outline">
-            outline
-          </Button>
-          <Button mode="subtle" variant="simple">
-            simple
-          </Button>
-          <Button mode="subtle" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
-        <Text>Negative</Text>
-        <Flex gap={4}>
-          <Button mode="negative" variant="fill">
-            fill
-          </Button>
-          <Button mode="negative" variant="outline">
-            outline
-          </Button>
-          <Button mode="negative" variant="simple">
-            simple
-          </Button>
-          <Button mode="negative" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
+        {Object.keys(button.variants.mode).map((mode: any) => (
+          <React.Fragment key={mode}>
+            <Text>{mode}</Text>
+            <Flex gap={4}>
+              {Object.keys(button.variants.variant).map((variant: any) => (
+                <Button key={variant} mode={mode} variant={variant} onPress={onPress}>
+                  {variant}
+                </Button>
+              ))}
+            </Flex>
+          </React.Fragment>
+        ))}
         <Header>Disabled</Header>
-        <Text>Distinct</Text>
-        <Flex gap={4}>
-          <Button isDisabled mode="distinct" variant="fill">
-            fill
-          </Button>
-          <Button isDisabled mode="distinct" variant="outline">
-            outline
-          </Button>
-          <Button isDisabled mode="distinct" variant="simple">
-            simple
-          </Button>
-          <Button isDisabled mode="distinct" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
-        <Text>Subtle</Text>
-        <Flex gap={4}>
-          <Button isDisabled mode="subtle" variant="fill">
-            fill
-          </Button>
-          <Button isDisabled mode="subtle" variant="outline">
-            outline
-          </Button>
-          <Button isDisabled mode="subtle" variant="simple">
-            simple
-          </Button>
-          <Button isDisabled mode="subtle" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
-        <Text>Negative</Text>
-        <Flex gap={4}>
-          <Button isDisabled mode="negative" variant="fill">
-            fill
-          </Button>
-          <Button isDisabled mode="negative" variant="outline">
-            outline
-          </Button>
-          <Button isDisabled mode="negative" variant="simple">
-            simple
-          </Button>
-          <Button isDisabled mode="negative" variant="ghost">
-            ghost
-          </Button>
-        </Flex>
+        {Object.keys(button.variants.mode).map((mode: any) => (
+          <React.Fragment key={mode}>
+            <Text>{mode}</Text>
+            <Flex gap={4}>
+              {Object.keys(button.variants.variant).map((variant: any) => (
+                <Button key={variant} mode={mode} variant={variant} isDisabled>
+                  {variant}
+                </Button>
+              ))}
+            </Flex>
+          </React.Fragment>
+        ))}
         <Header>Roundness</Header>
-        <Flex gap={4}>
-          <Button size="small" roundness="none">
-            Button
-          </Button>
-          <Button size="small" roundness="small">
-            Button
-          </Button>
-          <Button size="small" roundness="medium">
-            Button
-          </Button>
-          <Button size="small" roundness="large">
-            Button
-          </Button>
-          <Button size="small" roundness="full">
-            Button
-          </Button>
-        </Flex>
-        <Flex gap={4}>
-          <Button size="medium" roundness="none">
-            Button
-          </Button>
-          <Button size="medium" roundness="small">
-            Button
-          </Button>
-          <Button size="medium" roundness="medium">
-            Button
-          </Button>
-          <Button size="medium" roundness="large">
-            Button
-          </Button>
-          <Button size="medium" roundness="full">
-            Button
-          </Button>
-        </Flex>
-        <Flex gap={4}>
-          <Button size="large" roundness="none">
-            Button
-          </Button>
-          <Button size="large" roundness="small">
-            Button
-          </Button>
-          <Button size="large" roundness="medium">
-            Button
-          </Button>
-          <Button size="large" roundness="large">
-            Button
-          </Button>
-          <Button size="large" roundness="full">
-            Button
-          </Button>
-        </Flex>
-        <Flex gap={4}>
-          <Button size="extralarge" roundness="none">
-            Button
-          </Button>
-          <Button size="extralarge" roundness="small">
-            Button
-          </Button>
-          <Button size="extralarge" roundness="medium">
-            Button
-          </Button>
-          <Button size="extralarge" roundness="large">
-            Button
-          </Button>
-          <Button size="extralarge" roundness="full">
-            Button
-          </Button>
-        </Flex>
+        {Object.keys(button.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(button.variants.roundness).map((roundness: any) => (
+              <Button key={roundness} size={size} roundness={roundness}>
+                {roundness}
+              </Button>
+            ))}
+          </Flex>
+        ))}
       </Flex>
     </div>
   );

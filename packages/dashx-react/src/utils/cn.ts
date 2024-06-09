@@ -1,7 +1,8 @@
+import classnames from 'classnames';
 import { twMerge } from 'tailwind-merge';
-import { cx } from 'class-variance-authority';
-import type { ClassValue } from 'class-variance-authority/types';
 
-const cn = (...params: ClassValue[]) => twMerge(cx(...params));
+import type { ArgumentArray } from 'classnames';
+
+const cn = (...params: ArgumentArray) => twMerge(classnames(...params));
 
 export { cn };

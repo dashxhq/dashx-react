@@ -1,28 +1,26 @@
 import React from 'react';
-import { cva } from 'class-variance-authority';
+import { Slot } from '@radix-ui/react-slot';
+import { text, type TextVariantProps } from '../variants/text.js';
 
-import { cn } from '../utils/cn.js';
+interface TextOwnProps extends TextVariantProps {
+  asChild?: boolean;
+}
 
-import type { VariantProps } from 'class-variance-authority';
+type TextSpanProps = { as?: 'span' } & React.HTMLAttributes<HTMLSpanElement>;
+type TextDivProps = { as: 'div' } & React.HTMLAttributes<HTMLDivElement>;
+type TextLabelProps = { as: 'label' } & React.HTMLAttributes<HTMLLabelElement>;
+type TextPProps = { as: 'p' } & React.HTMLAttributes<HTMLParagraphElement>;
 
-const textVariants = cva(['text-gray-700'], {
-  variants: {
-    size: {
-      sm: ['text-sm'],
-      lg: ['text-lg'],
-    },
-  },
-});
+type TextProps = TextOwnProps & (TextSpanProps | TextDivProps | TextLabelProps | TextPProps);
 
-type TextProps = VariantProps<typeof textVariants>;
+const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
+  const { as: Tag = 'span', asChild, children, className, size, ...rest } = props;
 
-const Text = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLParagraphElement> & TextProps
->((props, ref) => {
-  const { className, size } = props;
-
-  return <p className={cn(textVariants({ size }), className)} ref={ref} {...props} />;
+  return (
+    <Slot className={text({ size, className })} ref={ref} {...rest}>
+      {asChild ? children : <Tag>{children}</Tag>}
+    </Slot>
+  );
 });
 
 Text.displayName = 'Text';

@@ -17,6 +17,16 @@
         "default": "./dist/esm/index.js"
       }
     },
+    "./variants": {
+      "require": {
+        "types": "./dist/cjs/variants/index.d.ts",
+        "default": "./dist/cjs/variants/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/variants/index.d.ts",
+        "default": "./dist/esm/variants/index.js"
+      }
+    },
     "./*": "./*"
   },
   "sideEffects": false,
@@ -86,11 +96,13 @@
     "@react-types/shared": "^3.23.1",
     "@tailwindcss/postcss": "^4.0.0-alpha.15",
     "class-variance-authority": "^0.7.0",
+    "classnames": "^2.5.1",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.0",
     "react-aria": "^3.33.1",
     "react-remove-scroll-bar": "2.3.4",
     "tailwind-merge": "^2.3.0",
+    "tailwind-variants": "^0.2.1",
     "tailwindcss": "^4.0.0-alpha.15",
     "tailwindcss-react-aria-components": "^1.1.3"
   },
