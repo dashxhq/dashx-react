@@ -1,18 +1,19 @@
 import { tv } from 'tailwind-variants';
-import type { VariantProps } from 'tailwind-variants';
 
-import baseElement from './base-element';
+import baseElement from './base-element.js';
+
+import type { VariantProps } from 'tailwind-variants';
 
 const button = tv({
   extend: baseElement,
-  base: 'inline-flex items-center justify-center outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',
+  base: 'inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',
   variants: {
     size: {
-      extrasmall: 'px-2 min-w-14 text-xs',
-      small: 'px-3 min-w-16 text-sm',
-      medium: 'px-4 min-w-24 text-base',
-      large: 'px-6 min-w-28 text-lg',
-      extralarge: 'px-6 min-w-32 text-xl',
+      extrasmall: 'text-xs',
+      small: 'text-sm',
+      medium: 'text-base',
+      large: 'text-lg',
+      extralarge: 'text-xl',
     },
     variant: {
       fill: 'text-white',
@@ -21,9 +22,9 @@ const button = tv({
       ghost: '',
     },
     mode: {
-      distinct: 'data-[focus-visible]:outline-accent-300',
-      subtle: 'data-[focus-visible]:outline-accent-300',
-      negative: 'data-[focus-visible]:outline-negative-300',
+      distinct: 'data-[focus-visible]:outline-accent-700',
+      subtle: 'data-[focus-visible]:outline-accent-700',
+      negative: 'data-[focus-visible]:outline-negative-700',
     },
     roundness: {
       none: '',
@@ -32,12 +33,17 @@ const button = tv({
       large: '',
       full: '',
     },
+    shape: {
+      square: '',
+      rect: '',
+    },
     // TODO: shadow
   },
   defaultVariants: {
     size: 'medium',
     mode: 'distinct',
     variant: 'fill',
+    shape: 'rect',
   },
   compoundVariants: [
     {
@@ -109,11 +115,22 @@ const button = tv({
       className:
         'text-negative-500 hover:bg-negative-100 hover:text-negative-600 active:bg-negative-200 active:text-negative-700',
     },
+
+    { shape: 'rect', size: 'extrasmall', className: 'min-w-14 px-2' },
+    { shape: 'rect', size: 'small', className: 'min-w-16 px-3' },
+    { shape: 'rect', size: 'medium', className: 'min-w-24 px-4' },
+    { shape: 'rect', size: 'large', className: 'min-w-28 px-6' },
+    { shape: 'rect', size: 'extralarge', className: 'min-w-32 px-6' },
+    { shape: 'square', size: 'extrasmall', className: 'size-6 p-1' },
+    { shape: 'square', size: 'small', className: 'size-8 p-2' },
+    { shape: 'square', size: 'medium', className: 'size-10 p-3' },
+    { shape: 'square', size: 'large', className: 'size-12 p-4' },
+    { shape: 'square', size: 'extralarge', className: 'size-14 p-5' },
   ],
 });
 
 type ButtonVariantProps = VariantProps<typeof button>;
 
-export type {ButtonVariantProps}
+export type { ButtonVariantProps };
 
-export {button}
+export { button };

@@ -1,7 +1,7 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 import { typography } from './typography';
 
-const text = tv({
+const heading = tv({
   extend: typography,
   base: 'text-gray-950',
   variants: {
@@ -12,14 +12,14 @@ const text = tv({
     variant: {},
   },
   defaultVariants: {
-    size: 3,
-    weight: 'regular',
+    size: 9,
+    weight: 'bold',
     color: 'gray',
     variant: 'primary',
   },
 });
 
-type TextVariantProps = VariantProps<typeof text>;
+type HeadingVariantProps = VariantProps<typeof heading>;
 
-export type { TextVariantProps };
-export { text };
+export type { HeadingVariantProps };
+export { heading };

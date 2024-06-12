@@ -1,7 +1,7 @@
 @import 'tailwindcss/preflight' layer(base);
 @import 'tailwindcss/utilities' layer(utilities);
 
-.dr * {
+.dr {
   --lightness-50: 97.78%;
   --lightness-100: 93.56%;
   --lightness-200: 88.11%;
@@ -29,8 +29,9 @@
   --negative-base: oklch(0% 0 20);
 
   --base-density: 1;
-  --density: var(--base-density);
-  --roundness: 1;
+  --density-multiplier: 1;
+  --density: calc(var(--base-density) * var(--density-multiplier, 1));
+  /* --roundness: 1; */
 
   /* Colors */
   /* Default background */
@@ -158,36 +159,35 @@
   --line-height-8: calc(2rem / var(--density));
   --line-height-9: calc(2.25rem / var(--density));
   --line-height-10: calc(2.5rem / var(--density));
+}
+[data-radius='none'] {
+  --roundness: 0;
+  --radius-full: 0px;
+  --radius-thumb: 0.5px;
+}
 
-  [data-radius='none'] {
-    --roundness: 0;
-    --radius-full: 0px;
-    --radius-thumb: 0.5px;
-  }
+[data-radius='small'] {
+  --roundness: 0.75;
+  --radius-full: 0px;
+  --radius-thumb: 0.5px;
+}
 
-  [data-radius='small'] {
-    --roundness: 0.75;
-    --radius-full: 0px;
-    --radius-thumb: 0.5px;
-  }
+[data-radius='medium'] {
+  --roundness: 1;
+  --radius-full: 0px;
+  --radius-thumb: 9999px;
+}
 
-  [data-radius='medium'] {
-    --roundness: 1;
-    --radius-full: 0px;
-    --radius-thumb: 9999px;
-  }
+[data-radius='large'] {
+  --roundness: 1.5;
+  --radius-full: 0px;
+  --radius-thumb: 9999px;
+}
 
-  [data-radius='large'] {
-    --roundness: 1.5;
-    --radius-full: 0px;
-    --radius-thumb: 9999px;
-  }
-
-  [data-radius='full'] {
-    --roundness: 1.5;
-    --radius-full: 9999px;
-    --radius-thumb: 9999px;
-  }
+[data-radius='full'] {
+  --roundness: 1.5;
+  --radius-full: 9999px;
+  --radius-thumb: 9999px;
 }
 
 @property --accent-base {
@@ -281,9 +281,9 @@
   --shadow-none: 0 0 #0000;
   --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
   /* Switch */
-  --shadow-xxxs: 0 2px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-3xs: 0 2px 2px 0 rgb(0 0 0 / 0.05);
   /* Card */
-  --shadow-xxs: 0 2px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-2xs: 0 2px 3px 0 rgb(0 0 0 / 0.05);
   /* Slider thumb */
   --shadow-xs: 0 4px 6px 0 rgb(0 0 0 / 0.05);
   /* Button */
@@ -295,9 +295,9 @@
   /* TextInput, TextArea */
   --shadow-xl: 0 20px 60px 0 rgb(0 0 0 / 0.1);
   /* Larger overlays: Sidebar, Sidepane, Dialog */
-  --shadow-xxl: 0 29px 50px 0 rgb(0 0 0 / 0.25);
+  --shadow-2xl: 0 29px 50px 0 rgb(0 0 0 / 0.25);
   /* Largest overlay */
-  --shadow-xxxl: 0 29px 60px 0 rgb(0 0 0 / 0.25);
+  --shadow-3xl: 0 29px 60px 0 rgb(0 0 0 / 0.25);
 
   /* Type scale */
   --font-size-xs: ;
@@ -353,7 +353,7 @@
 }
 
 @media (pointer: coarse) {
-  .dr * {
-    --density: calc(var(--base-density) * 0.8);
+  .dr {
+    --density-multiplier: 0.8;
   }
 }

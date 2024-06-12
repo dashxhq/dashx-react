@@ -14,10 +14,20 @@ type TextPProps = { as: 'p' } & React.HTMLAttributes<HTMLParagraphElement>;
 type TextProps = TextOwnProps & (TextSpanProps | TextDivProps | TextLabelProps | TextPProps);
 
 const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
-  const { as: Tag = 'span', asChild, children, className, size, ...rest } = props;
+  const {
+    as: Tag = 'span',
+    asChild,
+    children,
+    className,
+    size,
+    align,
+    color,
+    variant,
+    ...rest
+  } = props;
 
   return (
-    <Slot className={text({ size, className })} ref={ref} {...rest}>
+    <Slot className={text({ size, align, color, variant, className })} ref={ref} {...rest}>
       {asChild ? children : <Tag>{children}</Tag>}
     </Slot>
   );

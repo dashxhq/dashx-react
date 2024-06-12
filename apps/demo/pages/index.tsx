@@ -1,9 +1,10 @@
-import { Button, Flex, Header, Text } from '@dashx/react';
+import { Button, Flex, Heading, Popover, Text } from '@dashx/react';
+import { button, heading, text } from '@dashx/react/variants';
+import { Bell } from '@dashx/react/icons';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
 import '@dashx/react/styles.css';
-import { button, text } from '@dashx/react/variants';
 
 const onPress = () => console.log('pressed');
 
@@ -18,11 +19,33 @@ function Index() {
       data-chroma-boosted="true"
       style={{
         '--accent-base': baseColor,
-        '--density': 1,
-        '--roundness': 1.25,
+        '--base-density': 1,
       }}
+      data-radius="medium"
     >
       <Flex direction="column" gap={4}>
+        <Flex gap={4} align="center">
+          <Popover.Root>
+            <Popover.Trigger>
+              <Button shape="square" roundness="full" variant="ghost">
+                <Bell />
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <Popover.Header asChild>
+                <Heading size={3}>Notifications</Heading>
+              </Popover.Header>
+              <Popover.Body asChild>
+                <Text as="p">{QUICK_BROWN_FOX}</Text>
+              </Popover.Body>
+              <Popover.Footer asChild>
+                <Text as="p" align="center" color="accent" variant="tertiary" size={1}>
+                  Powered by DashX
+                </Text>
+              </Popover.Footer>
+            </Popover.Content>
+          </Popover.Root>
+        </Flex>
         <Flex justify="center">
           <input
             type="color"
@@ -83,18 +106,25 @@ function Index() {
             </div>
           ))}
         </Flex>
-        <Header>Typography</Header>
+        <Heading>Typography</Heading>
+        <Flex align="baseline">
+          {Object.keys(heading.variants.size).map((size: any) => (
+            <Heading size={size} key={size}>
+              Aa
+            </Heading>
+          ))}
+        </Flex>
         {Object.keys(text.variants.size).map((size: any) => (
           <Text size={size} key={size}>
             {QUICK_BROWN_FOX}
           </Text>
         ))}
 
-        <Header>Button</Header>
+        <Heading>Button</Heading>
         <Flex gap={4}>
           <Button onPress={onPress}>Button</Button>
         </Flex>
-        <Header>Link</Header>
+        <Heading>Link</Heading>
         <Flex gap={4}>
           <Button onPress={onPress} asChild>
             <a onClick={() => console.log('link clicked')} href="#">
@@ -107,7 +137,7 @@ function Index() {
             </Link>
           </Button>
         </Flex>
-        <Header>Span</Header>
+        <Heading>Span</Heading>
         <Flex gap={4}>
           <Button onPress={onPress} asChild>
             <span onClick={() => console.log('span clicked')}>Span</span>
@@ -116,7 +146,7 @@ function Index() {
             <div onClick={() => console.log('div clicked')}>Div</div>
           </Button>
         </Flex>
-        <Header>Sizes</Header>
+        <Heading>Sizes</Heading>
         <Flex gap={4}>
           {Object.keys(button.variants.size).map((size: any) => (
             <Button key={size} size={size} onPress={onPress}>
@@ -124,7 +154,7 @@ function Index() {
             </Button>
           ))}
         </Flex>
-        <Header>Variants</Header>
+        <Heading>Variants</Heading>
         {Object.keys(button.variants.mode).map((mode: any) => (
           <React.Fragment key={mode}>
             <Text>{mode}</Text>
@@ -137,7 +167,7 @@ function Index() {
             </Flex>
           </React.Fragment>
         ))}
-        <Header>Disabled</Header>
+        <Heading>Disabled</Heading>
         {Object.keys(button.variants.mode).map((mode: any) => (
           <React.Fragment key={mode}>
             <Text>{mode}</Text>
@@ -150,12 +180,22 @@ function Index() {
             </Flex>
           </React.Fragment>
         ))}
-        <Header>Roundness</Header>
+        <Heading>Roundness</Heading>
         {Object.keys(button.variants.size).map((size: any) => (
           <Flex key={size} gap={4}>
             {Object.keys(button.variants.roundness).map((roundness: any) => (
               <Button key={roundness} size={size} roundness={roundness}>
                 {roundness}
+              </Button>
+            ))}
+          </Flex>
+        ))}
+
+        {Object.keys(button.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(button.variants.roundness).map((roundness: any) => (
+              <Button key={roundness} size={size} roundness={roundness} shape="square">
+                <Bell />
               </Button>
             ))}
           </Flex>
