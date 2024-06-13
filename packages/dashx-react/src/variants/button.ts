@@ -22,9 +22,9 @@ const button = tv({
       ghost: '',
     },
     mode: {
-      distinct: 'data-[focus-visible]:outline-accent-700',
-      subtle: 'data-[focus-visible]:outline-accent-700',
-      negative: 'data-[focus-visible]:outline-negative-700',
+      distinct: 'data-[focus-visible]:outline-accent-300',
+      subtle: 'data-[focus-visible]:outline-accent-300',
+      negative: 'data-[focus-visible]:outline-negative-300',
     },
     roundness: {
       none: '',

@@ -3,13 +3,11 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '../utils/cn.js';
-import {
-  popover,
-  popoverBody,
-  popoverFooter,
-  popoverHeader,
-  type PopoverVariantProps,
-} from '../variants/popover.js';
+import { popover, popoverBody, popoverFooter, popoverHeader } from '../variants/popover.js';
+import { SPACING } from '../variants/card.js';
+import { Theme } from './theme.js';
+
+import type { PopoverVariantProps } from '../variants/popover.js';
 
 interface PopoverRootProps extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Root> {}
 const PopoverRoot: React.FC<PopoverRootProps> = (props: PopoverRootProps) => (
@@ -28,36 +26,55 @@ const PopoverTrigger = React.forwardRef<PopoverTriggerElement, PopoverTriggerPro
 );
 PopoverTrigger.displayName = 'Popover.Trigger';
 
-const SPACING = {
-  small: 'var(--spacing-3)',
-  medium: 'var(--spacing-4)',
-  large: 'var(--spacing-5)',
-  extralarge: 'var(--spacing-6)',
-};
-
 type PopoverContentElement = React.ElementRef<typeof PopoverPrimitive.Content>;
 interface PopoverContentProps
   extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Portal>,
-    PopoverVariantProps {}
+    PopoverVariantProps {
+  maxWidth?: number | string;
+  minWidth?: number | string;
+  width?: number | string;
+  maxHeight?: number | string;
+  minHeight?: number | string;
+  height?: number | string;
+}
 const PopoverContent = React.forwardRef<PopoverContentElement, PopoverContentProps>(
   (props, ref) => {
-    const { forceMount, container, key, roundness = 'medium', spacing = 'medium', ...rest } = props;
+    const {
+      forceMount,
+      container,
+      roundness,
+      spacing = 'medium',
+      maxWidth,
+      minWidth,
+      width,
+      maxHeight,
+      minHeight,
+      height,
+      ...rest
+    } = props;
     return (
-      <PopoverPrimitive.Portal key={key} container={container} forceMount={forceMount}>
-        <PopoverPrimitive.Content
-          align="start"
-          sideOffset={8}
-          collisionPadding={10}
-          {...rest}
-          ref={ref}
-          className={cn('dr', popover({ roundness }))}
-          data-radius={roundness}
-          style={{
-            // @ts-ignore
-            '--padding': SPACING[spacing],
-          }}
-        />
+      <PopoverPrimitive.Portal container={container} forceMount={forceMount}>
+        <Theme roundness={roundness} asChild>
+          <PopoverPrimitive.Content
+            align="start"
+            sideOffset={8}
+            collisionPadding={10}
+            {...rest}
+            ref={ref}
+            className={cn(popover({ roundness }))}
+            style={{
+              // @ts-ignore
+              '--padding': SPACING[spacing],
+              '--max-width': maxWidth,
+              '--min-width': minWidth,
+              '--width': width,
+              '--max-height': maxHeight,
+              '--min-height': minHeight,
+              '--height': height,
+            }}
+          />
+        </Theme>
       </PopoverPrimitive.Portal>
     );
   },
@@ -73,7 +90,7 @@ const PopoverBody = React.forwardRef<HTMLDivElement, PopoverBodyProps>((props, r
 
   return <Comp ref={ref} {...rest} className={cn(popoverBody())} />;
 });
-PopoverContent.displayName = 'Popover.Content';
+PopoverBody.displayName = 'Popover.Body';
 
 type PopoverHeaderProps = React.PropsWithChildren<{
   asChild?: boolean;
@@ -84,7 +101,7 @@ const PopoverHeader = React.forwardRef<HTMLDivElement, PopoverHeaderProps>((prop
 
   return <Comp ref={ref} {...rest} className={cn(popoverHeader())} />;
 });
-PopoverContent.displayName = 'Popover.Content';
+PopoverHeader.displayName = 'Popover.Header';
 
 type PopoverFooterProps = React.PropsWithChildren<{
   asChild?: boolean;
@@ -95,7 +112,7 @@ const PopoverFooter = React.forwardRef<HTMLDivElement, PopoverFooterProps>((prop
 
   return <Comp ref={ref} {...rest} className={cn(popoverFooter())} />;
 });
-PopoverContent.displayName = 'Popover.Content';
+PopoverFooter.displayName = 'Popover.Footer';
 
 type PopoverCloseElement = React.ElementRef<typeof PopoverPrimitive.Close>;
 interface PopoverCloseProps extends React.PropsWithChildren<{}> {}

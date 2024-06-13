@@ -1,6 +1,9 @@
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { text, type TextVariantProps } from '../variants/text.js';
+
+import { text } from '../variants/text.js';
+
+import type { TextVariantProps } from '../variants/text.js';
 
 interface TextOwnProps extends TextVariantProps {
   asChild?: boolean;
@@ -23,11 +26,12 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
     align,
     color,
     variant,
+    weight,
     ...rest
   } = props;
 
   return (
-    <Slot className={text({ size, align, color, variant, className })} ref={ref} {...rest}>
+    <Slot className={text({ size, align, color, variant, className, weight })} ref={ref} {...rest}>
       {asChild ? children : <Tag>{children}</Tag>}
     </Slot>
   );

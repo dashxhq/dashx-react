@@ -22,13 +22,31 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
   let elementType = asChild
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
     : 'button';
+
+  let { onPress } = props;
+  let onClick;
+  if ('onClick' in props && !('onPress' in props)) {
+    // @ts-ignore
+    onPress = props.onClick;
+    onClick = undefined;
+  }
   const innerRef = useRef<HTMLButtonElement>(null);
-  let { buttonProps, isPressed } = useButton({ ...props, elementType }, innerRef);
+  let { buttonProps, isPressed } = useButton(
+    // @ts-ignore
+    { ...props, elementType, onPress, onClick },
+    innerRef,
+  );
   let { focusProps, isFocused, isFocusVisible } = useFocusRing(props);
-  let { hoverProps, isHovered } = useHover(props);
+  let { hoverProps, isHovered } = useHover({
+    ...props,
+    // @ts-ignore
+    onHoverStart: props.onHoverStart || props.onMouseEnter,
+    // @ts-ignore
+    onHoverEnd: props.onHoverEnd || props.onMouseLeave,
+  });
 
   let Comp = asChild ? Slot : 'button';
-  console.log(buttonProps);
+
   return (
     <Comp
       {...filterDOMProps(props)}
@@ -39,10 +57,7 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
       data-hovered={isHovered || undefined}
       data-focused={isFocused || undefined}
       data-focus-visible={isFocusVisible || undefined}
-      className={cn('dr', button({ size, mode, variant, roundness, shape }), {
-        'rounded-full': roundness === 'full',
-        'md:rounded-full': roundness === 'full',
-      })}
+      className={cn('dr', button({ size, mode, variant, roundness, shape }))}
       data-radius={roundness}
     >
       {children}

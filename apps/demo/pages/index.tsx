@@ -1,6 +1,6 @@
-import { Button, Flex, Heading, Popover, Text } from '@dashx/react';
+import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
-import { Bell } from '@dashx/react/icons';
+import { Bell, Inbox, Mail, MailOpen } from '@dashx/react/icons';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -14,29 +14,74 @@ const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
   return (
-    <div
-      className="dr"
-      data-chroma-boosted="true"
-      style={{
-        '--accent-base': baseColor,
-        '--base-density': 1,
-      }}
-      data-radius="medium"
-    >
+    <Theme accentBaseColor={baseColor} className="dr">
       <Flex direction="column" gap={4}>
         <Flex gap={4} align="center">
+          <Tooltip content="Mark Read">
+            <Button shape="square" variant="ghost">
+              <MailOpen />
+            </Button>
+          </Tooltip>
           <Popover.Root>
             <Popover.Trigger>
               <Button shape="square" roundness="full" variant="ghost">
-                <Bell />
+                <Inbox />
               </Button>
             </Popover.Trigger>
-            <Popover.Content>
+            <Popover.Content spacing="large" maxWidth={'350px'}>
               <Popover.Header asChild>
                 <Heading size={3}>Notifications</Heading>
               </Popover.Header>
-              <Popover.Body asChild>
-                <Text as="p">{QUICK_BROWN_FOX}</Text>
+              <Popover.Body>
+                <Flex direction="column" gap={1}>
+                  <Card>
+                    <Flex align="center" gap={4}>
+                      <Flex direction="column" gap={1}>
+                        <Text as="p" variant="secondary" weight="semibold" size={2}>
+                          {QUICK_BROWN_FOX}
+                        </Text>
+                        <Text size={1} variant="tertiary">
+                          Today
+                        </Text>
+                      </Flex>
+                      <Tooltip content="Mark Read">
+                        <Button shape="square" variant="ghost">
+                          <MailOpen />
+                        </Button>
+                      </Tooltip>
+                    </Flex>
+                  </Card>
+                  <Card>
+                    <Flex align="center" gap={4}>
+                      <Flex direction="column" gap={1}>
+                        <Text as="p" variant="secondary" weight="semibold" size={2}>
+                          {QUICK_BROWN_FOX}
+                        </Text>
+                        <Text size={1} variant="tertiary">
+                          Yesterday
+                        </Text>
+                      </Flex>
+                      <Button shape="square" variant="ghost">
+                        <Mail />
+                      </Button>
+                    </Flex>
+                  </Card>
+                  <Card>
+                    <Flex align="center" gap={4}>
+                      <Flex direction="column" gap={1}>
+                        <Text as="p" variant="secondary" weight="semibold" size={2}>
+                          {QUICK_BROWN_FOX}
+                        </Text>
+                        <Text size={1} variant="tertiary">
+                          2 days ago
+                        </Text>
+                      </Flex>
+                      <Button shape="square" variant="ghost">
+                        <MailOpen />
+                      </Button>
+                    </Flex>
+                  </Card>
+                </Flex>
               </Popover.Body>
               <Popover.Footer asChild>
                 <Text as="p" align="center" color="accent" variant="tertiary" size={1}>
@@ -201,7 +246,7 @@ function Index() {
           </Flex>
         ))}
       </Flex>
-    </div>
+    </Theme>
   );
 }
 

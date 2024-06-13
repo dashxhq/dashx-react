@@ -84,21 +84,19 @@
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
 
-  --spacing-1: calc(4px / var(--density));
-  --spacing-2: calc(8px / var(--density));
-  --spacing-3: calc(12px / var(--density));
-  --spacing-4: calc(16px / var(--density));
-  --spacing-6: calc(24px / var(--density));
-  --spacing-8: calc(32px / var(--density));
-  --spacing-10: calc(40px / var(--density));
-  --spacing-12: calc(48px / var(--density));
-  --spacing-14: calc(56px / var(--density));
-  --spacing-16: calc(64px / var(--density));
-  --spacing-18: calc(72px / var(--density));
-  --spacing-24: calc(96px / var(--density));
-  --spacing-28: calc(112px / var(--density));
-  --spacing-32: calc(128px / var(--density));
-  --spacing-36: calc(144px / var(--density));
+  --spacing-1: calc(4px / var(--density)); /*    -                                */
+  --spacing-2: calc(8px / var(--density)); /*    --                               */
+  --spacing-3: calc(12px / var(--density)); /*   ---                              */
+  --spacing-4: calc(16px / var(--density)); /*   ----                             */
+  --spacing-6: calc(24px / var(--density)); /*   ------                           */
+  --spacing-8: calc(32px / var(--density)); /*   --------                         */
+  --spacing-10: calc(40px / var(--density)); /*  ----------                       */
+  --spacing-12: calc(48px / var(--density)); /*  ------------                     */
+  --spacing-14: calc(56px / var(--density)); /*  --------------                   */
+  --spacing-16: calc(64px / var(--density)); /*  ----------------                 */
+  --spacing-18: calc(72px / var(--density)); /*  ------------------               */
+  --spacing-24: calc(96px / var(--density)); /*  ------------------------         */
+  --spacing-32: calc(128px / var(--density)); /* -------------------------------- */
 
   --radius-sm: calc((3px / var(--density)) * var(--roundness));
   --radius-md: calc((4px / var(--density)) * var(--roundness));
@@ -106,7 +104,12 @@
   --radius-xl: calc((8px / var(--density)) * var(--roundness));
   --radius-2xl: calc((12px / var(--density)) * var(--roundness));
   --radius-3xl: calc((16px / var(--density)) * var(--roundness));
-  --radius-full: 999px;
+  --radius-sm-or-full: max(var(--radius-full), calc((3px / var(--density)) * var(--roundness)));
+  --radius-md-or-full: max(var(--radius-full), calc((4px / var(--density)) * var(--roundness)));
+  --radius-lg-or-full: max(var(--radius-full), calc((6px / var(--density)) * var(--roundness)));
+  --radius-xl-or-full: max(var(--radius-full), calc((8px / var(--density)) * var(--roundness)));
+  --radius-2xl-or-full: max(var(--radius-full), calc((12px / var(--density)) * var(--roundness)));
+  --radius-3xl-or-full: max(var(--radius-full), calc((16px / var(--density)) * var(--roundness)));
 
   /* Type scale */
   --font-size-xs: calc(0.75rem / var(--density));
@@ -276,6 +279,12 @@
   --radius-xl: ;
   --radius-2xl: ;
   --radius-3xl: ;
+  --radius-sm-or-full: ;
+  --radius-md-or-full: ;
+  --radius-lg-or-full: ;
+  --radius-xl-or-full: ;
+  --radius-2xl-or-full: ;
+  --radius-3xl-or-full: ;
   --radius-full: ;
 
   --shadow-none: 0 0 #0000;

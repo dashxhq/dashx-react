@@ -1,6 +1,9 @@
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { heading, type HeadingVariantProps } from '../variants/heading.js';
+
+import { heading } from '../variants/heading.js';
+
+import type { HeadingVariantProps } from '../variants/heading.js';
 
 interface HeadingOwnProps extends HeadingVariantProps {
   asChild?: boolean;
@@ -19,11 +22,16 @@ const Heading = React.forwardRef<HTMLDivElement, HeadingProps>((props, ref) => {
     align,
     color,
     variant,
+    weight,
     ...rest
   } = props;
 
   return (
-    <Slot className={heading({ size, align, color, variant, className })} ref={ref} {...rest}>
+    <Slot
+      className={heading({ size, align, color, variant, weight, className })}
+      ref={ref}
+      {...rest}
+    >
       {asChild ? children : <Tag>{children}</Tag>}
     </Slot>
   );

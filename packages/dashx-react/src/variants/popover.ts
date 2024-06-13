@@ -1,7 +1,9 @@
-import { tv, type VariantProps } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
+
+import type { VariantProps } from 'tailwind-variants';
 
 const popover = tv({
-  base: 'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 overflow-hidden bg-white shadow-md shadow-gray-400/30 outline-0',
+  base: 'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 h-[var(--height)] max-h-[var(--max-height)] min-h-[var(--min-height)] w-[var(--width)] max-w-[var(--max-width)] min-w-[var(--min-width)] overflow-hidden bg-white shadow-md shadow-gray-400/30 outline-0',
   variants: {
     roundness: {
       none: 'rounded-none',

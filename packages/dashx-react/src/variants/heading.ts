@@ -1,5 +1,8 @@
-import { tv, type VariantProps } from 'tailwind-variants';
-import { typography } from './typography';
+import { tv } from 'tailwind-variants';
+
+import { typography } from './typography.js';
+
+import type { VariantProps } from 'tailwind-variants';
 
 const heading = tv({
   extend: typography,

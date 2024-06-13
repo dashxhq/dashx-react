@@ -1,15 +1,15 @@
-import { tv } from "tailwind-variants";
+import { tv } from 'tailwind-variants';
 
 const baseElement = tv({
   variants: {
     size: {
-      extrasmall: 'h-6 rounded-sm',
-      small: 'h-8 rounded-sm',
-      medium: 'h-10 rounded-md',
-      large: 'h-12 rounded-lg',
-      extralarge: 'h-14 rounded-lg',
+      extrasmall: 'rounded-sm-or-full h-6',
+      small: 'rounded-sm-or-full h-8',
+      medium: 'rounded-md-or-full h-10',
+      large: 'rounded-lg-or-full h-12',
+      extralarge: 'rounded-lg-or-full h-14',
     },
-  }
-})
+  },
+});
 
-export default baseElement
+export default baseElement;

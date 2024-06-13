@@ -1,35 +1,32 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
+import { SPACING, card } from '../variants/card.js';
 import { cn } from '../utils/cn.js';
 
-const CardMedia = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    const { className } = props;
+import type { CardVariantProps } from '../variants/card.js';
 
-    return <Slot className={cn('rounded-3', className)} ref={ref} {...props} />;
-  },
-);
-
-CardMedia.displayName = 'CardMedia';
-
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    const { className } = props;
-
-    return (
-      <div
-        className={cn(
-          'shadow-1 hover:shadow-6 rounded-5 flex gap-5 border bg-white p-5 transition-shadow hover:bg-white',
-          className,
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
+interface CardProps extends React.HTMLAttributes<HTMLDivElement>, CardVariantProps {
+  asChild?: boolean;
+}
+const Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
+  const { asChild, className, spacing = 'medium', roundness, ...rest } = props;
+  const Comp = asChild ? Slot : 'div';
+  return (
+    <Comp
+      ref={ref}
+      {...rest}
+      className={cn('dr', card({ className, spacing, roundness }))}
+      data-radius={roundness}
+      style={{
+        // @ts-ignore
+        '--padding': SPACING[spacing],
+      }}
+    />
+  );
+});
 
 Card.displayName = 'Card';
 
-export { Card, CardMedia };
+export { Card };
+export type { CardProps };
