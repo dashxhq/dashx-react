@@ -37,6 +37,11 @@ const button = tv({
       square: '',
       rect: '',
     },
+    inset: {
+      left: '',
+      right: '',
+      both: '',
+    },
     // TODO: shadow
   },
   defaultVariants: {
@@ -116,16 +121,66 @@ const button = tv({
         'text-negative-500 hover:bg-negative-100 hover:text-negative-600 active:bg-negative-200 active:text-negative-700',
     },
 
-    { shape: 'rect', size: 'extrasmall', className: 'min-w-14 px-2' },
-    { shape: 'rect', size: 'small', className: 'min-w-16 px-3' },
-    { shape: 'rect', size: 'medium', className: 'min-w-24 px-4' },
-    { shape: 'rect', size: 'large', className: 'min-w-28 px-6' },
-    { shape: 'rect', size: 'extralarge', className: 'min-w-32 px-6' },
-    { shape: 'square', size: 'extrasmall', className: 'size-6 p-1' },
-    { shape: 'square', size: 'small', className: 'size-8 p-2' },
-    { shape: 'square', size: 'medium', className: 'size-10 p-3' },
-    { shape: 'square', size: 'large', className: 'size-12 p-4' },
-    { shape: 'square', size: 'extralarge', className: 'size-14 p-5' },
+    {
+      shape: 'rect',
+      size: 'extrasmall',
+      className:
+        'min-w-14 px-2 data-[inset=left]:-ml-2 data-[inset=right]:-mr-2 data-[inset=both]:-mx-2',
+    },
+    {
+      shape: 'rect',
+      size: 'small',
+      className:
+        'min-w-16 px-3 data-[inset=left]:-ml-3 data-[inset=right]:-mr-3 data-[inset=both]:-mx-3',
+    },
+    {
+      shape: 'rect',
+      size: 'medium',
+      className:
+        'min-w-24 px-4 data-[inset=left]:-ml-4 data-[inset=right]:-mr-4 data-[inset=both]:-mx-4',
+    },
+    {
+      shape: 'rect',
+      size: 'large',
+      className:
+        'min-w-28 px-6 data-[inset=left]:-ml-6 data-[inset=right]:-mr-6 data-[inset=both]:-mx-6',
+    },
+    {
+      shape: 'rect',
+      size: 'extralarge',
+      className:
+        'min-w-32 px-6 data-[inset=left]:-ml-6 data-[inset=right]:-mr-6 data-[inset=both]:-mx-6',
+    },
+    {
+      shape: 'square',
+      size: 'extrasmall',
+      className:
+        'size-6 p-1 data-[inset=left]:-ml-1 data-[inset=right]:-mr-1 data-[inset=both]:-mx-1',
+    },
+    {
+      shape: 'square',
+      size: 'small',
+      className:
+        'size-8 p-2 data-[inset=left]:-ml-2 data-[inset=right]:-mr-2 data-[inset=both]:-mx-2',
+    },
+    {
+      shape: 'square',
+      size: 'medium',
+      className:
+        'size-10 p-3 data-[inset=left]:-ml-3 data-[inset=right]:-mr-3 data-[inset=both]:-mx-3',
+    },
+    {
+      shape: 'square',
+      size: 'large',
+      className:
+        'size-12 p-4 data-[inset=left]:-ml-4 data-[inset=right]:-mr-4 data-[inset=both]:-mx-4',
+    },
+    {
+      shape: 'square',
+      size: 'extralarge',
+      className:
+        'size-14 p-5 data-[inset=left]:-ml-5 data-[inset=right]:-mr-5 data-[inset=both]:-mx-5',
+    },
   ],
 });
 

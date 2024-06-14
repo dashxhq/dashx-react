@@ -30,6 +30,7 @@ const flexVariants = tv({
     },
     justify: {
       center: 'justify-center',
+      between: 'justify-between',
     },
     align: {
       baseline: 'items-baseline',

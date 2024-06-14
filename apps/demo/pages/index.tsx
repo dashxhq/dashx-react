@@ -1,14 +1,38 @@
-import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
+import {
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Popover,
+  Text,
+  Theme,
+  Tooltip,
+  useDashXProvider,
+} from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
-import { Bell, Inbox, Mail, MailOpen } from '@dashx/react/icons';
+import { Bell } from '@dashx/react/icons';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import '@dashx/react/styles.css';
+import { NotificationBell } from '@dashx/react/widgets';
+import dynamic from 'next/dynamic';
 
 const onPress = () => console.log('pressed');
 
 const QUICK_BROWN_FOX = 'The quick brown fox jumps over the lazy dog.';
+
+const DashXProvider = dynamic(() => import('@dashx/react').then((p) => p.DashXProvider), {
+  ssr: false,
+});
+
+const NotificationBellWrapper = () => {
+  const dashx = useDashXProvider();
+
+  dashx.identify('1');
+
+  return <NotificationBell />;
+};
 
 const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
@@ -17,82 +41,12 @@ function Index() {
     <Theme accentBaseColor={baseColor} className="dr">
       <Flex direction="column" gap={4}>
         <Flex gap={4} align="center">
-          <Popover.Root>
-            <Tooltip.Root>
-              <Tooltip.Trigger>
-                <Popover.Trigger>
-                  <Button shape="square" roundness="full" variant="ghost">
-                    <Inbox />
-                  </Button>
-                </Popover.Trigger>
-              </Tooltip.Trigger>
-              <Tooltip.Content content="Notification" />
-            </Tooltip.Root>
-            <Popover.Content spacing="large" maxWidth={'350px'}>
-              <Popover.Header asChild>
-                <Heading size={3}>Notifications</Heading>
-              </Popover.Header>
-              <Popover.Body>
-                <Flex direction="column" gap={1}>
-                  <Card>
-                    <Flex align="center" gap={4}>
-                      <Flex direction="column" gap={1}>
-                        <Text as="p" variant="secondary" weight="semibold" size={2}>
-                          {QUICK_BROWN_FOX}
-                        </Text>
-                        <Text size={1} variant="tertiary">
-                          Today
-                        </Text>
-                      </Flex>
-                      <Tooltip.Root>
-                        <Tooltip.Trigger>
-                          <Button shape="square" variant="ghost">
-                            <MailOpen />
-                          </Button>
-                        </Tooltip.Trigger>
-                        <Tooltip.Content content="Mark as read" />
-                      </Tooltip.Root>
-                    </Flex>
-                  </Card>
-                  <Card>
-                    <Flex align="center" gap={4}>
-                      <Flex direction="column" gap={1}>
-                        <Text as="p" variant="secondary" weight="semibold" size={2}>
-                          {QUICK_BROWN_FOX}
-                        </Text>
-                        <Text size={1} variant="tertiary">
-                          Yesterday
-                        </Text>
-                      </Flex>
-                      <Button shape="square" variant="ghost">
-                        <Mail />
-                      </Button>
-                    </Flex>
-                  </Card>
-                  <Card>
-                    <Flex align="center" gap={4}>
-                      <Flex direction="column" gap={1}>
-                        <Text as="p" variant="secondary" weight="semibold" size={2}>
-                          {QUICK_BROWN_FOX}
-                        </Text>
-                        <Text size={1} variant="tertiary">
-                          2 days ago
-                        </Text>
-                      </Flex>
-                      <Button shape="square" variant="ghost">
-                        <MailOpen />
-                      </Button>
-                    </Flex>
-                  </Card>
-                </Flex>
-              </Popover.Body>
-              <Popover.Footer asChild>
-                <Text as="p" align="center" color="accent" variant="tertiary" size={1}>
-                  Powered by DashX
-                </Text>
-              </Popover.Footer>
-            </Popover.Content>
-          </Popover.Root>
+          <Suspense>
+            {/* eslint-disable-next-line turbo/no-undeclared-env-vars */}
+            <DashXProvider publicKey={process.env.NEXT_PUBLIC_DASHX_PUBLIC_KEY}>
+              <NotificationBellWrapper />
+            </DashXProvider>
+          </Suspense>
         </Flex>
         <Flex justify="center">
           <input
