@@ -7,4 +7,4 @@ export * as Popover from './popover.js';
 export * from './text.js';
 export * from './text-field.js';
 export * from './theme.js';
-export * from './tooltip.js';
+export * as Tooltip from './tooltip.js';

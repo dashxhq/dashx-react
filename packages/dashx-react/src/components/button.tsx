@@ -23,26 +23,43 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
     : 'button';
 
-  let { onPress } = props;
-  let onClick;
-  if ('onClick' in props && !('onPress' in props)) {
-    // @ts-ignore
-    onPress = props.onClick;
-    onClick = undefined;
-  }
+  const fallbackEventTo = (event: any, fallbackEventName: any) => {
+    let anyProps: any = props;
+    if (fallbackEventName in props && !event) {
+      return [anyProps[fallbackEventName], undefined];
+    }
+
+    return [event, anyProps[fallbackEventName]];
+  };
+
+  const [onPress, onClick] = fallbackEventTo(props.onPress, 'onClick');
+  const [onPressStart, onPointerDown] = fallbackEventTo(props.onPressStart, 'onPointerDown');
+  const [onHoverStart, onPointerMove] = fallbackEventTo(props.onHoverStart, 'onPointerMove');
+  const [onHoverEnd, onPointerLeave] = fallbackEventTo(props.onHoverEnd, 'onPointerLeave');
   const innerRef = useRef<HTMLButtonElement>(null);
   let { buttonProps, isPressed } = useButton(
-    // @ts-ignore
-    { ...props, elementType, onPress, onClick },
+    {
+      ...props,
+      elementType,
+      onPress,
+      onPressStart,
+      // @ts-ignore
+      onClick,
+      // @ts-ignore
+      onPointerDown,
+      // @ts-ignore
+      onPointerMove,
+      // @ts-ignore
+      onPointerLeave,
+    },
     innerRef,
   );
   let { focusProps, isFocused, isFocusVisible } = useFocusRing(props);
+
   let { hoverProps, isHovered } = useHover({
     ...props,
-    // @ts-ignore
-    onHoverStart: props.onHoverStart || props.onMouseEnter,
-    // @ts-ignore
-    onHoverEnd: props.onHoverEnd || props.onMouseLeave,
+    onHoverStart,
+    onHoverEnd,
   });
 
   let Comp = asChild ? Slot : 'button';

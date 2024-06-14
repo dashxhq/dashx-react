@@ -17,17 +17,17 @@ function Index() {
     <Theme accentBaseColor={baseColor} className="dr">
       <Flex direction="column" gap={4}>
         <Flex gap={4} align="center">
-          <Tooltip content="Mark Read">
-            <Button shape="square" variant="ghost">
-              <MailOpen />
-            </Button>
-          </Tooltip>
           <Popover.Root>
-            <Popover.Trigger>
-              <Button shape="square" roundness="full" variant="ghost">
-                <Inbox />
-              </Button>
-            </Popover.Trigger>
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <Popover.Trigger>
+                  <Button shape="square" roundness="full" variant="ghost">
+                    <Inbox />
+                  </Button>
+                </Popover.Trigger>
+              </Tooltip.Trigger>
+              <Tooltip.Content content="Notification" />
+            </Tooltip.Root>
             <Popover.Content spacing="large" maxWidth={'350px'}>
               <Popover.Header asChild>
                 <Heading size={3}>Notifications</Heading>
@@ -44,11 +44,14 @@ function Index() {
                           Today
                         </Text>
                       </Flex>
-                      <Tooltip content="Mark Read">
-                        <Button shape="square" variant="ghost">
-                          <MailOpen />
-                        </Button>
-                      </Tooltip>
+                      <Tooltip.Root>
+                        <Tooltip.Trigger>
+                          <Button shape="square" variant="ghost">
+                            <MailOpen />
+                          </Button>
+                        </Tooltip.Trigger>
+                        <Tooltip.Content content="Mark as read" />
+                      </Tooltip.Root>
                     </Flex>
                   </Card>
                   <Card>

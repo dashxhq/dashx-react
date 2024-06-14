@@ -18,8 +18,8 @@ PopoverRoot.displayName = 'Popover.Root';
 type PopoverTriggerElement = React.ElementRef<typeof PopoverPrimitive.Trigger>;
 interface PopoverTriggerProps extends React.PropsWithChildren<{}> {}
 const PopoverTrigger = React.forwardRef<PopoverTriggerElement, PopoverTriggerProps>(
-  ({ children }, ref) => (
-    <PopoverPrimitive.Trigger ref={ref} asChild>
+  ({ children, ...rest }, ref) => (
+    <PopoverPrimitive.Trigger {...rest} ref={ref} asChild>
       <Slot>{children}</Slot>
     </PopoverPrimitive.Trigger>
   ),
