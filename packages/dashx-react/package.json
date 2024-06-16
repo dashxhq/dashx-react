@@ -118,6 +118,7 @@
     "@tailwindcss/postcss": "^4.0.0-alpha.15",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
+    "date-fns": "^3.6.0",
     "lucide-react": "^0.394.0",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.0",

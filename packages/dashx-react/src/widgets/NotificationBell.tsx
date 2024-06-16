@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { intlFormatDistance } from 'date-fns';
 
 import { useInApp } from '../hooks/index.js';
 import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '../index.js';
@@ -10,12 +10,11 @@ const NotificationBell = () => {
     markNotificationAsUnread,
     notifications,
     unreadNotificationsCount,
-    fetchInAppNotifications,
   } = useInApp();
 
   return (
     <Theme>
-      <Popover.Root onOpenChange={fetchInAppNotifications}>
+      <Popover.Root>
         <Tooltip.Root>
           <Tooltip.Trigger>
             <Popover.Trigger>
@@ -30,7 +29,7 @@ const NotificationBell = () => {
           </Tooltip.Trigger>
           <Tooltip.Content content="Notification" />
         </Tooltip.Root>
-        <Popover.Content spacing="large" maxWidth={'350px'}>
+        <Popover.Content spacing="large" width="350px" height="450px">
           <Popover.Header asChild>
             <Flex justify="between" align="center">
               <Heading size={3}>Notifications</Heading>
@@ -45,18 +44,20 @@ const NotificationBell = () => {
             <Flex direction="column" gap={1}>
               {notifications.length < 0 && (
                 <Flex justify="center" align="center">
-                  <Text>No notifications</Text>
+                  <Text variant="tertiary" size={2}>
+                    No notifications yet.
+                  </Text>
                 </Flex>
               )}
               {notifications.map((notification) => (
                 <Card key={notification.id}>
-                  <Flex align="center" gap={4}>
+                  <Flex align="center" gap={4} justify="between">
                     <Flex direction="column" gap={1}>
                       <Text as="p" variant="secondary" weight="semibold" size={2}>
                         {notification.renderedContent.body}
                       </Text>
                       <Text size={1} variant="tertiary">
-                        Today
+                        {intlFormatDistance(notification.sentAt, new Date())}
                       </Text>
                     </Flex>
                     <Tooltip.Root>
@@ -64,6 +65,8 @@ const NotificationBell = () => {
                         <Button
                           shape="square"
                           variant="ghost"
+                          roundness="full"
+                          mode={notification.readAt ? 'subtle' : 'distinct'}
                           onPress={() => {
                             if (notification.readAt) {
                               markNotificationAsUnread(notification.id);
