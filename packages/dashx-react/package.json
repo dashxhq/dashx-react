@@ -1,6 +1,7 @@
 {
   "name": "@dashx/react",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "license": "UNLICENSED",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -70,9 +71,7 @@
     "dev:js:esm": "node esbuild-esm.mjs watch=true",
     "dev:js:esm:types": "tsc --watch --incremental --outdir dist/esm >/dev/null",
     "dev:css": "postcss src/styles/index.css -o styles.css --watch",
-    "lint": "yarn lint:js && yarn lint:css",
-    "lint:js": "eslint \"src/**/*.ts*\"",
-    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo node_modules dist tokens layout *.css",
     "prepublishOnly": "yarn lint"
   },
