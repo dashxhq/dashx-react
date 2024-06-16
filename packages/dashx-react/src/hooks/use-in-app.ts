@@ -67,7 +67,7 @@ const useInApp = (): UseInAppHookResponse => {
             throw new Error(`Unknown message type ${message}`);
         }
       },
-      /* onOpen: (_) => {
+      onOpen: (_) => {
         let subscriptionMessage: WebsocketMessageType = {
           type: WebsocketMessage.SUBSCRIBE,
           data: {
@@ -76,7 +76,7 @@ const useInApp = (): UseInAppHookResponse => {
         };
 
         sendJsonMessage(subscriptionMessage);
-      }, */
+      },
     },
     connectWebsocket,
   );
