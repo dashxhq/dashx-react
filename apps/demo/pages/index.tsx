@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
-import { Bell, Inbox, Mail, MailOpen } from '@dashx/react/icons';
+import { Bell, Inbox, Mail, MailOpen, X } from '@dashx/react/icons';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -13,11 +13,12 @@ const QUICK_BROWN_FOX = 'The quick brown fox jumps over the lazy dog.';
 const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
+  const [baseDensity, setBaseDensity] = useState(1);
   return (
-    <Theme accentBaseColor={baseColor} className="dr">
+    <Theme accentBaseColor={baseColor} density={baseDensity} className="dr">
       <Flex direction="column" gap={4}>
-        <Flex gap={4} align="center">
-          <Popover.Root>
+        <Flex gap={4} align="center" justify="end">
+          <Popover.Root open>
             <Tooltip.Root>
               <Tooltip.Trigger>
                 <Popover.Trigger>
@@ -28,14 +29,27 @@ function Index() {
               </Tooltip.Trigger>
               <Tooltip.Content content="Notification" />
             </Tooltip.Root>
-            <Popover.Content spacing="large" maxWidth={'350px'}>
+            <Popover.Content spacing="large" width="350px">
               <Popover.Header asChild>
-                <Heading size={3}>Notifications</Heading>
+                <Flex justify="between" align="center">
+                  <Heading size={3}>Notifications</Heading>
+                  <Popover.Close>
+                    <Button
+                      shape="square"
+                      roundness="full"
+                      variant="ghost"
+                      mode="subtle"
+                      inset="right"
+                    >
+                      <X />
+                    </Button>
+                  </Popover.Close>
+                </Flex>
               </Popover.Header>
               <Popover.Body>
                 <Flex direction="column" gap={1}>
                   <Card>
-                    <Flex align="center" gap={4}>
+                    <Flex align="center" justify="between" gap={4}>
                       <Flex direction="column" gap={1}>
                         <Text as="p" variant="secondary" weight="semibold" size={2}>
                           {QUICK_BROWN_FOX}
@@ -55,7 +69,7 @@ function Index() {
                     </Flex>
                   </Card>
                   <Card>
-                    <Flex align="center" gap={4}>
+                    <Flex align="center" justify="between" gap={4}>
                       <Flex direction="column" gap={1}>
                         <Text as="p" variant="secondary" weight="semibold" size={2}>
                           {QUICK_BROWN_FOX}
@@ -70,7 +84,7 @@ function Index() {
                     </Flex>
                   </Card>
                   <Card>
-                    <Flex align="center" gap={4}>
+                    <Flex align="center" justify="between" gap={4}>
                       <Flex direction="column" gap={1}>
                         <Text as="p" variant="secondary" weight="semibold" size={2}>
                           {QUICK_BROWN_FOX}
@@ -101,6 +115,16 @@ function Index() {
             onChange={(e) => {
               setBaseColor(e.target.value);
             }}
+          />
+          <input
+            type="range"
+            min={0.75}
+            max={1.5}
+            onChange={(e) => {
+              setBaseDensity(Number(e.target.value));
+            }}
+            value={baseDensity}
+            step={0.05}
           />
         </Flex>
         <Flex justify="center">

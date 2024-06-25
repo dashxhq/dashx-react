@@ -28,7 +28,6 @@
 
   --negative-base: oklch(0% 0 20);
 
-  --base-density: 1;
   --density-multiplier: 1;
   --density: calc(var(--base-density) * var(--density-multiplier, 1));
   /* --roundness: 1; */
@@ -162,6 +161,8 @@
   --line-height-8: calc(2rem / var(--density));
   --line-height-9: calc(2.25rem / var(--density));
   --line-height-10: calc(2.5rem / var(--density));
+
+  accent-color: var(--color-accent-500);
 }
 [data-radius='none'] {
   --roundness: 0;

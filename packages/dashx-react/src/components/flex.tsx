@@ -29,12 +29,17 @@ const flexVariants = tv({
       32: 'gap-32',
     },
     justify: {
+      baseline: 'justify-baseline',
       center: 'justify-center',
       between: 'justify-between',
+      start: 'justify-start',
+      end: 'justify-end',
     },
     align: {
       baseline: 'items-baseline',
       center: 'items-center',
+      start: 'items-start',
+      end: 'items-end',
     },
   },
 });

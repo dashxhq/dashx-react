@@ -6,7 +6,7 @@ import type { VariantProps } from 'tailwind-variants';
 
 const button = tv({
   extend: baseElement,
-  base: 'inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',
+  base: 'inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30 data-[disabled]:shadow-none',
   variants: {
     size: {
       extrasmall: 'text-xs',
@@ -143,7 +143,7 @@ const button = tv({
       shape: 'rect',
       size: 'large',
       className:
-        'min-w-28 px-6 data-[inset=left]:-ml-6 data-[inset=right]:-mr-6 data-[inset=both]:-mx-6',
+        'min-w-24 px-6 data-[inset=left]:-ml-6 data-[inset=right]:-mr-6 data-[inset=both]:-mx-6',
     },
     {
       shape: 'rect',
