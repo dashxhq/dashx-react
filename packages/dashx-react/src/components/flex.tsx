@@ -1,5 +1,6 @@
 import React from 'react';
 import { tv } from 'tailwind-variants';
+import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '../utils/cn.js';
 
@@ -44,14 +45,16 @@ const flexVariants = tv({
   },
 });
 
-type FlexProps = VariantProps<typeof flexVariants>;
+type FlexProps = VariantProps<typeof flexVariants> & {
+  asChild?: boolean;
+};
 
 const Flex = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & FlexProps>(
   (props, ref) => {
-    const { className, direction, gap, justify, align, ...rest } = props;
-
+    const { className, direction, gap, justify, align, asChild, ...rest } = props;
+    const Comp = asChild ? Slot : 'div';
     return (
-      <div
+      <Comp
         className={cn(flexVariants({ direction, gap, justify, align }), className)}
         ref={ref}
         {...rest}

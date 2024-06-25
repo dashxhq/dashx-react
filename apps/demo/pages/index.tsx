@@ -14,8 +14,11 @@ const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
   const [baseDensity, setBaseDensity] = useState(1);
+  const [roundness, setRoundness] = useState<'medium' | 'small' | 'none' | 'large' | 'full'>(
+    'medium',
+  );
   return (
-    <Theme accentBaseColor={baseColor} density={baseDensity} className="dr">
+    <Theme accentBaseColor={baseColor} density={baseDensity} roundness={roundness} className="dr">
       <Flex direction="column" gap={4}>
         <Flex gap={4} align="center" justify="end">
           <Popover.Root open>
@@ -29,7 +32,7 @@ function Index() {
               </Tooltip.Trigger>
               <Tooltip.Content content="Notification" />
             </Tooltip.Root>
-            <Popover.Content spacing="large" width="350px">
+            <Popover.Content spacing="large" width={`calc(350px + 50px / ${baseDensity})`}>
               <Popover.Header asChild>
                 <Flex justify="between" align="center">
                   <Heading size={3}>Notifications</Heading>
@@ -107,25 +110,6 @@ function Index() {
               </Popover.Footer>
             </Popover.Content>
           </Popover.Root>
-        </Flex>
-        <Flex justify="center">
-          <input
-            type="color"
-            value={baseColor}
-            onChange={(e) => {
-              setBaseColor(e.target.value);
-            }}
-          />
-          <input
-            type="range"
-            min={0.75}
-            max={1.5}
-            onChange={(e) => {
-              setBaseDensity(Number(e.target.value));
-            }}
-            value={baseDensity}
-            step={0.05}
-          />
         </Flex>
         <Flex justify="center">
           {COLOR_SCALE.map((color) => (
@@ -272,6 +256,109 @@ function Index() {
             ))}
           </Flex>
         ))}
+        <Theme density={1}>
+          <Card asChild>
+            <div
+              style={{
+                position: 'fixed',
+                bottom: 0,
+                right: 0,
+                backgroundColor: '#ececec',
+                color: 'white !important',
+              }}
+            >
+              <Flex justify="center" align="baseline" gap={4}>
+                <Text>Roundness</Text>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    None
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setRoundness('none');
+                      }}
+                      checked={roundness === 'none'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Small
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setRoundness('small');
+                      }}
+                      checked={roundness === 'small'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Medium
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setRoundness('medium');
+                      }}
+                      checked={roundness === 'medium'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Large
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setRoundness('large');
+                      }}
+                      checked={roundness === 'large'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={1} align="center">
+                  <Text as="label">
+                    Full
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setRoundness('full');
+                      }}
+                      checked={roundness === 'full'}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
+              <Flex justify="center" align="center" gap={4}>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Density
+                    <input
+                      type="range"
+                      min={0.75}
+                      max={1.5}
+                      onChange={(e) => {
+                        setBaseDensity(Number(e.target.value));
+                      }}
+                      value={baseDensity}
+                      step={0.05}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
+              <Flex justify="center">
+                <input
+                  type="color"
+                  value={baseColor}
+                  onChange={(e) => {
+                    setBaseColor(e.target.value);
+                  }}
+                />
+              </Flex>
+            </div>
+          </Card>
+        </Theme>
       </Flex>
     </Theme>
   );
