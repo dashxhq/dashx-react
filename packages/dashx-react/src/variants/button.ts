@@ -17,8 +17,8 @@ const button = tv({
     },
     variant: {
       fill: 'text-white',
-      outline: 'border-2',
-      simple: 'border-1 hover:ring-1 hover:ring-inset',
+      outline: 'ring-2 ring-inset',
+      simple: 'ring-1 ring-inset hover:ring-2 data-[focus-visible]:ring-2',
       ghost: '',
     },
     mode: {

@@ -2,7 +2,7 @@ import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@das
 import { button, heading, text } from '@dashx/react/variants';
 import { Bell, Inbox, Mail, MailOpen, X } from '@dashx/react/icons';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import '@dashx/react/styles.css';
 
@@ -25,7 +25,7 @@ function Index() {
             <Tooltip.Root>
               <Tooltip.Trigger>
                 <Popover.Trigger>
-                  <Button shape="square" roundness="full" variant="ghost">
+                  <Button shape="square">
                     <Inbox />
                   </Button>
                 </Popover.Trigger>
@@ -63,7 +63,7 @@ function Index() {
                       </Flex>
                       <Tooltip.Root>
                         <Tooltip.Trigger>
-                          <Button shape="square" variant="ghost">
+                          <Button shape="square" variant="ghost" roundness="full">
                             <MailOpen />
                           </Button>
                         </Tooltip.Trigger>
@@ -81,7 +81,7 @@ function Index() {
                           Yesterday
                         </Text>
                       </Flex>
-                      <Button shape="square" variant="ghost">
+                      <Button shape="square" variant="ghost" roundness="full">
                         <Mail />
                       </Button>
                     </Flex>
@@ -96,7 +96,7 @@ function Index() {
                           2 days ago
                         </Text>
                       </Flex>
-                      <Button shape="square" variant="ghost">
+                      <Button shape="square" variant="ghost" roundness="full">
                         <MailOpen />
                       </Button>
                     </Flex>
@@ -210,9 +210,16 @@ function Index() {
             </Button>
           ))}
         </Flex>
+        <Flex gap={4}>
+          {Object.keys(button.variants.size).map((size: any) => (
+            <Button shape="square" key={size} size={size} onPress={onPress}>
+              <Bell />
+            </Button>
+          ))}
+        </Flex>
         <Heading>Variants</Heading>
         {Object.keys(button.variants.mode).map((mode: any) => (
-          <React.Fragment key={mode}>
+          <Fragment key={mode}>
             <Text>{mode}</Text>
             <Flex gap={4}>
               {Object.keys(button.variants.variant).map((variant: any) => (
@@ -221,11 +228,24 @@ function Index() {
                 </Button>
               ))}
             </Flex>
-          </React.Fragment>
+            <Flex gap={4}>
+              {Object.keys(button.variants.variant).map((variant: any) => (
+                <Button
+                  shape="square"
+                  key={variant}
+                  mode={mode}
+                  variant={variant}
+                  onPress={onPress}
+                >
+                  <Bell />
+                </Button>
+              ))}
+            </Flex>
+          </Fragment>
         ))}
         <Heading>Disabled</Heading>
         {Object.keys(button.variants.mode).map((mode: any) => (
-          <React.Fragment key={mode}>
+          <Fragment key={mode}>
             <Text>{mode}</Text>
             <Flex gap={4}>
               {Object.keys(button.variants.variant).map((variant: any) => (
@@ -234,7 +254,23 @@ function Index() {
                 </Button>
               ))}
             </Flex>
-          </React.Fragment>
+            <Flex gap={4}>
+              {Object.keys(button.variants.variant).map((variant: any) => (
+                <Fragment key={variant}>
+                  <Button
+                    shape="square"
+                    key={variant}
+                    mode={mode}
+                    variant={variant}
+                    onPress={onPress}
+                    isDisabled
+                  >
+                    <Bell />
+                  </Button>
+                </Fragment>
+              ))}
+            </Flex>
+          </Fragment>
         ))}
         <Heading>Roundness</Heading>
         {Object.keys(button.variants.size).map((size: any) => (
