@@ -17,8 +17,14 @@ function Index() {
   const [roundness, setRoundness] = useState<'medium' | 'small' | 'none' | 'large' | 'full'>(
     'medium',
   );
+  const [elevation, setElevation] = useState<'medium' | 'small' | 'none' | 'large'>('medium');
   return (
-    <Theme accentBaseColor={baseColor} density={baseDensity} roundness={roundness} className="dr">
+    <Theme
+      accentBaseColor={baseColor}
+      density={baseDensity}
+      roundness={roundness}
+      elevation={elevation}
+    >
       <Flex direction="column" gap={4}>
         <Flex gap={4} align="center" justify="end">
           <Popover.Root open>
@@ -111,7 +117,7 @@ function Index() {
             </Popover.Content>
           </Popover.Root>
         </Flex>
-        <Flex justify="center">
+        <Flex>
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -128,7 +134,7 @@ function Index() {
             </div>
           ))}
         </Flex>
-        <Flex justify="center">
+        <Flex>
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -145,7 +151,7 @@ function Index() {
             </div>
           ))}
         </Flex>
-        <Flex justify="center">
+        <Flex>
           {COLOR_SCALE.map((color) => (
             <div
               key={color}
@@ -303,6 +309,57 @@ function Index() {
                 color: 'white !important',
               }}
             >
+              <Flex justify="center" align="baseline" gap={4}>
+                <Text>Elevation</Text>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    None
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setElevation('none');
+                      }}
+                      checked={elevation === 'none'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Small
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setElevation('small');
+                      }}
+                      checked={elevation === 'small'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Medium
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setElevation('medium');
+                      }}
+                      checked={elevation === 'medium'}
+                    />
+                  </Text>
+                </Flex>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Large
+                    <input
+                      type="radio"
+                      onChange={(e) => {
+                        setElevation('large');
+                      }}
+                      checked={elevation === 'large'}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
               <Flex justify="center" align="baseline" gap={4}>
                 <Text>Roundness</Text>
                 <Flex asChild gap={2} align="center">

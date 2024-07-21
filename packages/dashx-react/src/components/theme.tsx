@@ -8,6 +8,7 @@ interface ThemeContext {
   negativeBaseColor?: string;
   grayBaseColor?: string;
   roundness?: 'none' | 'small' | 'medium' | 'large' | 'full';
+  elevation?: 'none' | 'small' | 'medium' | 'large';
   density?: number;
   contrast?: number;
   mode?: 'light' | 'dark';
@@ -22,6 +23,7 @@ const ThemeContext = React.createContext<ThemeContext>({
   negativeBaseColor: undefined,
   grayBaseColor: undefined,
   roundness: 'medium',
+  elevation: 'medium',
   density: 1,
   contrast: undefined,
   mode: undefined,
@@ -35,11 +37,13 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
     negativeBaseColor = parentTheme.negativeBaseColor,
     grayBaseColor = parentTheme.grayBaseColor,
     roundness = parentTheme.roundness,
+    elevation = parentTheme.elevation,
     density = parentTheme.density,
     contrast = parentTheme.contrast,
     mode = parentTheme.mode,
     ...rest
   } = props;
+
   const Comp = asChild ? Slot : 'div';
   return (
     <TooltipProvider delayDuration={200}>
@@ -50,6 +54,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
             negativeBaseColor,
             grayBaseColor,
             roundness,
+            elevation,
             density,
             contrast,
             mode,
@@ -68,6 +73,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
               } as any
             }
             data-radius={roundness}
+            data-shadow={elevation}
           />
         </ThemeContext.Provider>
       </DirectionProvider>

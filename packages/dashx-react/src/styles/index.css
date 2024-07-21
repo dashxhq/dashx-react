@@ -162,8 +162,57 @@
   --line-height-9: calc(2.25rem / var(--density));
   --line-height-10: calc(2.5rem / var(--density));
 
+  /* Box Shadow */
+  --shadow-none-base: 0 0 #0000;
+  --shadow-inner-base: inset 0 calc(2px * var(--elevation)) calc(4px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  /* Switch */
+  --shadow-3xs-base: 0 calc(2px * var(--elevation)) calc(2px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  /* Card */
+  --shadow-2xs-base: 0 calc(2px * var(--elevation)) calc(3px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  /* Slider thumb */
+  --shadow-xs-base: 0 calc(4px * var(--elevation)) calc(6px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  /* Button */
+  --shadow-sm-base: 0 calc(10px * var(--elevation)) calc(20px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  /* Alert, Popover, Tooltip, Card hovered, etc.. */
+  --shadow-md-base: 0 calc(13px * var(--elevation)) calc(20px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  /* Button hovered */
+  --shadow-lg-base: 0 calc(13px * var(--elevation)) calc(30px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  /* TextInput, TextArea */
+  --shadow-xl-base: 0 calc(20px * var(--elevation)) calc(60px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  /* Larger overlays: Sidebar, Sidepane, Dialog */
+  --shadow-2xl-base: 0 calc(29px * var(--elevation)) calc(50px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.25));
+  /* Largest overlay */
+  --shadow-3xl-base: 0 calc(29px * var(--elevation)) calc(60px * var(--elevation)) 0
+    var(--tw-shadow-color, rgb(0 0 0 / 0.25));
+
   accent-color: var(--color-accent-500);
 }
+
+[data-shadow='none'] {
+  --elevation: 0;
+}
+
+[data-shadow='small'] {
+  --elevation: 0.75;
+}
+
+[data-shadow='medium'] {
+  --elevation: 1;
+}
+
+[data-shadow='large'] {
+  --elevation: 1.5;
+}
+
 [data-radius='none'] {
   --roundness: 0;
   --radius-full: 0px;
@@ -288,26 +337,26 @@
   --radius-3xl-or-full: ;
   --radius-full: ;
 
-  --shadow-none: 0 0 #0000;
-  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-none: var(--shadow-none-base);
+  --shadow-inner: var(--shadow-inner-base);
   /* Switch */
-  --shadow-3xs: 0 2px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-3xs: var(--shadow-3xs-base);
   /* Card */
-  --shadow-2xs: 0 2px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-2xs: var(--shadow-2xs-base);
   /* Slider thumb */
-  --shadow-xs: 0 4px 6px 0 rgb(0 0 0 / 0.05);
+  --shadow-xs: var(--shadow-xs-base);
   /* Button */
-  --shadow-sm: 0 10px 20px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: var(--shadow-sm-base);
   /* Alert, Popover, Tooltip, Card hovered, etc.. */
-  --shadow-md: 0 13px 20px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: var(--shadow-md-base);
   /* Button hovered */
-  --shadow-lg: 0 13px 30px 0 rgb(0 0 0 / 0.1);
+  --shadow-lg: var(--shadow-lg-base);
   /* TextInput, TextArea */
-  --shadow-xl: 0 20px 60px 0 rgb(0 0 0 / 0.1);
+  --shadow-xl: var(--shadow-xl-base);
   /* Larger overlays: Sidebar, Sidepane, Dialog */
-  --shadow-2xl: 0 29px 50px 0 rgb(0 0 0 / 0.25);
+  --shadow-2xl: var(--shadow-2xl-base);
   /* Largest overlay */
-  --shadow-3xl: 0 29px 60px 0 rgb(0 0 0 / 0.25);
+  --shadow-3xl: var(--shadow-3xl-base);
 
   /* Type scale */
   --font-size-xs: ;
