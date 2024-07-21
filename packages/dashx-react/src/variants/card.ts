@@ -11,7 +11,7 @@ const SPACING = {
 };
 
 const card = tv({
-  base: 'shadow-2xs border border-gray-300/30 bg-white p-[var(--padding)] shadow-gray-400/10',
+  base: 'shadow-2xs bg-bg border border-gray-300/30 p-[var(--padding)] shadow-gray-400/10',
   variants: {
     roundness: {
       none: 'rounded-none',

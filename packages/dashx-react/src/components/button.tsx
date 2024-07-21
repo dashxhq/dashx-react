@@ -18,7 +18,7 @@ export interface ButtonProps
 }
 
 function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
-  const { asChild, children, size, mode, variant, roundness, shape, inset } = props;
+  const { asChild, children, size, mode, variant, roundness, elevation, shape, inset } = props;
   let elementType = asChild
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
     : 'button';
@@ -74,8 +74,9 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
       data-hovered={isHovered || undefined}
       data-focused={isFocused || undefined}
       data-focus-visible={isFocusVisible || undefined}
-      className={cn('dr', button({ size, mode, variant, roundness, shape }))}
+      className={cn('dr', button({ size, mode, variant, roundness, elevation, shape }))}
       data-radius={roundness}
+      data-shadow={elevation}
       data-inset={inset}
     >
       {children}

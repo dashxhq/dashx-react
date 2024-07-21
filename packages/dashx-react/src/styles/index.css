@@ -1,18 +1,24 @@
 @import 'tailwindcss/preflight';
 @import 'tailwindcss/utilities';
 
-.dr {
-  --lightness-50: 97.78%;
-  --lightness-100: 93.56%;
-  --lightness-200: 88.11%;
-  --lightness-300: 82.67%;
-  --lightness-400: 74.22%;
-  --lightness-500: 64.78%;
-  --lightness-600: 54%;
-  --lightness-700: 46.89%;
-  --lightness-800: 39.44%;
-  --lightness-900: 32%;
-  --lightness-950: 23.78%;
+:is(.dark, .dark-theme),
+:is(.dark, .dark-theme) :where(.dr:not(.light, .light-theme)) {
+  /* TODO */
+}
+
+.dr:where(.light, .light-theme) {
+  /* Higher the contrast, further the lightness of consecutive colors */
+  --lightness-50: calc(4.44% * var(--contrast-factor) + 93.34%);
+  --lightness-100: calc(-7.12% * var(--contrast-factor) + 100.68%);
+  --lightness-200: calc(-16.22% * var(--contrast-factor) + 104.33%);
+  --lightness-300: calc(-25.34% * var(--contrast-factor) + 108.01%);
+  --lightness-400: calc(-28.44% * var(--contrast-factor) + 102.66%);
+  --lightness-500: calc(-29.56% * var(--contrast-factor) + 94.34%);
+  --lightness-600: calc(-28% * var(--contrast-factor) + 82%);
+  --lightness-700: calc(-33% * var(--contrast-factor) + 80.67%);
+  --lightness-800: calc(-38.88% * var(--contrast-factor) + 78.32%);
+  --lightness-900: calc(-44% * var(--contrast-factor) + 76%);
+  --lightness-950: calc(-47.56% * var(--contrast-factor) + 71.34%);
 
   --chroma-50: 0.02;
   --chroma-100: 0.04;
@@ -26,11 +32,15 @@
   --chroma-900: 0.2;
   --chroma-950: 0.2;
 
+  --color-bg: var(--color-white);
+  --color-fg: var(--color-black);
+}
+
+.dr {
   --negative-base: oklch(0% 0 20);
 
-  --density-multiplier: 1;
-  --density: calc(var(--base-density) * var(--density-multiplier, 1));
-  /* --roundness: 1; */
+  --density-factor: 1;
+  --density: calc(var(--base-density) * var(--density-factor, 1));
 
   /* Colors */
   /* Default background */
@@ -305,7 +315,10 @@
   --color-gray-900: ;
   --color-gray-950: ;
 
-  --color-white: rgb(255 255 255);
+  --color-white: ;
+  --color-black: ;
+  --color-bg: ;
+  --color-fg: ;
 
   --spacing-1: ;
   --spacing-2: ;
@@ -413,6 +426,6 @@
 
 @media (pointer: coarse) {
   .dr {
-    --density-multiplier: 0.8;
+    --density-factor: 0.8;
   }
 }

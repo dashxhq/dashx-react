@@ -33,6 +33,12 @@ const button = tv({
       large: '',
       full: '',
     },
+    elevation: {
+      none: '',
+      small: '',
+      medium: '',
+      large: '',
+    },
     shape: {
       square: '',
       rect: '',

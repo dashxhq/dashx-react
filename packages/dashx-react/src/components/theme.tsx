@@ -25,8 +25,8 @@ const ThemeContext = React.createContext<ThemeContext>({
   roundness: 'medium',
   elevation: 'medium',
   density: 1,
-  contrast: undefined,
-  mode: undefined,
+  contrast: 1,
+  mode: 'light',
 });
 
 const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref) => {
@@ -62,7 +62,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
         >
           <Comp
             {...rest}
-            className="dr"
+            className={'dr ' + mode}
             ref={ref}
             style={
               {
@@ -70,6 +70,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
                 '--negative-base': negativeBaseColor,
                 '--gray-base': grayBaseColor,
                 '--base-density': density,
+                '--contrast-factor': contrast,
               } as any
             }
             data-radius={roundness}

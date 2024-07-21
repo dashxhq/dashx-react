@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
-import { Bell, Inbox, Mail, MailOpen, X } from '@dashx/react/icons';
+import { Bell, Inbox, Mail, MailOpen, Moon, Sun, X } from '@dashx/react/icons';
 import Link from 'next/link';
 import React, { Fragment, useState } from 'react';
 
@@ -14,18 +14,22 @@ const COLOR_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
   const [baseDensity, setBaseDensity] = useState(1);
+  const [contrast, setContrast] = useState(1);
   const [roundness, setRoundness] = useState<'medium' | 'small' | 'none' | 'large' | 'full'>(
     'medium',
   );
   const [elevation, setElevation] = useState<'medium' | 'small' | 'none' | 'large'>('medium');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   return (
     <Theme
       accentBaseColor={baseColor}
       density={baseDensity}
       roundness={roundness}
       elevation={elevation}
+      contrast={contrast}
+      // mode={mode}
     >
-      <Flex direction="column" gap={4}>
+      <Flex direction="column" gap={4} className="bg-bg">
         <Flex gap={4} align="center" justify="end">
           <Popover.Root open>
             <Tooltip.Root>
@@ -440,6 +444,23 @@ function Index() {
                   </Text>
                 </Flex>
               </Flex>
+              <Flex justify="center" align="center" gap={4}>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Contrast
+                    <input
+                      type="range"
+                      min={0.75}
+                      max={1.5}
+                      onChange={(e) => {
+                        setContrast(Number(e.target.value));
+                      }}
+                      value={contrast}
+                      step={0.05}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
               <Flex justify="center">
                 <input
                   type="color"
@@ -448,6 +469,27 @@ function Index() {
                     setBaseColor(e.target.value);
                   }}
                 />
+              </Flex>
+              <Flex>
+                <Flex gap={2} align="center">
+                  <Text as="label">Mode</Text>
+                  <Button
+                    elevation="none"
+                    variant={mode === 'dark' ? 'ghost' : 'fill'}
+                    mode={mode === 'dark' ? 'subtle' : 'distinct'}
+                    onPress={() => setMode('light')}
+                  >
+                    <Sun /> Light
+                  </Button>
+                  <Button
+                    elevation="none"
+                    variant={mode === 'light' ? 'ghost' : 'fill'}
+                    mode={mode === 'light' ? 'subtle' : 'distinct'}
+                    onPress={() => setMode('dark')}
+                  >
+                    <Moon /> Dark
+                  </Button>
+                </Flex>
               </Flex>
             </div>
           </Card>
