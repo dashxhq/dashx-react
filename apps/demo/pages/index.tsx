@@ -1,8 +1,9 @@
+import React, { Fragment, useState } from 'react';
+import Link from 'next/link';
+
 import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
 import { Bell, Inbox, Mail, MailOpen, X } from '@dashx/react/icons';
-import Link from 'next/link';
-import React, { Fragment, useState } from 'react';
 
 import '@dashx/react/styles.css';
 
