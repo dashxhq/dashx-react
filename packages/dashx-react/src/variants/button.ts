@@ -6,7 +6,7 @@ import type { VariantProps } from 'tailwind-variants';
 
 const button = tv({
   extend: baseElement,
-  base: 'inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30 data-[disabled]:shadow-none',
+  base: 'inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.25, select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[disabled]:shadow-none',
   variants: {
     size: {
       extrasmall: 'text-xs',
@@ -16,7 +16,7 @@ const button = tv({
       extralarge: 'text-xl',
     },
     variant: {
-      fill: 'text-white',
+      fill: 'text-bg',
       outline: 'ring-2 ring-inset',
       simple: 'ring-1 ring-inset hover:ring-2 data-[focus-visible]:ring-2',
       ghost: '',
@@ -61,7 +61,7 @@ const button = tv({
       mode: 'distinct',
       variant: 'fill',
       className:
-        'bg-accent-500 hover:bg-accent-600 active:bg-accent-700 shadow-accent-600/30 hover:shadow-accent-600/30 active:shadow-accent-600/30 shadow-sm hover:shadow-lg active:shadow-sm',
+        'bg-accent-500 hover:bg-accent-600 active:bg-accent-700 shadow-accent-600/30 hover:shadow-accent-600/30 active:shadow-accent-600/30',
     },
     {
       mode: 'distinct',
@@ -84,7 +84,7 @@ const button = tv({
       mode: 'subtle',
       variant: 'fill',
       className:
-        'bg-gray-500 shadow-sm shadow-gray-600/30 hover:bg-gray-600 hover:shadow-lg hover:shadow-gray-600/30 active:bg-gray-700 active:shadow-sm active:shadow-gray-600/30',
+        'bg-gray-500 shadow-gray-600/30 hover:bg-gray-600 hover:shadow-lg hover:shadow-gray-600/30 active:bg-gray-700 active:shadow-gray-600/30',
     },
     {
       mode: 'subtle',
@@ -107,7 +107,7 @@ const button = tv({
       mode: 'negative',
       variant: 'fill',
       className:
-        'bg-negative-500 hover:bg-negative-600 active:bg-negative-700 shadow-negative-600/30 hover:shadow-negative-600/30 active:shadow-negative-600/30 shadow-sm hover:shadow-lg active:shadow-sm',
+        'bg-negative-500 hover:bg-negative-600 active:bg-negative-700 shadow-negative-600/30 hover:shadow-negative-600/30 active:shadow-negative-600/30',
     },
     {
       mode: 'negative',
@@ -186,6 +186,32 @@ const button = tv({
       size: 'extralarge',
       className:
         'size-14 p-5 data-[inset=left]:-ml-5 data-[inset=right]:-mr-5 data-[inset=both]:-mx-5',
+    },
+
+    {
+      size: 'extrasmall',
+      variant: 'fill',
+      className: 'shadow-2xs active:shadow-2xs hover:shadow-sm',
+    },
+    {
+      size: 'small',
+      variant: 'fill',
+      className: 'shadow-2xs active:shadow-2xs hover:shadow-sm',
+    },
+    {
+      size: 'medium',
+      variant: 'fill',
+      className: 'shadow-xs hover:shadow-md active:shadow-xs',
+    },
+    {
+      size: 'large',
+      variant: 'fill',
+      className: 'shadow-sm hover:shadow-lg active:shadow-sm',
+    },
+    {
+      size: 'extralarge',
+      variant: 'fill',
+      className: 'shadow-sm hover:shadow-lg active:shadow-sm',
     },
   ],
 });

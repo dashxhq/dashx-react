@@ -15,6 +15,7 @@ function Index() {
   const [baseColor, setBaseColor] = useState('#9661E2');
   const [baseDensity, setBaseDensity] = useState(1);
   const [contrast, setContrast] = useState(1);
+  const [chroma, setChroma] = useState(1);
   const [roundness, setRoundness] = useState<'medium' | 'small' | 'none' | 'large' | 'full'>(
     'medium',
   );
@@ -27,9 +28,10 @@ function Index() {
       roundness={roundness}
       elevation={elevation}
       contrast={contrast}
-      // mode={mode}
+      mode={mode}
+      chroma={chroma}
     >
-      <Flex direction="column" gap={4} className="bg-bg">
+      <Flex direction="column" gap={4} className="bg-gray-50">
         <Flex gap={4} align="center" justify="end">
           <Popover.Root open>
             <Tooltip.Root>
@@ -309,8 +311,6 @@ function Index() {
                 position: 'fixed',
                 bottom: 0,
                 right: 0,
-                backgroundColor: '#ececec',
-                color: 'white !important',
               }}
             >
               <Flex justify="center" align="baseline" gap={4}>
@@ -450,13 +450,30 @@ function Index() {
                     Contrast
                     <input
                       type="range"
-                      min={0.75}
-                      max={1.5}
+                      min={0.5}
+                      max={2}
                       onChange={(e) => {
                         setContrast(Number(e.target.value));
                       }}
                       value={contrast}
-                      step={0.05}
+                      step={0.1}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
+              <Flex justify="center" align="center" gap={4}>
+                <Flex asChild gap={2} align="center">
+                  <Text as="label">
+                    Chroma
+                    <input
+                      type="range"
+                      min={0}
+                      max={2}
+                      onChange={(e) => {
+                        setChroma(Number(e.target.value));
+                      }}
+                      value={chroma}
+                      step={0.1}
                     />
                   </Text>
                 </Flex>

@@ -47,7 +47,7 @@ const TooltipContent = React.forwardRef<TooltipElement, TooltipProps>((props, fo
           ref={forwardedRef}
           className={'rounded-sm bg-gray-600 py-2 px-4 shadow-md shadow-gray-400/30'}
         >
-          <Text className="text-white" as="p" size={1}>
+          <Text className="text-bg" as="p" size={1}>
             {content}
           </Text>
           <TooltipPrimitive.Arrow className="fill-gray-600" />

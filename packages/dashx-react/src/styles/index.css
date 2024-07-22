@@ -3,44 +3,62 @@
 
 :is(.dark, .dark-theme),
 :is(.dark, .dark-theme) :where(.dr:not(.light, .light-theme)) {
-  /* TODO */
+  color-scheme: dark;
+
+  /* Higher the contrast, further the lightness of consecutive colors */
+  --lightness-950: calc(4.44% * var(--contrast-factor, 1) + 93.34%);
+  --lightness-900: calc(-7.12% * var(--contrast-factor, 1) + 100.68%);
+  --lightness-800: calc(-16.22% * var(--contrast-factor, 1) + 104.33%);
+  --lightness-700: calc(-25.34% * var(--contrast-factor, 1) + 108.01%);
+  --lightness-600: calc(-28.44% * var(--contrast-factor, 1) + 102.66%);
+  --lightness-500: calc(-29.56% * var(--contrast-factor, 1) + 94.34%);
+  --lightness-400: calc(-28% * var(--contrast-factor, 1) + 82%);
+  --lightness-300: calc(-33% * var(--contrast-factor, 1) + 80.67%);
+  --lightness-200: calc(-38.88% * var(--contrast-factor, 1) + 78.32%);
+  --lightness-100: calc(-44% * var(--contrast-factor, 1) + 76%);
+  --lightness-50: calc(-47.56% * var(--contrast-factor, 1) + 71.34%);
+
+  --color-bg: var(--color-black);
+  --color-fg: var(--color-white);
 }
 
 .dr:where(.light, .light-theme) {
-  /* Higher the contrast, further the lightness of consecutive colors */
-  --lightness-50: calc(4.44% * var(--contrast-factor) + 93.34%);
-  --lightness-100: calc(-7.12% * var(--contrast-factor) + 100.68%);
-  --lightness-200: calc(-16.22% * var(--contrast-factor) + 104.33%);
-  --lightness-300: calc(-25.34% * var(--contrast-factor) + 108.01%);
-  --lightness-400: calc(-28.44% * var(--contrast-factor) + 102.66%);
-  --lightness-500: calc(-29.56% * var(--contrast-factor) + 94.34%);
-  --lightness-600: calc(-28% * var(--contrast-factor) + 82%);
-  --lightness-700: calc(-33% * var(--contrast-factor) + 80.67%);
-  --lightness-800: calc(-38.88% * var(--contrast-factor) + 78.32%);
-  --lightness-900: calc(-44% * var(--contrast-factor) + 76%);
-  --lightness-950: calc(-47.56% * var(--contrast-factor) + 71.34%);
+  color-scheme: light;
 
-  --chroma-50: 0.02;
-  --chroma-100: 0.04;
-  --chroma-200: 0.07;
-  --chroma-300: 0.1;
-  --chroma-400: 0.14;
-  --chroma-500: 0.2;
-  --chroma-600: 0.2;
-  --chroma-700: 0.2;
-  --chroma-800: 0.2;
-  --chroma-900: 0.2;
-  --chroma-950: 0.2;
+  /* Higher the contrast, further the lightness of consecutive colors */
+  --lightness-50: calc(4.44% * var(--contrast-factor, 1) + 93.34%);
+  --lightness-100: calc(-7.12% * var(--contrast-factor, 1) + 100.68%);
+  --lightness-200: calc(-16.22% * var(--contrast-factor, 1) + 104.33%);
+  --lightness-300: calc(-25.34% * var(--contrast-factor, 1) + 108.01%);
+  --lightness-400: calc(-28.44% * var(--contrast-factor, 1) + 102.66%);
+  --lightness-500: calc(-29.56% * var(--contrast-factor, 1) + 94.34%);
+  --lightness-600: calc(-28% * var(--contrast-factor, 1) + 82%);
+  --lightness-700: calc(-33% * var(--contrast-factor, 1) + 80.67%);
+  --lightness-800: calc(-38.88% * var(--contrast-factor, 1) + 78.32%);
+  --lightness-900: calc(-44% * var(--contrast-factor, 1) + 76%);
+  --lightness-950: calc(-47.56% * var(--contrast-factor, 1) + 71.34%);
 
   --color-bg: var(--color-white);
   --color-fg: var(--color-black);
 }
 
 .dr {
+  --chroma-50: calc(0.02 * var(--chroma-factor, 1));
+  --chroma-100: calc(0.04 * var(--chroma-factor, 1));
+  --chroma-200: calc(0.07 * var(--chroma-factor, 1));
+  --chroma-300: calc(0.1 * var(--chroma-factor, 1));
+  --chroma-400: calc(0.14 * var(--chroma-factor, 1));
+  --chroma-500: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-600: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-700: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-800: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-900: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-950: calc(0.2 * var(--chroma-factor, 1));
+
   --negative-base: oklch(0% 0 20);
 
   --density-factor: 1;
-  --density: calc(var(--base-density) * var(--density-factor, 1));
+  --density: calc(var(--base-density, 1) * var(--density-factor, 1));
 
   /* Colors */
   /* Default background */

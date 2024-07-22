@@ -11,6 +11,7 @@ interface ThemeContext {
   elevation?: 'none' | 'small' | 'medium' | 'large';
   density?: number;
   contrast?: number;
+  chroma?: number;
   mode?: 'light' | 'dark';
 }
 
@@ -27,6 +28,7 @@ const ThemeContext = React.createContext<ThemeContext>({
   density: 1,
   contrast: 1,
   mode: 'light',
+  chroma: 1,
 });
 
 const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref) => {
@@ -41,6 +43,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
     density = parentTheme.density,
     contrast = parentTheme.contrast,
     mode = parentTheme.mode,
+    chroma = parentTheme.chroma,
     ...rest
   } = props;
 
@@ -58,6 +61,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
             density,
             contrast,
             mode,
+            chroma,
           }}
         >
           <Comp
@@ -71,6 +75,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
                 '--gray-base': grayBaseColor,
                 '--base-density': density,
                 '--contrast-factor': contrast,
+                '--chroma-factor': chroma,
               } as any
             }
             data-radius={roundness}
