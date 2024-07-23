@@ -66,7 +66,7 @@ const Theme = React.forwardRef<React.ElementRef<'div'>, ThemeProps>((props, ref)
         >
           <Comp
             {...rest}
-            className={'dr ' + mode}
+            className={'dx ' + mode}
             ref={ref}
             style={
               {

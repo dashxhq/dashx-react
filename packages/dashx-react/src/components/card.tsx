@@ -16,7 +16,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
     <Comp
       ref={ref}
       {...rest}
-      className={cn('dr', card({ className, spacing, roundness }))}
+      className={cn('dx', card({ className, spacing, roundness }))}
       data-radius={roundness}
       style={{
         // @ts-ignore

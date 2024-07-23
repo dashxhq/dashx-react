@@ -74,7 +74,7 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
       data-hovered={isHovered || undefined}
       data-focused={isFocused || undefined}
       data-focus-visible={isFocusVisible || undefined}
-      className={cn('dr', button({ size, mode, variant, roundness, elevation, shape }))}
+      className={cn('dx', button({ size, mode, variant, roundness, elevation, shape }))}
       data-radius={roundness}
       data-shadow={elevation}
       data-inset={inset}

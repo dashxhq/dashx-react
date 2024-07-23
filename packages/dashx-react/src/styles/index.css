@@ -2,7 +2,7 @@
 @import 'tailwindcss/utilities';
 
 :is(.dark, .dark-theme),
-:is(.dark, .dark-theme) :where(.dr:not(.light, .light-theme)) {
+:is(.dark, .dark-theme) :where(.dx:not(.light, .light-theme)) {
   color-scheme: dark;
 
   /* Higher the contrast, further the lightness of consecutive colors */
@@ -22,7 +22,7 @@
   --color-fg: var(--color-white);
 }
 
-.dr:where(.light, .light-theme) {
+.dx:where(.light, .light-theme) {
   color-scheme: light;
 
   /* Higher the contrast, further the lightness of consecutive colors */
@@ -42,7 +42,7 @@
   --color-fg: var(--color-black);
 }
 
-.dr {
+.dx {
   --chroma-50: calc(0.02 * var(--chroma-factor, 1));
   --chroma-100: calc(0.04 * var(--chroma-factor, 1));
   --chroma-200: calc(0.07 * var(--chroma-factor, 1));
@@ -230,7 +230,7 @@
 }
 
 [data-shadow='small'] {
-  --elevation: 0.75;
+  --elevation: 0.5;
 }
 
 [data-shadow='medium'] {
@@ -277,6 +277,7 @@
   initial-value: oklch(0% 0 260);
 }
 
+/* Tailwind theme */
 @theme {
   /* Breakpoints */
   --breakpoint-sm: 40rem;
@@ -443,7 +444,7 @@
 }
 
 @media (pointer: coarse) {
-  .dr {
+  .dx {
     --density-factor: 0.8;
   }
 }
