@@ -21,7 +21,7 @@ interface ThemeProps extends ThemeContext, React.HTMLAttributes<HTMLDivElement> 
 
 const ThemeContext = React.createContext<ThemeContext>({
   accentBaseColor: undefined,
-  negativeBaseColor: undefined,
+  negativeBaseColor: 'oklch(0% 0 20)',
   grayBaseColor: undefined,
   roundness: 'medium',
   elevation: 'medium',
