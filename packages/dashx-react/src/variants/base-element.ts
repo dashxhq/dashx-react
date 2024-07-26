@@ -9,6 +9,19 @@ const baseElement = tv({
       large: 'rounded-lg-or-full h-12',
       extralarge: 'rounded-lg-or-full h-14',
     },
+    roundness: {
+      none: '',
+      small: '',
+      medium: '',
+      large: '',
+      full: '',
+    },
+    elevation: {
+      none: '',
+      small: '',
+      medium: '',
+      large: '',
+    },
   },
 });
 

@@ -13,6 +13,7 @@ const text = tv({
     weight: {},
     color: {},
     variant: {},
+    transform: {},
   },
   defaultVariants: {
     size: 3,

@@ -1,4 +1,15 @@
-import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '@dashx/react';
+import {
+  Button,
+  Card,
+  Flex,
+  Form,
+  Heading,
+  Popover,
+  Text,
+  TextField,
+  Theme,
+  Tooltip,
+} from '@dashx/react';
 import { button, heading, text } from '@dashx/react/variants';
 import { Bell, Inbox, Mail, MailOpen, Moon, Sun, X } from '@dashx/react/icons';
 import Link from 'next/link';
@@ -174,6 +185,28 @@ function Index() {
             </div>
           ))}
         </Flex>
+        <Heading>Text Field</Heading>
+
+        {Object.keys(button.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(button.variants.roundness).map((roundness: any) => (
+              <TextField
+                isInvalid
+                name={`${roundness}-${size}`}
+                label="Text"
+                key={roundness}
+                size={size}
+                roundness={roundness}
+                value="Text"
+                description="Description"
+                errorMessage={'Cannot be blank'}
+              >
+                {roundness}
+              </TextField>
+            ))}
+          </Flex>
+        ))}
+
         <Heading>Typography</Heading>
         <Flex align="baseline">
           {Object.keys(heading.variants.size).map((size: any) => (

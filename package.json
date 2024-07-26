@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "dashx",
   "packageManager": "yarn@1.22.18",
   "workspaces": [
     "apps/*",
@@ -14,6 +15,6 @@
   "devDependencies": {
     "eslint": "^8.29.0",
     "eslint-config-custom": "*",
-    "turbo": "latest"
+    "turbo": "^2.0.9"
   }
 }

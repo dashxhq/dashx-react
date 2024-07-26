@@ -27,11 +27,16 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
     color,
     variant,
     weight,
+    transform,
     ...rest
   } = props;
 
   return (
-    <Slot className={text({ size, align, color, variant, className, weight })} ref={ref} {...rest}>
+    <Slot
+      className={text({ size, align, color, variant, className, weight, transform })}
+      ref={ref}
+      {...rest}
+    >
       {asChild ? children : <Tag>{children}</Tag>}
     </Slot>
   );

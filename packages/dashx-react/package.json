@@ -120,7 +120,6 @@
     "date-fns": "^3.6.0",
     "lucide-react": "^0.394.0",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.6.0",
     "react-aria": "^3.33.1",
     "react-hot-toast": "^2.4.1",
     "react-remove-scroll-bar": "2.3.4",

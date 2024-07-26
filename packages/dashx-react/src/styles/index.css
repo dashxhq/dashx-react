@@ -5,18 +5,19 @@
 :is(.dark, .dark-theme) :where(.dx:not(.light, .light-theme)) {
   color-scheme: dark;
 
+  /* WIP */
   /* Higher the contrast, further the lightness of consecutive colors */
-  --lightness-950: min(98%, calc(4.44% / var(--contrast-factor, 1) + 93.34%));
-  --lightness-900: min(96%, calc(-7.12% / var(--contrast-factor, 1) + 100.68%));
-  --lightness-800: min(94%, calc(-16.22% / var(--contrast-factor, 1) + 104.33%));
-  --lightness-700: min(92%, calc(-25.34% / var(--contrast-factor, 1) + 108.01%));
-  --lightness-600: min(90%, calc(-28.44% / var(--contrast-factor, 1) + 102.66%));
-  --lightness-500: max(10%, min(90%, calc(-29.56% / var(--contrast-factor, 1) + 94.34%)));
-  --lightness-400: max(10%, calc(-28% / var(--contrast-factor, 1) + 82%));
-  --lightness-300: max(8%, calc(-33% / var(--contrast-factor, 1) + 80.67%));
-  --lightness-200: max(6%, calc(-38.88% / var(--contrast-factor, 1) + 78.32%));
-  --lightness-100: max(4%, calc(-44% / var(--contrast-factor, 1) + 76%));
-  --lightness-50: max(2%, calc(-47.56% / var(--contrast-factor, 1) + 71.34%));
+  --lightness-950: calc(4.44% * var(--contrast-factor, 1) + 93.34%);
+  --lightness-900: calc(-7.12% * var(--contrast-factor, 1) + 100.68%);
+  --lightness-800: calc(-16.22% * var(--contrast-factor, 1) + 104.33%);
+  --lightness-700: calc(-25.34% * var(--contrast-factor, 1) + 108.01%);
+  --lightness-600: calc(-28.44% * var(--contrast-factor, 1) + 102.66%);
+  --lightness-500: max(40%, min(90%, calc(-29.56% * var(--contrast-factor, 1) + 94.34%)));
+  --lightness-400: max(40%, calc(-28% * var(--contrast-factor, 1) + 82%));
+  --lightness-300: max(35%, calc(-33% * var(--contrast-factor, 1) + 80.67%));
+  --lightness-200: max(30%, calc(-38.88% * var(--contrast-factor, 1) + 78.32%));
+  --lightness-100: max(24%, calc(-44% * var(--contrast-factor, 1) + 76%));
+  --lightness-50: max(20%, calc(-47.56% * var(--contrast-factor, 1) + 71.34%));
 
   --color-bg: var(--color-black);
   --color-fg: var(--color-white);
@@ -43,44 +44,66 @@
 }
 
 .dx {
-  --chroma-50: calc(0.02 * var(--chroma-factor, 1));
-  --chroma-100: calc(0.04 * var(--chroma-factor, 1));
-  --chroma-200: calc(0.07 * var(--chroma-factor, 1));
-  --chroma-300: calc(0.1 * var(--chroma-factor, 1));
-  --chroma-400: calc(0.14 * var(--chroma-factor, 1));
-  --chroma-500: calc(0.2 * var(--chroma-factor, 1));
-  --chroma-600: calc(0.2 * var(--chroma-factor, 1));
-  --chroma-700: calc(0.2 * var(--chroma-factor, 1));
-  --chroma-800: calc(0.2 * var(--chroma-factor, 1));
-  --chroma-900: calc(0.2 * var(--chroma-factor, 1));
-  --chroma-950: calc(0.2 * var(--chroma-factor, 1));
+  --chroma-50: 0.02;
+  --chroma-100: 0.04;
+  --chroma-200: 0.07;
+  --chroma-300: 0.1;
+  --chroma-400: 0.14;
+  --chroma-500: 0.2;
+  --chroma-600: 0.2;
+  --chroma-700: 0.2;
+  --chroma-800: 0.2;
+  --chroma-900: 0.2;
+  --chroma-950: 0.2;
 
   --density-factor: 1;
   --density: calc(var(--base-density, 1) * var(--density-factor, 1));
 
   /* Colors */
   /* Default background */
-  --color-accent-50: oklch(from var(--accent-base) var(--lightness-50) var(--chroma-50) h);
+  --color-accent-50: oklch(
+    from var(--accent-base) var(--lightness-50) calc(var(--chroma-50) * var(--chroma-factor, 1)) h
+  );
   /* Hover background */
-  --color-accent-100: oklch(from var(--accent-base) var(--lightness-100) var(--chroma-100) h);
+  --color-accent-100: oklch(
+    from var(--accent-base) var(--lightness-100) calc(var(--chroma-100) * var(--chroma-factor, 1)) h
+  );
   /* Active background */
-  --color-accent-200: oklch(from var(--accent-base) var(--lightness-200) var(--chroma-200) h);
+  --color-accent-200: oklch(
+    from var(--accent-base) var(--lightness-200) calc(var(--chroma-200) * var(--chroma-factor, 1)) h
+  );
   /* Default border */
-  --color-accent-300: oklch(from var(--accent-base) var(--lightness-300) var(--chroma-300) h);
+  --color-accent-300: oklch(
+    from var(--accent-base) var(--lightness-300) calc(var(--chroma-300) * var(--chroma-factor, 1)) h
+  );
   /* Hover border */
-  --color-accent-400: oklch(from var(--accent-base) var(--lightness-400) var(--chroma-400) h);
+  --color-accent-400: oklch(
+    from var(--accent-base) var(--lightness-400) calc(var(--chroma-400) * var(--chroma-factor, 1)) h
+  );
   /* Active border */ /* Default High Contrast background */
-  --color-accent-500: oklch(from var(--accent-base) var(--lightness-500) var(--chroma-500) h);
+  --color-accent-500: oklch(
+    from var(--accent-base) var(--lightness-500) calc(var(--chroma-500) * var(--chroma-factor, 1)) h
+  );
   /* Hover High Contrast background */
-  --color-accent-600: oklch(from var(--accent-base) var(--lightness-600) var(--chroma-600) h);
+  --color-accent-600: oklch(
+    from var(--accent-base) var(--lightness-600) calc(var(--chroma-600) * var(--chroma-factor, 1)) h
+  );
   /* Active High background */
-  --color-accent-700: oklch(from var(--accent-base) var(--lightness-700) var(--chroma-700) h);
+  --color-accent-700: oklch(
+    from var(--accent-base) var(--lightness-700) calc(var(--chroma-700) * var(--chroma-factor, 1)) h
+  );
   /* Tertiary Text */
-  --color-accent-800: oklch(from var(--accent-base) var(--lightness-800) var(--chroma-800) h);
+  --color-accent-800: oklch(
+    from var(--accent-base) var(--lightness-800) calc(var(--chroma-800) * var(--chroma-factor, 1)) h
+  );
   /* Secondary Text */
-  --color-accent-900: oklch(from var(--accent-base) var(--lightness-900) var(--chroma-900) h);
+  --color-accent-900: oklch(
+    from var(--accent-base) var(--lightness-900) calc(var(--chroma-900) * var(--chroma-factor, 1)) h
+  );
   /* Primary Text */
-  --color-accent-950: oklch(from var(--accent-base) var(--lightness-950) var(--chroma-950) h);
+  --color-accent-950: oklch(
+    from var(--accent-base) var(--lightness-950) calc(var(--chroma-950) * var(--chroma-factor, 1)) h
+  );
 
   --color-negative-50: oklch(from var(--negative-base) var(--lightness-50) var(--chroma-50) h);
   --color-negative-100: oklch(from var(--negative-base) var(--lightness-100) var(--chroma-100) h);
@@ -439,6 +462,12 @@
   --line-height-8: ;
   --line-height-9: ;
   --line-height-10: ;
+
+  --transition-timing-function-linear: linear;
+  --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-timing-function-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-timing-funtion-fluid: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @media (pointer: coarse) {

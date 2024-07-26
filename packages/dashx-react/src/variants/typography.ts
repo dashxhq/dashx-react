@@ -5,6 +5,11 @@ import type { VariantProps } from 'tailwind-variants';
 const typography = tv({
   base: 'text-gray-950',
   variants: {
+    transform: {
+      uppercase: 'uppercase',
+      capitalize: 'capitalize',
+      lowercase: 'lowercase',
+    },
     align: {
       center: 'text-center',
       left: 'text-left',
@@ -49,47 +54,47 @@ const typography = tv({
     {
       color: 'accent',
       variant: 'primary',
-      className: 'text-accent-950',
+      className: 'text-accent-950 opacity-[0.95]',
     },
     {
       color: 'accent',
       variant: 'secondary',
-      className: 'text-accent-900',
+      className: 'text-accent-900 opacity-[0.90]',
     },
     {
       color: 'accent',
       variant: 'tertiary',
-      className: 'text-accent-800',
+      className: 'text-accent-800 opacity-[0.80]',
     },
     {
       color: 'gray',
       variant: 'primary',
-      className: 'text-gray-950',
+      className: 'text-gray-950 opacity-[0.95]',
     },
     {
       color: 'gray',
       variant: 'secondary',
-      className: 'text-gray-900',
+      className: 'text-gray-900 opacity-[0.90]',
     },
     {
       color: 'gray',
       variant: 'tertiary',
-      className: 'text-gray-800',
+      className: 'text-gray-800 opacity-[0.80]',
     },
     {
       color: 'negative',
       variant: 'primary',
-      className: 'text-negative-950',
+      className: 'text-negative-950 opacity-[0.95]',
     },
     {
       color: 'negative',
       variant: 'secondary',
-      className: 'text-negative-900',
+      className: 'text-negative-900 opacity-[0.90]',
     },
     {
       color: 'negative',
       variant: 'tertiary',
-      className: 'text-negative-800',
+      className: 'text-negative-800 opacity-[0.80]',
     },
   ],
 });
