@@ -16,15 +16,15 @@ const button = tv({
       extralarge: 'text-xl',
     },
     variant: {
-      fill: 'text-bg',
+      fill: 'text-white',
       outline: 'ring-2 ring-inset',
       simple: 'ring-1 ring-inset hover:ring-2 data-[focus-visible]:ring-2',
       ghost: '',
     },
     mode: {
-      distinct: 'data-[focus-visible]:outline-accent-300',
-      subtle: 'data-[focus-visible]:outline-accent-300',
-      negative: 'data-[focus-visible]:outline-negative-300',
+      distinct: 'data-[focus-visible]:outline-accent-500',
+      subtle: 'data-[focus-visible]:outline-accent-500',
+      negative: 'data-[focus-visible]:outline-negative-500',
     },
     roundness: {},
     elevation: {},
@@ -37,7 +37,6 @@ const button = tv({
       right: '',
       both: '',
     },
-    // TODO: shadow
   },
   defaultVariants: {
     size: 'medium',
@@ -50,7 +49,7 @@ const button = tv({
       mode: 'distinct',
       variant: 'fill',
       className:
-        'bg-accent-500 hover:bg-accent-600 active:bg-accent-700 shadow-accent-600/30 hover:shadow-accent-600/30 active:shadow-accent-600/30',
+        'bg-accent-500 hover:bg-accent-600 active:bg-accent-700 shadow-accent-400/30 hover:shadow-accent-400/30 active:shadow-accent-400/30',
     },
     {
       mode: 'distinct',
@@ -73,30 +72,30 @@ const button = tv({
       mode: 'subtle',
       variant: 'fill',
       className:
-        'bg-gray-500 shadow-gray-600/30 hover:bg-gray-600 hover:shadow-lg hover:shadow-gray-600/30 active:bg-gray-700 active:shadow-gray-600/30',
+        'bg-gray-600 shadow-gray-400/30 hover:bg-gray-600 hover:shadow-lg hover:shadow-gray-400/30 active:bg-gray-700 active:shadow-gray-400/30',
     },
     {
       mode: 'subtle',
       variant: 'outline',
-      className: 'text-gray-500 hover:text-gray-600 active:text-gray-700',
+      className: 'text-gray-600 hover:text-gray-600 active:text-gray-700',
     },
     {
       mode: 'subtle',
       variant: 'simple',
       className:
-        'text-gray-500 hover:text-gray-600 hover:ring-gray-600 active:text-gray-700 active:ring-gray-700',
+        'text-gray-600 hover:text-gray-600 hover:ring-gray-600 active:text-gray-700 active:ring-gray-700',
     },
     {
       mode: 'subtle',
       variant: 'ghost',
       className:
-        'text-gray-500 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200 active:text-gray-700',
+        'text-gray-600 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200 active:text-gray-700',
     },
     {
       mode: 'negative',
       variant: 'fill',
       className:
-        'bg-negative-500 hover:bg-negative-600 active:bg-negative-700 shadow-negative-600/30 hover:shadow-negative-600/30 active:shadow-negative-600/30',
+        'bg-negative-500 hover:bg-negative-600 active:bg-negative-700 shadow-negative-400/30 hover:shadow-negative-400/30 active:shadow-negative-400/30',
     },
     {
       mode: 'negative',
