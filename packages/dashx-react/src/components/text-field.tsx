@@ -4,11 +4,12 @@ import {
   TextField as BaseTextField,
   Label,
   Input,
+  Group,
 } from 'react-aria-components';
 
 import { cn } from '../utils/cn.js';
 import { textField } from '../variants/index.js';
-import { Flex, Text } from './index.js';
+import { Button, Flex, Text } from './index.js';
 import { fieldError } from '../variants/field-error.js';
 
 import type { TextFieldVariantProps } from '../variants/index.js';
@@ -38,14 +39,14 @@ function TextField({
             <Label>{label}</Label>
           </Text>
         )}
-        <div className="relative" data-radius={roundness} data-shadow={elevation}>
+        <Group className="relative" data-radius={roundness} data-shadow={elevation}>
           <Input className={cn('dx', 'w-full', textField({ size, roundness, elevation }))} />
           <Text asChild size={1} className={cn('dx', fieldError({ size, roundness, elevation }))}>
             <FieldError data-radius={roundness} data-shadow={elevation}>
               {errorMessage}
             </FieldError>
           </Text>
-        </div>
+        </Group>
         {description && (
           <Text asChild size={1} variant="tertiary">
             <BaseText slot="description">{description}</BaseText>

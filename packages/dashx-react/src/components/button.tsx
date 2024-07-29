@@ -1,3 +1,4 @@
+import { ButtonContext, useContextProps, type SlotProps } from 'react-aria-components';
 import { Slot } from '@radix-ui/react-slot';
 import { filterDOMProps, mergeRefs } from '@react-aria/utils';
 import React, { forwardRef, isValidElement, useRef } from 'react';
@@ -12,12 +13,14 @@ import type { ButtonVariantProps } from '../variants/button.js';
 
 export interface ButtonProps
   extends Omit<AriaButtonProps, 'elementType' | 'href' | 'target' | 'rel'>,
+    SlotProps,
     HoverEvents,
     ButtonVariantProps {
   asChild?: boolean;
 }
 
 function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
+  [props, ref] = useContextProps(props, ref, ButtonContext);
   const { asChild, children, size, mode, variant, roundness, elevation, shape, inset } = props;
   let elementType = asChild
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
@@ -68,6 +71,7 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
     <Comp
       {...filterDOMProps(props)}
       {...mergeProps(buttonProps, focusProps, hoverProps)}
+      slot={props.slot || undefined}
       ref={mergeRefs(ref, innerRef)}
       data-disabled={props.isDisabled || undefined}
       data-pressed={isPressed || undefined}

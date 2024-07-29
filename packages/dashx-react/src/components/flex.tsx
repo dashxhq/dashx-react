@@ -10,8 +10,10 @@ const flexVariants = tv({
   base: 'flex',
   variants: {
     direction: {
-      column: ['flex-col'],
-      row: ['flex-row'],
+      column: 'flex-col',
+      row: 'flex-row',
+      'column-reverse': 'flex-col-reverse',
+      'row-reverse': 'flex-row-reverse',
     },
     gap: {
       1: 'gap-1',

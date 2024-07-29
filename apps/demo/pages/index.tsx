@@ -4,6 +4,7 @@ import {
   Flex,
   Form,
   Heading,
+  NumberField,
   Popover,
   Text,
   TextField,
@@ -185,6 +186,23 @@ function Index() {
             </div>
           ))}
         </Flex>
+        <Heading>Number Field</Heading>
+
+        {Object.keys(button.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(button.variants.roundness).map((roundness: any) => (
+              <NumberField
+                name={`${roundness}-${size}`}
+                label="Number"
+                key={roundness}
+                size={size}
+                roundness={roundness}
+                description="Description"
+              />
+            ))}
+          </Flex>
+        ))}
+
         <Heading>Text Field</Heading>
 
         {Object.keys(button.variants.size).map((size: any) => (
@@ -200,9 +218,7 @@ function Index() {
                 value="Text"
                 description="Description"
                 errorMessage={'Cannot be blank'}
-              >
-                {roundness}
-              </TextField>
+              />
             ))}
           </Flex>
         ))}

@@ -13,8 +13,7 @@
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "eslint": "^8.29.0",
-    "eslint-config-custom": "*",
-    "turbo": "^2.0.9"
+    "eslint": "8.29.0",
+    "turbo": "2.0.3"
   }
 }
