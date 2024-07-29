@@ -8,11 +8,11 @@
   /* WIP */
   /* Higher the contrast, further the lightness of consecutive colors */
   --lightness-950: min(98%, calc(97.78% + (100% - 97.78%) * (var(--contrast-factor) - 1) / 0.5));
-  --lightness-900: min(96%, calc(93.56% + (95% - 93.56%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-900: min(94%, calc(93.56% + (95% - 93.56%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-800: min(90%, calc(88.11% + (90% - 88.11%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-700: min(85%, calc(82.67% + (85% - 82.67%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-600: min(80%, calc(74.22% + (80% - 74.22%) * (var(--contrast-factor) - 1) / 0.5));
-  --lightness-500: min(55%, max(45%, calc(64.78% + (75% - 64.78%) * (var(--contrast-factor) - 1) / 0.5)));
+  --lightness-500: min(75%, max(45%, calc(64.78% + (75% - 64.78%) * (var(--contrast-factor) - 1) / 0.5)));
   --lightness-400: max(40%, calc(54% + (40% - 54%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-300: max(35%, calc(46.89% + (35% - 46.89%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-200: max(30%, calc(39.44% + (30% - 39.44%) * (var(--contrast-factor) - 1) / 0.5));
@@ -27,17 +27,17 @@
   color-scheme: light;
 
   /* Higher the contrast, further the lightness of consecutive colors */
-  --lightness-50: min(98%, calc(4.44% * var(--contrast-factor, 1) + 93.34%));
-  --lightness-100: min(96%, calc(-7.12% * var(--contrast-factor, 1) + 100.68%));
-  --lightness-200: min(94%, calc(-16.22% * var(--contrast-factor, 1) + 104.33%));
-  --lightness-300: min(92%, calc(-25.34% * var(--contrast-factor, 1) + 108.01%));
-  --lightness-400: min(90%, calc(-28.44% * var(--contrast-factor, 1) + 102.66%));
+  --lightness-50: min(98%, calc(97.78% + (100% - 97.78%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-100: min(96%, calc(93.56% + (95% - 93.56%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-200: min(94%, calc(88.11% + (90% - 88.11%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-300: min(92%, calc(82.67% + (85% - 82.67%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-400: min(90%, calc(74.22% + (80% - 74.22%) * (var(--contrast-factor) - 1) / 0.5));
   --lightness-500: max(10%, min(90%, calc(-29.56% * var(--contrast-factor, 1) + 94.34%)));
-  --lightness-600: max(10%, calc(-28% * var(--contrast-factor, 1) + 82%));
-  --lightness-700: max(8%, calc(-33% * var(--contrast-factor, 1) + 80.67%));
-  --lightness-800: max(6%, calc(-38.88% * var(--contrast-factor, 1) + 78.32%));
-  --lightness-900: max(4%, calc(-44% * var(--contrast-factor, 1) + 76%));
-  --lightness-950: max(2%, calc(-47.56% * var(--contrast-factor, 1) + 71.34%));
+  --lightness-600: max(10%, calc(54% + (40% - 54%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-700: max(8%, calc(46.89% + (35% - 46.89%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-800: max(6%, calc(39.44% + (30% - 39.44%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-900: max(4%, calc(32% + (25% - 32%) * (var(--contrast-factor) - 1) / 0.5));
+  --lightness-950: max(2%, calc(23.78% + (20% - 23.78%) * (var(--contrast-factor) - 1) / 0.5));
 
   --color-bg: var(--color-white);
   --color-fg: var(--color-black);

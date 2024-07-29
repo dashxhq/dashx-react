@@ -16,7 +16,7 @@ const button = tv({
       extralarge: 'text-xl',
     },
     variant: {
-      fill: 'text-white',
+      fill: 'text-bg',
       outline: 'ring-2 ring-inset',
       simple: 'ring-1 ring-inset hover:ring-2 data-[focus-visible]:ring-2',
       ghost: '',

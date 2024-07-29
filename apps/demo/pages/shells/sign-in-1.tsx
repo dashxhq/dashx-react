@@ -34,7 +34,7 @@ function SignIn1() {
               <Button variant="simple">Login with Google</Button>
             </Form>
           </Flex>
-          <Text size={1} variant="tertiary">
+          <Text size={2} variant="tertiary">
             Don&apos;t have an account? Sign up
           </Text>
         </Flex>

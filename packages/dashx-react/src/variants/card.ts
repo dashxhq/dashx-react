@@ -11,12 +11,12 @@ const SPACING = {
 };
 
 const card = tv({
-  base: 'shadow-2xs bg-bg light:shadow-gray-400/30 border border-gray-300/30 p-[var(--padding)]',
+  base: 'shadow-2xs bg-bg light:shadow-gray-400/30 border border-gray-400/40 p-[var(--padding)]',
   variants: {
     roundness: {
       none: 'rounded-none',
-      small: 'rounded-sm',
-      medium: 'rounded-md',
+      small: 'rounded-md',
+      medium: 'rounded-lg',
       large: 'rounded-xl',
       full: 'rounded-full',
     },

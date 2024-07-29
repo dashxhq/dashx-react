@@ -3,4 +3,18 @@
 
 #__next {
   height: 100vh;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'avenir next',
+    avenir,
+    'helvetica neue',
+    helvetic,
+    ubuntu,
+    roboto,
+    noto,
+    'segoe ui',
+    arial,
+    san-serif;
 }

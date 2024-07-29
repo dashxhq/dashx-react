@@ -15,6 +15,7 @@ import type { TextFieldVariantProps } from '../variants/index.js';
 import type { TextFieldProps as BaseTextFieldProps, ValidationResult } from 'react-aria-components';
 
 interface TextFieldProps extends BaseTextFieldProps, TextFieldVariantProps {
+  placeholder?: string;
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);

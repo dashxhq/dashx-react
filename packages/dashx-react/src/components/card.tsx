@@ -10,7 +10,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement>, CardVariantPro
   asChild?: boolean;
 }
 const Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
-  const { asChild, className, spacing = 'medium', roundness, ...rest } = props;
+  const { asChild, className, spacing = 'medium', roundness = 'medium', ...rest } = props;
   const Comp = asChild ? Slot : 'div';
   return (
     <Comp
