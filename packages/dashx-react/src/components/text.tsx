@@ -33,7 +33,7 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
 
   return (
     <Slot
-      className={text({ size, align, color, variant, className, weight, transform })}
+      className={text({ className, size, align, color, variant, weight, transform })}
       ref={ref}
       {...rest}
     >

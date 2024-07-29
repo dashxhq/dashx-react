@@ -4,6 +4,7 @@ import {
   Flex,
   Form,
   Heading,
+  Link,
   NumberField,
   Popover,
   Text,
@@ -11,9 +12,9 @@ import {
   Theme,
   Tooltip,
 } from '@dashx/react';
-import { button, heading, text } from '@dashx/react/variants';
+import { button, heading, link, text } from '@dashx/react/variants';
 import { Bell, Inbox, Mail, MailOpen, Moon, Sun, X } from '@dashx/react/icons';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import React, { Fragment, useState } from 'react';
 
 import '@dashx/react/styles.css';
@@ -186,6 +187,22 @@ function Index() {
             </div>
           ))}
         </Flex>
+        <Heading>Link</Heading>
+        <Link href="/shells/sign-in-1">Plain Link</Link>
+        <Link asChild>
+          <NextLink href="/shells/sign-in-1">Next Link</NextLink>
+        </Link>
+
+        {Object.keys(link.variants.color).map((color: any) => (
+          <Flex key={color} gap={4}>
+            {Object.keys(link.variants.underline).map((underline: any) => (
+              <Link href="#" color={color} underline={underline}>
+                {underline} {color}
+              </Link>
+            ))}
+          </Flex>
+        ))}
+
         <Heading>Number Field</Heading>
 
         {Object.keys(button.variants.size).map((size: any) => (
@@ -249,9 +266,9 @@ function Index() {
             </a>
           </Button>
           <Button onPress={onPress} asChild>
-            <Link onClick={() => console.log('link clicked')} href="#">
+            <NextLink onClick={() => console.log('link clicked')} href="#">
               Next Link
-            </Link>
+            </NextLink>
           </Button>
         </Flex>
         <Heading>Span</Heading>

@@ -8,7 +8,7 @@ function SignIn1() {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
 
   return (
-    <Theme chroma={0} contrast={2} mode={mode} asChild>
+    <Theme chroma={0} contrast={2} mode={mode} elevation="small" asChild>
       <Flex className="bg-bg h-full" justify="center" align="center">
         <div className="absolute top-4 right-4">
           <Button
@@ -31,7 +31,7 @@ function SignIn1() {
               <Form>
                 <TextField name="email" type="email" label="Email" placeholder="user@dashx.com" />
                 <TextField name="password" type="password" label="Password" />
-                <Button elevation="small">Login</Button>
+                <Button>Login</Button>
                 <Button variant="simple">Login with Google</Button>
               </Form>
             </Flex>

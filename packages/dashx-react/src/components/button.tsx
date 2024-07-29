@@ -19,6 +19,15 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+export const fallbackEventTo = (props: any, eventName: string, fallbackEventName: string) => {
+  const event = props[eventName];
+  if (fallbackEventName in props && !event) {
+    return [props[fallbackEventName], undefined];
+  }
+
+  return [event, props[fallbackEventName]];
+};
+
 function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
   [props, ref] = useContextProps(props, ref, ButtonContext);
   const { asChild, children, size, mode, variant, roundness, elevation, shape, inset } = props;
@@ -26,19 +35,10 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
     : 'button';
 
-  const fallbackEventTo = (event: any, fallbackEventName: any) => {
-    let anyProps: any = props;
-    if (fallbackEventName in props && !event) {
-      return [anyProps[fallbackEventName], undefined];
-    }
-
-    return [event, anyProps[fallbackEventName]];
-  };
-
-  const [onPress, onClick] = fallbackEventTo(props.onPress, 'onClick');
-  const [onPressStart, onPointerDown] = fallbackEventTo(props.onPressStart, 'onPointerDown');
-  const [onHoverStart, onPointerMove] = fallbackEventTo(props.onHoverStart, 'onPointerMove');
-  const [onHoverEnd, onPointerLeave] = fallbackEventTo(props.onHoverEnd, 'onPointerLeave');
+  const [onPress, onClick] = fallbackEventTo(props, 'onPress', 'onClick');
+  const [onPressStart, onPointerDown] = fallbackEventTo(props, 'onPressStart', 'onPointerDown');
+  const [onHoverStart, onPointerMove] = fallbackEventTo(props, 'onHoverStart', 'onPointerMove');
+  const [onHoverEnd, onPointerLeave] = fallbackEventTo(props, 'onHoverEnd', 'onPointerLeave');
   const innerRef = useRef<HTMLButtonElement>(null);
   let { buttonProps, isPressed } = useButton(
     {

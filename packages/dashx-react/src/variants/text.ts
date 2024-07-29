@@ -6,7 +6,7 @@ import type { VariantProps } from 'tailwind-variants';
 
 const text = tv({
   extend: typography,
-  base: 'text-gray-950',
+  base: 'rounded-sm text-gray-950',
   variants: {
     align: {},
     size: {},
