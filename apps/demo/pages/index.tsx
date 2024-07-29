@@ -196,8 +196,8 @@ function Index() {
         {Object.keys(link.variants.color).map((color: any) => (
           <Flex key={color} gap={4}>
             {Object.keys(link.variants.underline).map((underline: any) => (
-              <Link href="#" color={color} underline={underline}>
-                {underline} {color}
+              <Link key={underline} href="#" color={color} underline={underline}>
+                {color} {underline}
               </Link>
             ))}
           </Flex>
@@ -278,6 +278,17 @@ function Index() {
           </Button>
           <Button onPress={onPress} asChild>
             <div onClick={() => console.log('div clicked')}>Div</div>
+          </Button>
+        </Flex>
+        <Heading>As Text</Heading>
+        <Flex gap={4}>
+          <Button onPress={onPress} asChild>
+            <Text onClick={() => console.log('span clicked')}>Span</Text>
+          </Button>
+          <Button onPress={onPress} asChild>
+            <Text as="div" onClick={() => console.log('div clicked')}>
+              Div
+            </Text>
           </Button>
         </Flex>
         <Heading>Sizes</Heading>

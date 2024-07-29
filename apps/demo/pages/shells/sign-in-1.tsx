@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Heading, Text, TextField, Theme } from '@dashx/react';
+import { Button, Flex, Form, Heading, Link, Text, TextField, Theme } from '@dashx/react';
 import { Moon, Sun } from '@dashx/react/icons';
 
 import '@dashx/react/styles.css';
@@ -29,16 +29,21 @@ function SignIn1() {
           <Flex direction="column" className="w-[350px]" gap={4} asChild>
             <Form>
               <TextField name="email" type="email" label="Email" />
-              <TextField name="password" type="password" label="Password" />
+              <TextField
+                name="password"
+                type="password"
+                label="Password"
+                description={<Link href="#">Forgot Password?</Link>}
+              />
               <Button>Login</Button>
               <Button variant="simple">Login with Google</Button>
             </Form>
           </Flex>
           <Text size={2} variant="tertiary">
-            Don&apos;t have an account? Sign up
+            Don&apos;t have an account? <Link href="#">Sign up</Link>
           </Text>
         </Flex>
-        <Flex className="hidden flex-1 bg-gray-100 lg:flex"></Flex>
+        <Flex className="flex-0 bg-gray-100 lg:flex-1"></Flex>
       </Flex>
     </Theme>
   );

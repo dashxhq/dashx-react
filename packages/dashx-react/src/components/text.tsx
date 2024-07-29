@@ -1,3 +1,4 @@
+import { useContextProps, LinkContext, TextContext } from 'react-aria-components';
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
@@ -16,7 +17,7 @@ type TextPProps = { as: 'p' } & React.HTMLAttributes<HTMLParagraphElement>;
 
 type TextProps = TextOwnProps & (TextSpanProps | TextDivProps | TextLabelProps | TextPProps);
 
-const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
+const Text = React.forwardRef<HTMLElement, TextProps>((props, ref) => {
   const {
     as: Tag = 'span',
     asChild,
@@ -32,13 +33,16 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>((props, ref) => {
   } = props;
 
   return (
-    <Slot
-      className={text({ className, size, align, color, variant, weight, transform })}
-      ref={ref}
-      {...rest}
-    >
-      {asChild ? children : <Tag>{children}</Tag>}
-    </Slot>
+    // @ts-ignore
+    <LinkContext.Provider value={props}>
+      <Slot
+        className={text({ className, size, align, color, variant, weight, transform })}
+        ref={ref}
+        {...rest}
+      >
+        {asChild ? children : <Tag>{children}</Tag>}
+      </Slot>
+    </LinkContext.Provider>
   );
 });
 
