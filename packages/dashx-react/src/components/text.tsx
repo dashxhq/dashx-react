@@ -18,6 +18,7 @@ type TextPProps = { as: 'p' } & React.HTMLAttributes<HTMLParagraphElement>;
 type TextProps = TextOwnProps & (TextSpanProps | TextDivProps | TextLabelProps | TextPProps);
 
 const Text = React.forwardRef<HTMLElement, TextProps>((props, ref) => {
+  [props, ref] = useContextProps(props, ref, TextContext);
   const {
     as: Tag = 'span',
     asChild,
@@ -33,8 +34,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>((props, ref) => {
   } = props;
 
   return (
-    // @ts-ignore
-    <LinkContext.Provider value={props}>
+    <TextContext.Provider value={props}>
       <Slot
         className={text({ className, size, align, color, variant, weight, transform })}
         ref={ref}
@@ -42,7 +42,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>((props, ref) => {
       >
         {asChild ? children : <Tag>{children}</Tag>}
       </Slot>
-    </LinkContext.Provider>
+    </TextContext.Provider>
   );
 });
 

@@ -1,6 +1,6 @@
 import { useContextProps, TextFieldContext } from 'react-aria-components';
 import { cn } from '../utils/cn.js';
-import { textField } from '../variants/index.js';
+
 import { Flex, Text } from './index.js';
 import { fieldError } from '../variants/field-error.js';
 import { filterDOMProps } from '@react-aria/utils';
@@ -8,17 +8,17 @@ import { useTextField } from 'react-aria';
 import { forwardRef, useRef, type ReactNode } from 'react';
 import { removeDataAttributes } from '../utils/helpers.js';
 
-import type { TextFieldVariantProps } from '../variants/index.js';
-import type { TextFieldProps as BaseTextFieldProps, ValidationResult } from 'react-aria-components';
+import type { TextFieldProps, ValidationResult } from 'react-aria-components';
+import { textArea, type TextAreaVariantProps } from '../variants/text-area.js';
 
-interface TextFieldProps extends BaseTextFieldProps, TextFieldVariantProps {
+interface TextAreaProps extends TextFieldProps, TextAreaVariantProps {
   placeholder?: string;
   label?: string;
   description?: string | ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
 
-function _TextField(
+function _TextArea(
   {
     label,
     description,
@@ -27,7 +27,7 @@ function _TextField(
     roundness = 'medium',
     elevation = 'medium',
     ...props
-  }: TextFieldProps,
+  }: TextAreaProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   [props, ref] = useContextProps(props, ref, TextFieldContext);
@@ -37,7 +37,7 @@ function _TextField(
     useTextField<any>(
       {
         ...removeDataAttributes(props),
-        inputElementType: 'input',
+        inputElementType: 'text-area',
         label,
       },
       inputRef,
@@ -68,10 +68,10 @@ function _TextField(
         </Text>
       )}
       <div role="group" className="relative" data-radius={roundness} data-shadow={elevation}>
-        <input
+        <textarea
           {...inputProps}
           ref={inputRef}
-          className={cn('dx', 'w-full', textField({ size, roundness, elevation }))}
+          className={cn('dx', 'w-full', textArea({ size, roundness, elevation }))}
           data-disabled={props.isDisabled || undefined}
           data-invalid={validation.isInvalid || undefined}
           data-readonly={props.isReadOnly || undefined}
@@ -102,6 +102,6 @@ function _TextField(
   );
 }
 
-const TextField = forwardRef(_TextField);
+const TextArea = forwardRef(_TextArea);
 
-export { TextField };
+export { TextArea };

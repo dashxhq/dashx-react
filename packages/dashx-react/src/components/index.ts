@@ -9,6 +9,7 @@ export * from './number-field.js';
 export * as Popover from './popover.js';
 export * from './toast.js';
 export * from './text.js';
+export * from './text-area.js';
 export * from './text-field.js';
 export * from './theme.js';
 export * as Tooltip from './tooltip.js';

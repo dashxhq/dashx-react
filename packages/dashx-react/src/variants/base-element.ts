@@ -3,11 +3,11 @@ import { tv } from 'tailwind-variants';
 const baseElement = tv({
   variants: {
     size: {
-      extrasmall: 'rounded-sm-or-full h-6',
-      small: 'rounded-sm-or-full h-8',
-      medium: 'rounded-md-or-full h-10',
-      large: 'rounded-lg-or-full h-12',
-      extralarge: 'rounded-lg-or-full h-14',
+      extrasmall: 'h-6',
+      small: 'h-8',
+      medium: 'h-10',
+      large: 'h-12',
+      extralarge: 'h-14',
     },
     roundness: {
       none: '',

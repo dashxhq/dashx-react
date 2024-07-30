@@ -8,6 +8,7 @@ import {
   NumberField,
   Popover,
   Text,
+  TextArea,
   TextField,
   Theme,
   Tooltip,
@@ -199,6 +200,23 @@ function Index() {
               <Link key={underline} href="#" color={color} underline={underline}>
                 {color} {underline}
               </Link>
+            ))}
+          </Flex>
+        ))}
+
+        <Heading>Text Area</Heading>
+
+        {Object.keys(button.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(button.variants.roundness).map((roundness: any) => (
+              <TextArea
+                name={`${roundness}-${size}`}
+                label="Text Area"
+                key={roundness}
+                size={size}
+                roundness={roundness}
+                description="Description"
+              />
             ))}
           </Flex>
         ))}

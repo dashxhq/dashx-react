@@ -9,11 +9,11 @@ const button = tv({
   base: 'ease-fluid inline-flex items-center justify-center gap-2 outline-none transition-[box-shadow,background-color,color] duration-300 select-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[disabled]:shadow-none',
   variants: {
     size: {
-      extrasmall: 'text-xs',
-      small: 'text-sm',
-      medium: 'text-base',
-      large: 'text-lg',
-      extralarge: 'text-xl',
+      extrasmall: 'rounded-sm-or-full text-xs',
+      small: 'rounded-sm-or-full text-sm',
+      medium: 'rounded-md-or-full text-base',
+      large: 'rounded-lg-or-full text-lg',
+      extralarge: 'rounded-lg-or-full text-xl',
     },
     variant: {
       fill: 'text-bg',

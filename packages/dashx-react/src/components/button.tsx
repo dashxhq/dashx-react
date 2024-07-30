@@ -6,6 +6,7 @@ import { mergeProps, useButton, useFocusRing, useHover } from 'react-aria';
 
 import { cn } from '../utils/cn.js';
 import { button } from '../variants/button.js';
+import { fallbackEventTo } from '../utils/helpers.js';
 
 import type { ElementType } from 'react';
 import type { AriaButtonProps, HoverEvents } from 'react-aria';
@@ -18,15 +19,6 @@ export interface ButtonProps
     ButtonVariantProps {
   asChild?: boolean;
 }
-
-export const fallbackEventTo = (props: any, eventName: string, fallbackEventName: string) => {
-  const event = props[eventName];
-  if (fallbackEventName in props && !event) {
-    return [props[fallbackEventName], undefined];
-  }
-
-  return [event, props[fallbackEventName]];
-};
 
 function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
   [props, ref] = useContextProps(props, ref, ButtonContext);

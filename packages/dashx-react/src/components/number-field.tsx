@@ -1,16 +1,15 @@
 import { useRect } from '@radix-ui/react-use-rect';
 import { NumberFieldContext, useContextProps } from 'react-aria-components';
 import { useNumberFieldState } from 'react-stately';
-
 import { cn } from '../utils/cn.js';
 import { fieldError } from '../variants/field-error.js';
 import { textField } from '../variants/index.js';
-import { Button, Flex, removeDataAttributes, Text } from './index.js';
-
+import { Button, Flex, Text } from './index.js';
 import { filterDOMProps } from '@react-aria/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { forwardRef, useRef, useState, type ReactNode } from 'react';
 import { useLocale, useNumberField } from 'react-aria';
+import { removeDataAttributes } from '../utils/helpers.js';
 import type {
   NumberFieldProps as BaseNumberFieldProps,
   ValidationResult,

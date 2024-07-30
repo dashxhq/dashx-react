@@ -1,4 +1,4 @@
-import { LinkContext, useContextProps, type SlotProps } from 'react-aria-components';
+import { LinkContext, TextContext, useContextProps, type SlotProps } from 'react-aria-components';
 import { filterDOMProps, mergeRefs } from '@react-aria/utils';
 import {
   forwardRef,
@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { mergeProps, useFocusRing, useHover, useLink } from 'react-aria';
 import { link, type LinkVariantProps } from '../variants';
-import { fallbackEventTo } from './button';
+import { fallbackEventTo } from '../utils/helpers';
 
 import { Slot } from '@radix-ui/react-slot';
 import { useRef } from 'react';
@@ -26,6 +26,8 @@ export interface LinkProps
 }
 
 function _Link(props: LinkProps, ref: ForwardedRef<HTMLAnchorElement>) {
+  // @ts-ignore
+  [props, ref] = useContextProps(props, ref, TextContext);
   [props, ref] = useContextProps(props, ref, LinkContext);
   const { asChild, children, size, align, color, variant, weight, transform, underline } = props;
   let elementType = asChild
