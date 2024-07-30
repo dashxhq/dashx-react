@@ -1,6 +1,7 @@
 import { tv } from 'tailwind-variants';
 
 import baseElement from './base-element.js';
+import { baseInput } from './base-input.js';
 
 import type { VariantProps } from 'tailwind-variants';
 
@@ -15,7 +16,7 @@ const getSpacing = () => ({
 
 const baseField = tv({
   extend: baseElement,
-  base: 'data-[invalid="true"]:border-negative-300 data-[invalid="true"]:hover:border-negative-400 data-[invalid="true"]:focus:border-negative-500 data-[invalid="true"]:text-negative-500 data-[invalid="true"]:bg-negative-50 ease-fluid data-[invalid="true"]:focus:outline-negative-500 focus:outline-accent-500 autofill:bg-accent-300 !hover:border-gray-400 border-gray-300 py-3 px-4 text-sm text-gray-900 outline-none transition-[box-shadow,background-color,color,border-color] duration-300',
+  base: baseInput(),
   variants: {
     size: getSpacing(),
     roundness: {

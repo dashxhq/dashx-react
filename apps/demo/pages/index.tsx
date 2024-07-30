@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Checkbox,
   Flex,
   Form,
   Heading,
@@ -13,7 +14,7 @@ import {
   Theme,
   Tooltip,
 } from '@dashx/react';
-import { button, heading, link, text } from '@dashx/react/variants';
+import { button, checkbox, heading, link, text } from '@dashx/react/variants';
 import { Bell, Inbox, Mail, MailOpen, Moon, Sun, X } from '@dashx/react/icons';
 import NextLink from 'next/link';
 import React, { Fragment, useState } from 'react';
@@ -200,6 +201,24 @@ function Index() {
               <Link key={underline} href="#" color={color} underline={underline}>
                 {color} {underline}
               </Link>
+            ))}
+          </Flex>
+        ))}
+
+        <Heading>Checkbox</Heading>
+
+        {Object.keys(checkbox.variants.size).map((size: any) => (
+          <Flex key={size} gap={4}>
+            {Object.keys(checkbox.variants.roundness).map((roundness: any) => (
+              <Checkbox
+                name={`${roundness}-${size}`}
+                key={roundness}
+                size={size}
+                roundness={roundness}
+                // description="Description"
+              >
+                Check me
+              </Checkbox>
             ))}
           </Flex>
         ))}

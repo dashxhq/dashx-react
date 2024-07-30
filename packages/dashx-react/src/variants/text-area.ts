@@ -14,7 +14,7 @@ const textArea = tv({
       small: 'rounded-sm',
       medium: 'rounded-md',
       large: 'rounded-lg',
-      extralarge: 'rounded-xl',
+      extralarge: 'rounded-lg',
     },
   },
 });

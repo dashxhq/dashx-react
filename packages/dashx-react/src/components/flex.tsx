@@ -57,7 +57,7 @@ const Flex = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     const Comp = asChild ? Slot : 'div';
     return (
       <Comp
-        className={cn(flexVariants({ direction, gap, justify, align }), className)}
+        className={flexVariants({ direction, gap, justify, align, className })}
         ref={ref}
         {...rest}
       />
