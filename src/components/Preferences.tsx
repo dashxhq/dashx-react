@@ -25,7 +25,7 @@ interface PreferencesProps {
     ) => void;
     loading: boolean;
     error: any;
-  }) => JSX.Element;
+  }) => React.ReactElement;
 }
 
 const defaultRenderPreferences: PreferencesProps["renderPreferences"] = ({

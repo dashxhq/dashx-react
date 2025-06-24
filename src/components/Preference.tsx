@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import React, { type ChangeEvent } from "react";
 
 import type { StoredPreference } from "./Preferences";
 
@@ -7,7 +7,7 @@ type PreferenceType = [string, StoredPreference];
 type RenderPreferenceFunction = (props: {
   preference: PreferenceType;
   onChange: UpdatePreferenceHandler;
-}) => JSX.Element;
+}) => React.ReactElement;
 
 interface PreferenceProps {
   preference: PreferenceType;

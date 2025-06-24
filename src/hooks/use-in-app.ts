@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import toast from 'react-hot-toast'
-import useWebSocket from 'react-use-websocket'
-import { WebsocketMessage } from '@dashx/browser'
+import { WebsocketMessage, DASHX_CLOSE_CODES } from '@dashx/browser'
 import type { InAppNotifications, WebsocketMessageType } from '@dashx/browser'
 
 import useDashXProvider from "./use-dashx-provider"
@@ -14,15 +13,8 @@ type UseInAppHookResponse = {
   markNotificationAsUnread: (id: string) => Promise<any>,
 }
 
-const DASHX_CLOSE_CODES = [
-  40000,
-  40001,
-  50000
-]
-
 const useInApp = (): UseInAppHookResponse => {
   let dashX = useDashXProvider()
-  const [connectWebsocket, setConnectWebsocket] = useState(false)
   const [notifications, setNotifications] = useState<InAppNotifications>([])
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number | null>(null)
 
@@ -37,53 +29,52 @@ const useInApp = (): UseInAppHookResponse => {
     dashX.watchFetchInAppNotificationsAggregate(setUnreadNotificationsCount)
   }, [])
 
-  let { sendJsonMessage } = useWebSocket(dashX.realtimeBaseUri, {
-    queryParams: {
-      publicKey: dashX.publicKey,
-      ...(dashX.identityToken && { 'identityToken': dashX.identityToken }),
-      ...(dashX.targetEnvironment && { 'targetEnvironment': dashX.targetEnvironment })
-    },
-    shouldReconnect: (closeEvent) => {
-      if (DASHX_CLOSE_CODES.includes(closeEvent.code)) {
-        return false
-      }
-
-      return true
-    },
-    onError: errorEvent => console.error({ errorEvent }),
-    onClose: closeEvent => console.log({ closeEvent }),
-    onMessage: async (messageEvent) => {
-      let message:WebsocketMessageType = JSON.parse(messageEvent.data)
-
-      switch (message?.type) {
-        case WebsocketMessage.SUBSCRIBE:
-          break;
-        case WebsocketMessage.IN_APP_NOTIFICATION:
-          dashX.trackNotification({ id: message.data.id, status: 'DELIVERED' })
-          dashX.addInAppNotificationToCache(message.data)
-          toast(message.data.renderedContent.body)
-          break;
-        case WebsocketMessage.SUBSCRIPTION_SUCCEEDED:
-          fetchInAppNotifications()
-          break;
-        default:
-          throw new Error(`Unknown message type ${message}`);
-      }
-    },
-    onOpen: (_) => {
-      let subscriptionMessage: WebsocketMessageType = {
-        type: WebsocketMessage.SUBSCRIBE,
-        data: {
-          accountUid: dashX.accountUid! // accountUid should exist by this point
-        }
-      }
-
-      sendJsonMessage(subscriptionMessage)
-    },
-  }, connectWebsocket);
-
   useEffect(() => {
-    setConnectWebsocket(true) // Ensure the webook connection request is made ONLY once
+    // Create WebSocket connection using the new dashx-browser WebSocketManager
+    const wsManager = dashX.createWebSocketConnection({
+      queryParams: {
+        publicKey: dashX.publicKey,
+        ...(dashX.identityToken && { 'identityToken': dashX.identityToken }),
+        ...(dashX.targetEnvironment && { 'targetEnvironment': dashX.targetEnvironment })
+      },
+      shouldReconnect: (closeEvent) => {
+        // Don't reconnect for DashX-specific close codes
+        if (DASHX_CLOSE_CODES.includes(closeEvent.code as any)) {
+          return false
+        }
+        return true
+      },
+      onError: errorEvent => console.error({ errorEvent }),
+      onClose: closeEvent => console.log({ closeEvent }),
+      onMessage: async (message: WebsocketMessageType) => {
+        switch (message?.type) {
+          case WebsocketMessage.SUBSCRIBE:
+            break;
+          case WebsocketMessage.IN_APP_NOTIFICATION:
+            dashX.trackNotification({ id: message.data.id, status: 'DELIVERED' })
+            dashX.addInAppNotificationToCache(message.data)
+            toast(message.data.renderedContent.body)
+            break;
+          case WebsocketMessage.SUBSCRIPTION_SUCCEEDED:
+            fetchInAppNotifications()
+            break;
+          default:
+            throw new Error(`Unknown message type ${message}`);
+        }
+      },
+      onOpen: () => {
+        // Subscription is automatically handled by dashx-browser
+        console.log('WebSocket connected and subscribed to notifications')
+      },
+    })
+
+    // Connect to WebSocket
+    wsManager.connect()
+
+    // Cleanup on unmount
+    return () => {
+      wsManager.disconnect()
+    }
   }, [])
 
   return {
