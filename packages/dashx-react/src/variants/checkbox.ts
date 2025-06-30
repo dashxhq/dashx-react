@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants';
 import type { VariantProps } from 'tailwind-variants';
-import { baseInput } from './base-input';
+import { baseInput } from './base-input.js';
 
 const checkbox = tv({
   extend: baseInput,

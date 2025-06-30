@@ -9,6 +9,9 @@ const options = {
   target: 'es2020',
   sourcemap: true,
   minify: true,
+  resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+  mainFields: ['module', 'main'],
+  outExtension: { '.js': '.js' },
 };
 
 // Check if "watch=true" flag is passed

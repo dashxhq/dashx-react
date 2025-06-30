@@ -29,11 +29,12 @@ import {
   type MutableRefObject,
   type ReactNode,
 } from 'react';
-import { Text } from './text';
-import { Flex } from './flex';
-import { fieldError } from '../variants/field-error';
-import { cn } from '../utils/cn';
-import { checkbox, type CheckboxVariantProps } from '../variants';
+
+import { Text } from './text.js';
+import { Flex } from './flex.js';
+import { fieldError } from '../variants/field-error.js';
+import { cn } from '../utils/cn.js';
+import { checkbox, type CheckboxVariantProps } from '../variants/index.js';
 
 export interface CheckboxGroupProps
   extends Omit<AriaCheckboxGroupProps, 'validationState'>,

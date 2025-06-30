@@ -1,8 +1,7 @@
 import { tv } from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants';
 
 import { text } from './text.js';
-
-import type { VariantProps } from 'tailwind-variants';
 
 const link = tv({
   extend: text,
