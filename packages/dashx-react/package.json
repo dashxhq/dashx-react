@@ -72,8 +72,7 @@
     "dev:js:esm:types": "tsc --watch --incremental --outdir dist/esm >/dev/null",
     "dev:css": "postcss src/styles/index.css -o styles.css --watch",
     "lint": "eslint \"src/**/*.ts*\"",
-    "clean": "rm -rf .turbo node_modules dist tokens layout *.css",
-    "prepublishOnly": "yarn lint"
+    "clean": "rm -rf .turbo node_modules dist tokens layout *.css"
   },
   "dependencies": {
     "@dashx/browser": "^0.4.0",
