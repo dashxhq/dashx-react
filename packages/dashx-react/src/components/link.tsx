@@ -8,13 +8,12 @@ import {
   type ReactNode,
 } from 'react';
 import { mergeProps, useFocusRing, useHover, useLink } from 'react-aria';
-import { link, type LinkVariantProps } from '../variants';
-import { fallbackEventTo } from '../utils/helpers';
-
 import { Slot } from '@radix-ui/react-slot';
 import { useRef } from 'react';
-
 import type { AriaLinkOptions, HoverEvents } from 'react-aria';
+
+import { link, type LinkVariantProps } from '../variants/index.js';
+import { fallbackEventTo } from '../utils/helpers.js';
 
 export interface LinkProps
   extends Omit<AriaLinkOptions, 'elementType'>,

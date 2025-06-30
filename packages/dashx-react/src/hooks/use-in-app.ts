@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket.js';
+import { useEffect, useState } from 'react';
 import { WebsocketMessage } from '@dashx/browser';
+import type { InAppNotifications, WebsocketMessageType } from '@dashx/browser';
 
 import useDashXProvider from './use-dashx-provider.js';
-
-import type { InAppNotifications, WebsocketMessageType } from '@dashx/browser';
+import { useWebSocket } from '../providers/DashXProvider.js';
 
 type UseInAppHookResponse = {
   notifications: InAppNotifications;
@@ -14,11 +13,9 @@ type UseInAppHookResponse = {
   markNotificationAsUnread: (id: string) => Promise<any>;
 };
 
-const DASHX_CLOSE_CODES = [40000, 40001, 50000];
-
 const useInApp = (): UseInAppHookResponse => {
   let dashX = useDashXProvider();
-  const [connectWebsocket, setConnectWebsocket] = useState(false);
+  const { subscribe } = useWebSocket();
   const [notifications, setNotifications] = useState<InAppNotifications>([]);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number | null>(null);
 
@@ -27,63 +24,25 @@ const useInApp = (): UseInAppHookResponse => {
   const markNotificationAsUnread = async (id: string) =>
     dashX.trackNotification({ id, status: 'UNREAD' });
 
+
   useEffect(() => {
+    // Set up notification watchers (automatically refetch on WebSocket reconnection)
     dashX.watchFetchInAppNotifications(setNotifications);
     dashX.watchFetchInAppNotificationsAggregate(setUnreadNotificationsCount);
   }, [dashX]);
 
-  let { sendJsonMessage } = useWebSocket(
-    dashX.realtimeBaseUri,
-    {
-      queryParams: {
-        publicKey: dashX.publicKey,
-        ...(dashX.identityToken && { identityToken: dashX.identityToken }),
-        ...(dashX.targetEnvironment && { targetEnvironment: dashX.targetEnvironment }),
-      },
-      shouldReconnect: (closeEvent) => {
-        if (DASHX_CLOSE_CODES.includes(closeEvent.code)) {
-          return false;
-        }
-
-        return true;
-      },
-      onError: (errorEvent) => console.error({ errorEvent }),
-      onClose: (closeEvent) => console.log({ closeEvent }),
-      onMessage: async (messageEvent) => {
-        let message: WebsocketMessageType = JSON.parse(messageEvent.data);
-
-        switch (message?.type) {
-          case WebsocketMessage.SUBSCRIBE:
-            break;
-          case WebsocketMessage.IN_APP_NOTIFICATION:
-            dashX.trackNotification({ id: message.data.id, status: 'DELIVERED' });
-            dashX.addInAppNotificationToCache(message.data);
-            toast(message.data.renderedContent.body);
-            break;
-          case WebsocketMessage.SUBSCRIPTION_SUCCEEDED:
-            dashX.fetchInAppNotifications();
-            break;
-          default:
-            throw new Error(`Unknown message type ${message}`);
-        }
-      },
-      onOpen: (_) => {
-        let subscriptionMessage: WebsocketMessageType = {
-          type: WebsocketMessage.SUBSCRIBE,
-          data: {
-            accountUid: dashX.accountUid!, // accountUid should exist by this point
-          },
-        };
-
-        sendJsonMessage(subscriptionMessage);
-      },
-    },
-    connectWebsocket,
-  );
-
   useEffect(() => {
-    setConnectWebsocket(true); // Ensure the webook connection request is made ONLY once
-  }, []);
+    // Subscribe to WebSocket messages for notifications
+    const unsubscribe = subscribe((message: WebsocketMessageType) => {
+      // Handle only IN_APP_NOTIFICATION for toast display
+      // The client handles all other message processing internally
+      if (message?.type === WebsocketMessage.IN_APP_NOTIFICATION) {
+        toast(message.data.renderedContent.body);
+      }
+    });
+
+    return unsubscribe;
+  }, [subscribe]);
 
   return {
     notifications,
