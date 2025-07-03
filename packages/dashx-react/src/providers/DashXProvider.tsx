@@ -18,6 +18,7 @@ function DashXProvider({
   realtimeBaseUri,
   targetEnvironment,
   targetProduct,
+  targetVersion,
 }: React.PropsWithChildren<ClientParams>) {
   const dashX = React.useMemo(
     () =>
@@ -26,9 +27,10 @@ function DashXProvider({
         baseUri: baseUri,
         realtimeBaseUri: realtimeBaseUri,
         targetEnvironment: targetEnvironment,
-        targetProduct
+        targetProduct,
+        targetVersion,
       }),
-    [publicKey, baseUri, realtimeBaseUri, targetEnvironment, targetProduct],
+    [publicKey, baseUri, realtimeBaseUri, targetEnvironment, targetProduct, targetVersion],
   );
 
   // WebSocket state
@@ -61,7 +63,7 @@ function DashXProvider({
       },
       onMessage: (message: WebsocketMessageType) => {
         // Notify all subscribers
-        subscribersRef.current.forEach(callback => {
+        subscribersRef.current.forEach((callback) => {
           try {
             callback(message);
           } catch (error) {
