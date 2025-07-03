@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=@dashx/react --only",
     "dev": "turbo run dev --no-cache --continue",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules"

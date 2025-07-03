@@ -1,7 +1,7 @@
 import { intlFormatDistance } from 'date-fns';
 
 import { useInApp } from '../hooks/index.js';
-import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '../index.js';
+import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '../components';
 import { Inbox, Mail, MailOpen, X } from '../icons/index.js';
 
 const NotificationBell = () => {
