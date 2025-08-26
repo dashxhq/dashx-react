@@ -67,7 +67,7 @@ function _TextArea(
           {label}
         </Text>
       )}
-      <div role="group" className="relative" data-radius={roundness} data-shadow={elevation}>
+      <Flex role="group" className="relative" data-radius={roundness} data-shadow={elevation}>
         <textarea
           {...inputProps}
           ref={inputRef}
@@ -92,7 +92,7 @@ function _TextArea(
                 : validation.validationErrors.join(' ')}
           </Text>
         )}
-      </div>
+      </Flex>
       {description && (
         <Text size={1} variant="tertiary" {...descriptionProps}>
           {description}
