@@ -44,6 +44,11 @@ const flexVariants = tv({
       start: 'items-start',
       end: 'items-end',
     },
+    wrap: {
+      nowrap: 'flex-nowrap',
+      wrap: 'flex-wrap',
+      'wrap-reverse': 'flex-wrap-reverse',
+    },
   },
 });
 
