@@ -1,8 +1,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-import { Chat, ChatPopover } from '@dashx/react/widgets';
-import { Card, Flex, Theme } from '@dashx/react';
+import { Flex, Theme, Chat, ChatPopover } from '@dashx/react';
 
 const DashXProvider = dynamic(() => import('@dashx/react').then((mod) => mod.DashXProvider), {
   ssr: false,
@@ -18,24 +17,22 @@ function ChatPage() {
         targetEnvironment={process.env.NEXT_PUBLIC_DASHX_TARGET_ENVIRONMENT}
         targetProduct={process.env.NEXT_PUBLIC_DASHX_TARGET_PRODUCT}
       >
-        <Card asChild>
-          <Flex
-            direction="column"
-            gap={4}
-            style={{
-              maxWidth: 640,
-              height: '100vh',
-              margin: 'auto',
-            }}
-          >
-            <Chat
-              agent="algebra-tutor"
-              publicEmbedKey="eNg9OShAKCzt9iF4BBLCsW5lPtyCZGkNMklLNi7pTN9aqjrAYJrQvjaH2VAVHVKH"
-            />
-          </Flex>
-        </Card>
+        <Flex
+          align="center"
+          justify="center"
+          style={{
+            maxWidth: 900,
+            height: 640,
+            margin: '2rem auto',
+          }}
+        >
+          <Chat
+            identifier="algebra-tutor"
+            publicEmbedKey="eNg9OShAKCzt9iF4BBLCsW5lPtyCZGkNMklLNi7pTN9aqjrAYJrQvjaH2VAVHVKH"
+          />
+        </Flex>
         <ChatPopover
-          agent="algebra-tutor"
+          identifier="algebra-tutor"
           publicEmbedKey="eNg9OShAKCzt9iF4BBLCsW5lPtyCZGkNMklLNi7pTN9aqjrAYJrQvjaH2VAVHVKH"
         />
       </DashXProvider>

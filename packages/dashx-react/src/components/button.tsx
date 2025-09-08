@@ -16,12 +16,13 @@ export interface ButtonProps
     SlotProps,
     HoverEvents,
     ButtonVariantProps {
+  className?: string;
   asChild?: boolean;
 }
 
 function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
   [props, ref] = useContextProps(props, ref, ButtonContext);
-  const { asChild, children, size, mode, variant, roundness, elevation, shape, inset } = props;
+  const { asChild, children, size, mode, variant, roundness, elevation, shape, inset, className } = props;
   let elementType = asChild
     ? (isValidElement(children) && (children?.type as ElementType)) || 'button'
     : 'button';
@@ -69,7 +70,7 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
       data-hovered={isHovered || undefined}
       data-focused={isFocused || undefined}
       data-focus-visible={isFocusVisible || undefined}
-      className={cn('dx', button({ size, mode, variant, roundness, elevation, shape }))}
+      className={cn('dx', button({ size, mode, variant, roundness, elevation, shape }), className)}
       data-radius={roundness}
       data-shadow={elevation}
       data-inset={inset}
