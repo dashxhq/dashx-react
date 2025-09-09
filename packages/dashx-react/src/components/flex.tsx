@@ -58,11 +58,11 @@ type FlexProps = VariantProps<typeof flexVariants> & {
 
 const Flex = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & FlexProps>(
   (props, ref) => {
-    const { className, direction, gap, justify, align, asChild, ...rest } = props;
+    const { className, direction, gap, justify, align, wrap, asChild, ...rest } = props;
     const Comp = asChild ? Slot : 'div';
     return (
       <Comp
-        className={flexVariants({ direction, gap, justify, align, className })}
+        className={flexVariants({ direction, gap, justify, align, wrap, className })}
         ref={ref}
         {...rest}
       />
