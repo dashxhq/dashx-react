@@ -39,6 +39,7 @@ const ChatPopup = (props: ChatProps) => {
               className="border-none"
               identifier={props.identifier} 
               publicEmbedKey={props.publicEmbedKey} 
+              withChatHeader
               withPopoverClose
             />
           </Popover.Content>

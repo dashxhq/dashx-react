@@ -13,10 +13,11 @@ type ChatProps = {
   className?: string;
   identifier: string;
   publicEmbedKey: string;
+  withChatHeader?: boolean;
   withPopoverClose?: boolean;
 }
 
-const Chat = ({ className, identifier, publicEmbedKey, withPopoverClose = false }: ChatProps) => {
+const Chat = ({ className, identifier, publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
   const { agent, messages, isThinking, error, sendMessage } = useAgent({
     identifier,
     publicEmbedKey,
@@ -41,15 +42,17 @@ const Chat = ({ className, identifier, publicEmbedKey, withPopoverClose = false 
   return (
     <Theme asChild>
       <Flex direction="column" className={cn('h-full border border-gray-400/40', className)}>
-        <ChatHeader agent={agent}>
-          {withPopoverClose && (
-            <Popover.Close>
-              <Button shape="square" roundness="full" variant="ghost" mode="subtle" inset="right">
-                <X />
-              </Button>
-            </Popover.Close>
-          )}
-        </ChatHeader>
+        {withChatHeader && (
+          <ChatHeader agent={agent}>
+            {withPopoverClose && (
+              <Popover.Close>
+                <Button shape="square" roundness="full" variant="ghost" mode="subtle" inset="right">
+                  <X />
+                </Button>
+              </Popover.Close>
+            )}
+          </ChatHeader>
+        )}
         <ChatBody
           agent={agent}
           messages={messages}
@@ -141,7 +144,7 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
                 {agent.starterSuggestions.map((suggestion, index) => (
                   <Button
                     key={`suggestion-${index}`}
-                    variant="simple"
+                    variant="fill"
                     mode="subtle"
                     roundness="full"
                     size="extrasmall"
@@ -213,7 +216,7 @@ const ChatFooter = ({ sendMessage, isThinking }: ChatFooterProps) => {
           className="mr-[7px] mb-[7px]"
           shape="square"
           roundness="full"
-          variant="ghost"
+          variant="fill"
           size="medium"
           onPress={handleSubmit}
           isDisabled={!inputValue.trim() || isThinking}
