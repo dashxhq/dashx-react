@@ -5,7 +5,7 @@ import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browse
 import type { KeyboardEvent } from 'react';
 
 import { cn } from '../utils/cn.js';
-import { Button, Flex, Text, TextArea, Theme, Heading, Popover } from '../components';
+import { Button, Flex, Text, TextArea, Theme, Heading, Popover, MarkdownRenderer } from '../components';
 import { useAgent } from '../hooks';
 import { X } from '../icons';
 
@@ -105,17 +105,16 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
     const isUser = message.role === 'user';
     
     return (
-      <Text
+      <MarkdownRenderer
         key={message.id || index}
-        as="p"
         className={cn([
           isUser
-            ? `ml-auto items-end bg-bg text-gray-900 rounded-lg px-3 py-2 ${USER_MESSAGE_WIDTH_CLASS}`
+            ? `ml-auto items-end bg-bg rounded-lg px-3 py-2 ${USER_MESSAGE_WIDTH_CLASS}`
             : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`
         ])}
       >
-        {message.content}
-      </Text>
+        {message.content || ''}
+      </MarkdownRenderer>
     );
   };
 
@@ -128,15 +127,12 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
         <ScrollArea.Viewport className="h-full">
           <Flex direction="column" gap={6}>
             {agent.starterMessages?.map((msg, index) => (
-              <Text 
+              <MarkdownRenderer
                 key={`message-${index}`}
-                as="p" 
-                className={
-                  cn("text-gray-900 mr-auto items-start", AGENT_MESSAGE_WIDTH_CLASS)
-                }
+                className={cn("mr-auto items-start", AGENT_MESSAGE_WIDTH_CLASS)}
               >
-                {msg.content}
-              </Text>
+                {msg.content || ''}
+              </MarkdownRenderer>
             ))}
 
             {agent.starterSuggestions && messages.length === 0 && (

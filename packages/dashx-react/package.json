@@ -122,6 +122,7 @@
     "prettier": "^3.2.5",
     "react-aria": "^3.33.1",
     "react-hot-toast": "^2.4.1",
+    "react-markdown": "^10.1.0",
     "react-remove-scroll-bar": "2.3.4",
     "react-use-websocket": "^4.8.1",
     "tailwind-merge": "^2.3.0",
