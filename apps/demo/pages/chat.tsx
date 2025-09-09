@@ -27,13 +27,13 @@ function ChatPage() {
           }}
         >
           <Chat
-            identifier="algebra-tutor"
-            publicEmbedKey="eNg9OShAKCzt9iF4BBLCsW5lPtyCZGkNMklLNi7pTN9aqjrAYJrQvjaH2VAVHVKH"
+            identifier={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_IDENTIFIER}
+            publicEmbedKey={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY}
           />
         </Flex>
         <ChatPopover
-          identifier="algebra-tutor"
-          publicEmbedKey="eNg9OShAKCzt9iF4BBLCsW5lPtyCZGkNMklLNi7pTN9aqjrAYJrQvjaH2VAVHVKH"
+            identifier={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_IDENTIFIER}
+            publicEmbedKey={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY}
         />
       </DashXProvider>
     </Theme>
