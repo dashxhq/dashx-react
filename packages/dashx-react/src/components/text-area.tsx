@@ -13,7 +13,6 @@ import { textArea, type TextAreaVariantProps } from '../variants/text-area.js';
 const MAX_HEIGHT = 180;
 
 interface TextAreaProps extends TextFieldProps, TextAreaVariantProps {
-  className?: string;
   placeholder?: string;
   label?: string;
   description?: string | ReactNode;
@@ -22,7 +21,6 @@ interface TextAreaProps extends TextFieldProps, TextAreaVariantProps {
 
 function _TextArea(
   {
-    className,
     label,
     description,
     errorMessage,
@@ -60,7 +58,6 @@ function _TextArea(
       {...filterDOMProps(props)}
       gap={2}
       direction="column"
-      className={className}
       ref={ref}
       slot={props.slot || undefined}
       data-disabled={props.isDisabled || undefined}

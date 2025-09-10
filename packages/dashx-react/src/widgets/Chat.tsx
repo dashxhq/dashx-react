@@ -10,13 +10,12 @@ import { useAgent } from '../hooks';
 import { X } from '../icons';
 
 type ChatProps = {
-  className?: string;
   publicEmbedKey: string;
   withChatHeader?: boolean;
   withPopoverClose?: boolean;
 }
 
-const Chat = ({ className, publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
+const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
   const { agent, messages, isThinking, error, sendMessage } = useAgent({ publicEmbedKey });
 
 
@@ -37,7 +36,7 @@ const Chat = ({ className, publicEmbedKey, withChatHeader = false, withPopoverCl
 
   return (
     <Theme asChild>
-      <Flex direction="column" className={cn('h-full border border-gray-400/40', className)}>
+      <Flex direction="column" className="h-full border border-gray-400/40">
         {withChatHeader && (
           <ChatHeader agent={agent}>
             {withPopoverClose && (
@@ -65,14 +64,13 @@ const Chat = ({ className, publicEmbedKey, withChatHeader = false, withPopoverCl
 type ChatHeaderProps = {
   agent: AiAgent;
   children?: React.ReactNode;
-  className?: string;
 };
 
-const ChatHeader = ({ agent, children, className }: ChatHeaderProps) => {
+const ChatHeader = ({ agent, children }: ChatHeaderProps) => {
   return (
     <Flex
       align="center"
-      className={cn('border-b border-b-gray-400/40 px-6 py-4', className)}
+      className="border-b border-b-gray-400/40 px-6 py-4"
       justify="between"
     >
       <Heading size={3}>{agent.name}</Heading>
@@ -101,7 +99,7 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
     const isUser = message.role === 'user';
     
     return (
-      <MarkdownRenderer
+      <div 
         key={message.id || index}
         className={cn([
           isUser
@@ -109,8 +107,10 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
             : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`
         ])}
       >
-        {message.content || ''}
-      </MarkdownRenderer>
+        <MarkdownRenderer>
+          {message.content || ''}
+        </MarkdownRenderer>
+      </div>
     );
   };
 
@@ -123,12 +123,14 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
         <ScrollArea.Viewport className="h-full">
           <Flex direction="column" gap={6}>
             {agent.starterMessages?.map((msg, index) => (
-              <MarkdownRenderer
+              <div
                 key={`message-${index}`}
                 className={cn("mr-auto items-start", AGENT_MESSAGE_WIDTH_CLASS)}
               >
-                {msg.content || ''}
-              </MarkdownRenderer>
+                <MarkdownRenderer>
+                  {msg.content || ''}
+                </MarkdownRenderer>
+              </div>
             ))}
 
             {agent.starterSuggestions && messages.length === 0 && (
@@ -194,27 +196,29 @@ const ChatFooter = ({ sendMessage, isThinking }: ChatFooterProps) => {
   return (
     <div className="shrink-0 grow-0 border-t border-t-gray-400/40">
       <Flex gap={2} align="end" className="w-full">
-        <TextArea
-          aria-label="message"
-          size="extralarge"
-          placeholder="Ask anything..."
-          value={inputValue}
-          onKeyDown={handleKeyDown}
-          onChange={(text) => setInputValue(text)}
-          className="flex-1 w-full [&_textarea]:!border-none [&_textarea]:!outline-none"
-          roundness="none"
-        />
-        <Button
-          className="mr-[7px] mb-[7px]"
-          shape="square"
-          roundness="full"
-          variant="fill"
-          size="medium"
-          onPress={handleSubmit}
-          isDisabled={!inputValue.trim() || isThinking}
-        >
-          <Send size={20} />
-        </Button>
+        <div className="w-full [&_textarea]:!border-none [&_textarea]:!outline-none">
+          <TextArea
+            aria-label="message"
+            size="extralarge"
+            placeholder="Ask anything..."
+            value={inputValue}
+            onKeyDown={handleKeyDown}
+            onChange={(text) => setInputValue(text)}
+            roundness="none"
+          />
+        </div>
+        <div className="mr-[7px] mb-[7px]">
+          <Button 
+            shape="square"
+            roundness="full"
+            variant="fill"
+            size="medium"
+            onPress={handleSubmit}
+            isDisabled={!inputValue.trim() || isThinking}
+          >
+            <Send size={20} />
+          </Button>
+        </div>
       </Flex>
     </div>
   )
