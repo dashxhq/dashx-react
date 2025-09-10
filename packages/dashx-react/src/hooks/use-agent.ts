@@ -5,7 +5,6 @@ import type { AiAgent, AiMessage } from '@dashx/browser';
 import useDashXProvider from './use-dashx-provider.js';
 
 type UseAgentHookProps = {
-  identifier: string;
   publicEmbedKey: string;
 }
 
@@ -18,7 +17,7 @@ type UseAgentHookResponse = {
   sendMessage: (text: string) => Promise<void>;
 }
 
-const useAgent = ({ identifier, publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse => {
+const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse => {
   const dashX = useDashXProvider();
 
   const [agent, setAgent] = useState<AiAgent>();
@@ -31,7 +30,6 @@ const useAgent = ({ identifier, publicEmbedKey }: UseAgentHookProps): UseAgentHo
   useEffect(() => {
     dashX
       .loadAiAgent({
-        agent: identifier,
         publicEmbedKey,
       })
       .then((agent) => {
@@ -41,7 +39,7 @@ const useAgent = ({ identifier, publicEmbedKey }: UseAgentHookProps): UseAgentHo
       .catch((err) => {
         setError(err);
       });
-  }, [dashX, identifier, publicEmbedKey]);
+  }, [dashX, publicEmbedKey]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -57,7 +55,6 @@ const useAgent = ({ identifier, publicEmbedKey }: UseAgentHookProps): UseAgentHo
         setError(null);
 
         const response = await dashX.invokeAiAgent({
-          agent: identifier,
           conversationId,
           prompt: text,
           publicEmbedKey,
@@ -74,7 +71,7 @@ const useAgent = ({ identifier, publicEmbedKey }: UseAgentHookProps): UseAgentHo
         setIsThinking(false);
       }
     },
-    [dashX, agent, publicEmbedKey, conversationId, identifier]
+    [dashX, agent, publicEmbedKey, conversationId]
   );
 
   return {

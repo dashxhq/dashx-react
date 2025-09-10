@@ -6,7 +6,7 @@ import { Button, Flex, Popover, Theme } from '../components';
 import { BotMessageSquareIcon } from '../icons/index.js';
 import { useDashXProvider } from '../hooks/index.js';
 
-const ChatPopup = (props: ChatProps) => {
+const ChatPopup = ({ publicEmbedKey }: ChatProps) => {
   const dashX = useDashXProvider();
 
   const [agent, setAgent] = React.useState<AiAgent>();
@@ -14,12 +14,11 @@ const ChatPopup = (props: ChatProps) => {
   useEffect(() => {
     dashX
       .loadAiAgent({
-        agent: props.identifier,
-        publicEmbedKey: props.publicEmbedKey,
+        publicEmbedKey,
       })
       .then((agent) => setAgent(agent))
       .catch((err) => console.error('Failed to load agent:', err));
-  }, [dashX, props.identifier, props.publicEmbedKey]);
+  }, [dashX, publicEmbedKey]);
 
   if (!agent) {
     return null;
@@ -37,8 +36,7 @@ const ChatPopup = (props: ChatProps) => {
           <Popover.Content spacing="large" width="350px" height="450px">
             <Chat
               className="border-none"
-              identifier={props.identifier} 
-              publicEmbedKey={props.publicEmbedKey} 
+              publicEmbedKey={publicEmbedKey} 
               withChatHeader
               withPopoverClose
             />

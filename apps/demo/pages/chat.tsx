@@ -27,13 +27,11 @@ function ChatPage() {
           }}
         >
           <Chat
-            identifier={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_IDENTIFIER}
             publicEmbedKey={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY}
           />
         </Flex>
         <ChatPopover
-            identifier={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_IDENTIFIER}
-            publicEmbedKey={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY}
+          publicEmbedKey={process.env.NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY}
         />
       </DashXProvider>
     </Theme>

@@ -11,17 +11,13 @@ import { X } from '../icons';
 
 type ChatProps = {
   className?: string;
-  identifier: string;
   publicEmbedKey: string;
   withChatHeader?: boolean;
   withPopoverClose?: boolean;
 }
 
-const Chat = ({ className, identifier, publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
-  const { agent, messages, isThinking, error, sendMessage } = useAgent({
-    identifier,
-    publicEmbedKey,
-  });
+const Chat = ({ className, publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
+  const { agent, messages, isThinking, error, sendMessage } = useAgent({ publicEmbedKey });
 
 
   if (!agent) {
