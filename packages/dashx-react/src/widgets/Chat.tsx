@@ -13,9 +13,10 @@ type ChatProps = {
   publicEmbedKey: string;
   withChatHeader?: boolean;
   withPopoverClose?: boolean;
+  borderless?: boolean;
 }
 
-const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false }: ChatProps) => {
+const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false, borderless = false }: ChatProps) => {
   const { agent, messages, isThinking, error, sendMessage } = useAgent({ publicEmbedKey });
 
 
@@ -36,7 +37,7 @@ const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false
 
   return (
     <Theme asChild>
-      <Flex direction="column" className="h-full border border-gray-400/40">
+      <Flex direction="column" className={cn("h-full", !borderless && "border border-gray-400/40")}>
         {withChatHeader && (
           <ChatHeader agent={agent}>
             {withPopoverClose && (

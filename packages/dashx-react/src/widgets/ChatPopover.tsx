@@ -35,8 +35,8 @@ const ChatPopup = ({ publicEmbedKey }: ChatProps) => {
           </Popover.Trigger>
           <Popover.Content spacing="large" width="350px" height="450px">
             <Chat
-              className="border-none"
               publicEmbedKey={publicEmbedKey} 
+              borderless
               withChatHeader
               withPopoverClose
             />
