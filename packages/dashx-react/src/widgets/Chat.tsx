@@ -1,5 +1,5 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Send } from 'lucide-react';
 import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browser';
 import type { KeyboardEvent } from 'react';
@@ -18,6 +18,7 @@ type ChatProps = {
 
 const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false, borderless = false }: ChatProps) => {
   const { agent, messages, isThinking, error, sendMessage } = useAgent({ publicEmbedKey });
+  const [isAnimating, setIsAnimating] = useState(false);
 
 
   if (!agent) {
@@ -55,8 +56,9 @@ const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false
           isThinking={isThinking}
           error={error}
           sendMessage={sendMessage}
+          setIsAnimating={setIsAnimating}
         />
-        <ChatFooter sendMessage={sendMessage} isThinking={isThinking} />
+        <ChatFooter sendMessage={sendMessage} isDisabled={isThinking || isAnimating} />
       </Flex>
     </Theme>
   );
@@ -89,15 +91,35 @@ type ChatBodyProps = {
   isThinking: boolean;
   error: string | null;
   sendMessage: (message: string) => void;
+  setIsAnimating: (animating: boolean) => void;
 };
 
-const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyProps) => {
+const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating }: ChatBodyProps) => {
+  const previousMessageCountRef = useRef(messages.length);
+  
+  const handleAnimationComplete = useCallback(() => {
+    setIsAnimating(false);
+  }, [setIsAnimating]);
+  
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    const hasNewMessage = messages.length > previousMessageCountRef.current;
+    
+    if (hasNewMessage && lastMessage?.role === 'assistant') {
+      setIsAnimating(true);
+    }
+    
+    previousMessageCountRef.current = messages.length;
+  }, [messages, isThinking, setIsAnimating]);
+
   const handleSuggestionClick = (suggestion: AiAgentStarterSuggestion) => {
     sendMessage(suggestion.content);
   };
 
   const renderMessage = (message: AiMessage, index: number) => {
     const isUser = message.role === 'user';
+    const isLastMessage = index === messages.length - 1;
+    const isLastAgentMessage = isLastMessage && !isUser;
     
     return (
       <div 
@@ -108,7 +130,7 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
             : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`
         ])}
       >
-        <MarkdownRenderer>
+        <MarkdownRenderer animate={isLastAgentMessage} onAnimationComplete={handleAnimationComplete}>
           {message.content || ''}
         </MarkdownRenderer>
       </div>
@@ -175,10 +197,10 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage }: ChatBodyP
 
 type ChatFooterProps = {
   sendMessage: (message: string) => void;
-  isThinking: boolean;
+  isDisabled?: boolean;
 };
 
-const ChatFooter = ({ sendMessage, isThinking }: ChatFooterProps) => {
+const ChatFooter = ({ sendMessage, isDisabled = false }: ChatFooterProps) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = () => {
@@ -216,7 +238,7 @@ const ChatFooter = ({ sendMessage, isThinking }: ChatFooterProps) => {
             variant="fill"
             size="medium"
             onPress={handleSubmit}
-            isDisabled={!inputValue.trim() || isThinking}
+            isDisabled={!inputValue.trim() || isDisabled}
           >
             <Send size={20} />
           </Button>

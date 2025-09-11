@@ -4,12 +4,23 @@ import ReactMarkdown from 'react-markdown'
 import { Heading } from './heading.js'
 import { Link } from './link.js'
 import { Text } from './text.js'
+import useAnimatedText from '../hooks/use-animated-text.js'
 
 type MarkdownRendererProps = {
-  children: string
+  children: string,
+  animate?: boolean
+  animationSpeed?: number
+  onAnimationComplete?: () => void
 }
 
-function MarkdownRenderer({ children }: MarkdownRendererProps) {
+function MarkdownRenderer({ children, animate = false, animationSpeed = 8, onAnimationComplete }: MarkdownRendererProps) {
+  const { displayedText } = useAnimatedText({
+    text: children,
+    speed: animationSpeed,
+    onComplete: onAnimationComplete,
+    enabled: animate
+  });
+
   return (
     <div className="space-y-6">
       <ReactMarkdown
@@ -37,7 +48,7 @@ function MarkdownRenderer({ children }: MarkdownRendererProps) {
           },
         }}
       >
-        {children}
+        {displayedText}
       </ReactMarkdown>
     </div>
   )
