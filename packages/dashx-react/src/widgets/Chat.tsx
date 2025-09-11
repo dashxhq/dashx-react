@@ -53,6 +53,7 @@ const Chat = ({ publicEmbedKey, withChatHeader = false, withPopoverClose = false
           isThinking={isThinking}
           error={error}
           sendMessage={sendMessage}
+          isAnimating={isAnimating}
           setIsAnimating={setIsAnimating}
         />
         <ChatFooter sendMessage={sendMessage} isDisabled={isThinking || isAnimating} />

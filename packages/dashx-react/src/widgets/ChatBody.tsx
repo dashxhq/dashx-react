@@ -4,6 +4,7 @@ import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browse
 
 import { cn } from '../utils/cn.js';
 import { Button, Flex, Text, MarkdownRenderer } from '../components';
+import { useAutoScroll } from '../hooks';
 
 const AGENT_MESSAGE_WIDTH_CLASS = 'max-w-[max(80%,350px)]';
 const USER_MESSAGE_WIDTH_CLASS = 'max-w-[80%]';
@@ -14,11 +15,13 @@ type ChatBodyProps = {
   isThinking: boolean;
   error: string | null;
   sendMessage: (message: string) => void;
+  isAnimating: boolean;
   setIsAnimating: (animating: boolean) => void;
 };
 
-const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating }: ChatBodyProps) => {
+const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating, isAnimating }: ChatBodyProps) => {
   const previousMessageCountRef = useRef(messages.length);
+  const { scrollAreaRef, scrollToBottom, checkIfUserAtBottom, isUserAtBottom } = useAutoScroll();
   
   const handleAnimationComplete = useCallback(() => {
     setIsAnimating(false);
@@ -32,8 +35,32 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
       setIsAnimating(true);
     }
     
+    if (hasNewMessage) {
+      setTimeout(() => scrollToBottom({ smooth: true }), 0);
+    }
+    
     previousMessageCountRef.current = messages.length;
-  }, [messages, isThinking, setIsAnimating]);
+  }, [messages, isThinking, setIsAnimating, scrollToBottom, isUserAtBottom]);
+
+  useEffect(() => {
+    if (isThinking) {
+      setTimeout(() => scrollToBottom({ smooth: true }), 0);
+    }
+  }, [isThinking, scrollToBottom, isUserAtBottom]);
+
+  useEffect(() => {
+    if (isAnimating && isUserAtBottom) {
+      const interval = setInterval(() => {
+        checkIfUserAtBottom();
+        if (isUserAtBottom) {
+          scrollToBottom({ smooth: false });
+        }
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [isAnimating, scrollToBottom, checkIfUserAtBottom, isUserAtBottom]);
+
 
   const handleSuggestionClick = (suggestion: AiAgentStarterSuggestion) => {
     sendMessage(suggestion.content);
@@ -65,7 +92,7 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
       direction="column"
       className="grow overflow-auto bg-gray-50"
     >
-      <ScrollArea.Root className="h-full grow-1 p-6">
+      <ScrollArea.Root ref={scrollAreaRef} className="h-full grow-1 p-6">
         <ScrollArea.Viewport className="h-full">
           <Flex direction="column" gap={6}>
             {agent.starterMessages?.map((msg, index) => (
