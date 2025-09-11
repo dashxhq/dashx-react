@@ -205,6 +205,7 @@ const ChatFooter = ({ sendMessage, isThinking }: ChatFooterProps) => {
             onKeyDown={handleKeyDown}
             onChange={(text) => setInputValue(text)}
             roundness="none"
+            autogrow
           />
         </div>
         <div className="mr-[7px] mb-[7px]">

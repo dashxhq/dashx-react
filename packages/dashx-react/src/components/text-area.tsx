@@ -17,6 +17,7 @@ interface TextAreaProps extends TextFieldProps, TextAreaVariantProps {
   label?: string;
   description?: string | ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  autogrow?: boolean;
 }
 
 function _TextArea(
@@ -27,6 +28,7 @@ function _TextArea(
     size = 'medium',
     roundness = 'medium',
     elevation = 'medium',
+    autogrow = false,
     ...props
   }: TextAreaProps,
   ref: React.ForwardedRef<HTMLDivElement>,
@@ -45,13 +47,13 @@ function _TextArea(
     );
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (autogrow && inputRef.current) {
       inputRef.current.style.height = "0px";
       const scrollHeight = inputRef.current.scrollHeight;
 
       inputRef.current.style.height = Math.min(scrollHeight, MAX_HEIGHT) + "px";
     }
-  }, [inputRef, inputProps.value]);
+  }, [autogrow, inputRef, inputProps.value]);
 
   return (
     <Flex
