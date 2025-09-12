@@ -17,9 +17,10 @@ type ChatBodyProps = {
   sendMessage: (message: string) => void;
   isAnimating: boolean;
   setIsAnimating: (animating: boolean) => void;
+  isPopoverOpen?: boolean;
 };
 
-const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating, isAnimating }: ChatBodyProps) => {
+const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating, isAnimating, isPopoverOpen = false }: ChatBodyProps) => {
   const previousMessageCountRef = useRef(messages.length);
   const initialMessageCountRef = useRef(messages.length);
   const { scrollAreaRef, scrollToBottom, checkIfUserAtBottom, isUserAtBottom } = useAutoScroll();
@@ -61,6 +62,13 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
       return () => clearInterval(interval);
     }
   }, [isAnimating, scrollToBottom, checkIfUserAtBottom, isUserAtBottom]);
+
+  useEffect(() => {
+    if (isPopoverOpen) {
+      // Use a small delay to ensure the popover content is fully rendered
+      setTimeout(() => scrollToBottom({ smooth: true }), 100);
+    }
+  }, [isPopoverOpen, scrollToBottom]);
 
 
   const handleSuggestionClick = (suggestion: AiAgentStarterSuggestion) => {

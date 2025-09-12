@@ -12,6 +12,7 @@ type ChatProps = UseAgentHookResponse & {
   withChatHeader?: boolean;
   withPopoverClose?: boolean;
   borderless?: boolean;
+  isPopoverOpen?: boolean;
 }
 
 const Chat = ({
@@ -23,6 +24,7 @@ const Chat = ({
   withChatHeader = false,
   withPopoverClose = false,
   borderless = false,
+  isPopoverOpen = false,
 }: ChatProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -62,6 +64,7 @@ const Chat = ({
           sendMessage={sendMessage}
           isAnimating={isAnimating}
           setIsAnimating={setIsAnimating}
+          isPopoverOpen={isPopoverOpen}
         />
         <ChatFooter sendMessage={sendMessage} isDisabled={isThinking || isAnimating} />
       </Flex>

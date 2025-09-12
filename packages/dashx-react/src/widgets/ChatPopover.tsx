@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Chat, type ChatWrapperProps } from './Chat.js';
 import { Button, Flex, Popover, Theme } from '../components';
@@ -7,11 +7,12 @@ import useAgent from '../hooks/use-agent.js';
 
 const ChatPopup = ({ publicEmbedKey, ...props }: ChatWrapperProps) => {
   const { agent, messages, isThinking, error, sendMessage, conversationId } = useAgent({ publicEmbedKey });
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   return (
     <Theme>
       <Flex className="fixed right-4 bottom-4 z-50">
-        <Popover.Root>
+        <Popover.Root onOpenChange={setIsPopoverOpen}>
           <Popover.Trigger>
             <Button shape="square" roundness="full" variant="fill" size="large">
               <BotMessageSquareIcon />
@@ -28,6 +29,7 @@ const ChatPopup = ({ publicEmbedKey, ...props }: ChatWrapperProps) => {
               borderless
               withChatHeader
               withPopoverClose
+              isPopoverOpen={isPopoverOpen}
               {...props}
             />
           </Popover.Content>
