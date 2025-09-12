@@ -4,7 +4,7 @@ import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browse
 
 import { cn } from '../utils/cn.js';
 import { Button, Flex, Text, MarkdownRenderer } from '../components';
-import { useAutoScroll } from '../hooks';
+import useAutoScroll from '../hooks/use-auto-scroll.js';
 
 const AGENT_MESSAGE_WIDTH_CLASS = 'max-w-[max(80%,350px)]';
 const USER_MESSAGE_WIDTH_CLASS = 'max-w-[80%]';
