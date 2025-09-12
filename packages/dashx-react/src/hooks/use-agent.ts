@@ -84,4 +84,6 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
   };
 };
 
+export type { UseAgentHookProps, UseAgentHookResponse };
+
 export default useAgent;

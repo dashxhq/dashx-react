@@ -1,28 +1,12 @@
-import React, { useEffect } from 'react';
-import type { AiAgent } from '@dashx/browser';
+import React from 'react';
 
-import Chat, { type ChatProps } from './Chat.js';
+import { Chat, type ChatWrapperProps } from './Chat.js';
 import { Button, Flex, Popover, Theme } from '../components';
 import { BotMessageSquareIcon } from '../icons/index.js';
-import { useDashXProvider } from '../hooks/index.js';
+import useAgent from '../hooks/use-agent.js';
 
-const ChatPopup = ({ publicEmbedKey }: ChatProps) => {
-  const dashX = useDashXProvider();
-
-  const [agent, setAgent] = React.useState<AiAgent>();
-
-  useEffect(() => {
-    dashX
-      .loadAiAgent({
-        publicEmbedKey,
-      })
-      .then((agent) => setAgent(agent))
-      .catch((err) => console.error('Failed to load agent:', err));
-  }, [dashX, publicEmbedKey]);
-
-  if (!agent) {
-    return null;
-  }
+const ChatPopup = ({ publicEmbedKey, ...props }: ChatWrapperProps) => {
+  const { agent, messages, isThinking, error, sendMessage, conversationId } = useAgent({ publicEmbedKey });
 
   return (
     <Theme>
@@ -35,10 +19,16 @@ const ChatPopup = ({ publicEmbedKey }: ChatProps) => {
           </Popover.Trigger>
           <Popover.Content spacing="large" width="350px" height="450px">
             <Chat
-              publicEmbedKey={publicEmbedKey} 
+              agent={agent}
+              conversationId={conversationId}
+              messages={messages}
+              isThinking={isThinking}
+              error={error}
+              sendMessage={sendMessage}
               borderless
               withChatHeader
               withPopoverClose
+              {...props}
             />
           </Popover.Content>
         </Popover.Root>
