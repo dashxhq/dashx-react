@@ -21,6 +21,7 @@ type ChatBodyProps = {
 
 const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating, isAnimating }: ChatBodyProps) => {
   const previousMessageCountRef = useRef(messages.length);
+  const initialMessageCountRef = useRef(messages.length);
   const { scrollAreaRef, scrollToBottom, checkIfUserAtBottom, isUserAtBottom } = useAutoScroll();
   
   const handleAnimationComplete = useCallback(() => {
@@ -70,6 +71,8 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
     const isUser = message.role === 'user';
     const isLastMessage = index === messages.length - 1;
     const isLastAgentMessage = isLastMessage && !isUser;
+    const isNewMessage = index >= initialMessageCountRef.current;
+    const shouldAnimate = isLastAgentMessage && isNewMessage;
     
     return (
       <div 
@@ -80,7 +83,7 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
             : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`
         ])}
       >
-        <MarkdownRenderer animate={isLastAgentMessage} onAnimationComplete={handleAnimationComplete}>
+        <MarkdownRenderer animate={shouldAnimate} onAnimationComplete={handleAnimationComplete}>
           {message.content || ''}
         </MarkdownRenderer>
       </div>
