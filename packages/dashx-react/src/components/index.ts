@@ -15,4 +15,3 @@ export * from './text-area.js';
 export * from './text-field.js';
 export * from './theme.js';
 export * as Tooltip from './tooltip.js';
-export * from './markdown-renderer.js';

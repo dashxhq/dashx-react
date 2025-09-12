@@ -2,8 +2,9 @@ import * as ScrollArea from '@radix-ui/react-scroll-area';
 import React, { useEffect, useRef, useCallback } from 'react';
 import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browser';
 
+import { Button, Flex, Text } from '../components';
 import { cn } from '../utils/cn.js';
-import { Button, Flex, Text, MarkdownRenderer } from '../components';
+import { MarkdownRenderer } from '../components/markdown-renderer.js';
 import useAutoScroll from '../hooks/use-auto-scroll.js';
 
 const AGENT_MESSAGE_WIDTH_CLASS = 'max-w-[max(80%,350px)]';
@@ -20,27 +21,36 @@ type ChatBodyProps = {
   isPopoverOpen?: boolean;
 };
 
-const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimating, isAnimating, isPopoverOpen = false }: ChatBodyProps) => {
+const ChatBody = ({
+  agent,
+  messages,
+  isThinking,
+  error,
+  sendMessage,
+  setIsAnimating,
+  isAnimating,
+  isPopoverOpen = false,
+}: ChatBodyProps) => {
   const previousMessageCountRef = useRef(messages.length);
   const initialMessageCountRef = useRef(messages.length);
   const { scrollAreaRef, scrollToBottom, checkIfUserAtBottom, isUserAtBottom } = useAutoScroll();
-  
+
   const handleAnimationComplete = useCallback(() => {
     setIsAnimating(false);
   }, [setIsAnimating]);
-  
+
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     const hasNewMessage = messages.length > previousMessageCountRef.current;
-    
+
     if (hasNewMessage && lastMessage?.role === 'assistant') {
       setIsAnimating(true);
     }
-    
+
     if (hasNewMessage) {
       setTimeout(() => scrollToBottom({ smooth: true }), 0);
     }
-    
+
     previousMessageCountRef.current = messages.length;
   }, [messages, isThinking, setIsAnimating, scrollToBottom, isUserAtBottom]);
 
@@ -70,7 +80,6 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
     }
   }, [isPopoverOpen, scrollToBottom]);
 
-
   const handleSuggestionClick = (suggestion: AiAgentStarterSuggestion) => {
     sendMessage(suggestion.content);
   };
@@ -81,14 +90,14 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
     const isLastAgentMessage = isLastMessage && !isUser;
     const isNewMessage = index >= initialMessageCountRef.current;
     const shouldAnimate = isLastAgentMessage && isNewMessage;
-    
+
     return (
-      <div 
+      <div
         key={message.id || index}
         className={cn([
           isUser
-            ? `ml-auto items-end bg-bg rounded-lg px-3 py-2 ${USER_MESSAGE_WIDTH_CLASS}`
-            : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`
+            ? `bg-bg ml-auto items-end rounded-lg py-2 px-3 ${USER_MESSAGE_WIDTH_CLASS}`
+            : `mr-auto items-start ${AGENT_MESSAGE_WIDTH_CLASS}`,
         ])}
       >
         <MarkdownRenderer animate={shouldAnimate} onAnimationComplete={handleAnimationComplete}>
@@ -99,21 +108,16 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
   };
 
   return (
-    <Flex
-      direction="column"
-      className="grow overflow-auto bg-gray-50"
-    >
+    <Flex direction="column" className="grow overflow-auto bg-gray-50">
       <ScrollArea.Root ref={scrollAreaRef} className="h-full grow-1 p-6">
         <ScrollArea.Viewport className="h-full">
           <Flex direction="column" gap={6}>
             {agent.starterMessages?.map((msg, index) => (
               <div
                 key={`message-${index}`}
-                className={cn("mr-auto items-start", AGENT_MESSAGE_WIDTH_CLASS)}
+                className={cn('mr-auto items-start', AGENT_MESSAGE_WIDTH_CLASS)}
               >
-                <MarkdownRenderer>
-                  {msg.content || ''}
-                </MarkdownRenderer>
+                <MarkdownRenderer>{msg.content || ''}</MarkdownRenderer>
               </div>
             ))}
 
@@ -137,11 +141,17 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
             {messages.map((message, index) => renderMessage(message, index))}
 
             {isThinking && (
-              <Text as="p" size={2} className="text-gray-500 mr-auto items-start">Thinking...</Text>
+              <Text as="p" size={2} className="mr-auto items-start text-gray-500">
+                Thinking...
+              </Text>
             )}
 
             {error && (
-              <Text as="p" size={2} className="bg-negative-100 text-negative-900 mx-auto items-start rounded-lg px-3 py-2">
+              <Text
+                as="p"
+                size={2}
+                className="bg-negative-100 text-negative-900 mx-auto items-start rounded-lg py-2 px-3"
+              >
                 Error: {error}
               </Text>
             )}
@@ -156,6 +166,6 @@ const ChatBody = ({ agent, messages, isThinking, error, sendMessage, setIsAnimat
   );
 };
 
-export type { ChatBodyProps }
+export type { ChatBodyProps };
 
 export default ChatBody;
