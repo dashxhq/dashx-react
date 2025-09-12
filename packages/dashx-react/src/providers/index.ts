@@ -1,1 +1,1 @@
-export { default as DashXProvider, DashXContext } from './DashXProvider.js';
+export { default as DashXProvider, DashXContext, useWebSocket } from './DashXProvider.js';
