@@ -75,7 +75,7 @@
     "clean": "rm -rf .turbo node_modules dist tokens layout *.css"
   },
   "dependencies": {
-    "@dashx/browser": "^0.4.6",
+    "@dashx/browser": "^0.4.8",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/primitive": "^1.0.1",
     "@radix-ui/react-accessible-icon": "^1.0.3",
