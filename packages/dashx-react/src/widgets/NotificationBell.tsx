@@ -42,7 +42,7 @@ const NotificationBell = () => {
           </Popover.Header>
           <Popover.Body>
             <Flex direction="column" gap={1}>
-              {notifications.length < 0 && (
+              {notifications.length === 0 && (
                 <Flex justify="center" align="center">
                   <Text variant="tertiary" size={2}>
                     No notifications yet.

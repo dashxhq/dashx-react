@@ -1,6 +1,6 @@
 {
   "name": "@dashx/react",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "UNLICENSED",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
@@ -75,7 +75,7 @@
     "clean": "rm -rf .turbo node_modules dist tokens layout *.css"
   },
   "dependencies": {
-    "@dashx/browser": "^0.4.4",
+    "@dashx/browser": "^0.4.8",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/primitive": "^1.0.1",
     "@radix-ui/react-accessible-icon": "^1.0.3",
@@ -122,13 +122,15 @@
     "prettier": "^3.2.5",
     "react-aria": "^3.33.1",
     "react-hot-toast": "^2.4.1",
+    "react-markdown": "^10.1.0",
     "react-remove-scroll-bar": "2.3.4",
     "react-use-websocket": "^4.8.1",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "tailwindcss": "^4.0.0-alpha.15",
     "tailwindcss-animate": "^1.0.7",
-    "tailwindcss-react-aria-components": "^1.1.3"
+    "tailwindcss-react-aria-components": "^1.1.3",
+    "uuid-random": "^1.3.2"
   },
   "peerDependencies": {
     "@types/react": "*",

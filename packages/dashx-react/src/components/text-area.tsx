@@ -1,21 +1,23 @@
-import { useContextProps, TextFieldContext } from 'react-aria-components';
-import { cn } from '../utils/cn.js';
-
-import { Flex, Text } from './index.js';
-import { fieldError } from '../variants/field-error.js';
 import { filterDOMProps } from '@react-aria/utils';
+import { forwardRef, useRef, type ReactNode, useEffect } from 'react';
+import { useContextProps, TextFieldContext } from 'react-aria-components';
 import { useTextField } from 'react-aria';
-import { forwardRef, useRef, type ReactNode } from 'react';
-import { removeDataAttributes } from '../utils/helpers.js';
-
 import type { TextFieldProps, ValidationResult } from 'react-aria-components';
+
+import { cn } from '../utils/cn.js';
+import { fieldError } from '../variants/field-error.js';
+import { Flex, Text } from './index.js';
+import { removeDataAttributes } from '../utils/helpers.js';
 import { textArea, type TextAreaVariantProps } from '../variants/text-area.js';
+
+const MAX_HEIGHT = 180;
 
 interface TextAreaProps extends TextFieldProps, TextAreaVariantProps {
   placeholder?: string;
   label?: string;
   description?: string | ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  autogrow?: boolean;
 }
 
 function _TextArea(
@@ -26,12 +28,13 @@ function _TextArea(
     size = 'medium',
     roundness = 'medium',
     elevation = 'medium',
+    autogrow = false,
     ...props
   }: TextAreaProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   [props, ref] = useContextProps(props, ref, TextFieldContext);
-  let inputRef = useRef(null);
+  let inputRef = useRef<HTMLTextAreaElement>(null);
 
   let { labelProps, inputProps, descriptionProps, errorMessageProps, ...validation } =
     useTextField<any>(
@@ -42,6 +45,15 @@ function _TextArea(
       },
       inputRef,
     );
+
+  useEffect(() => {
+    if (autogrow && inputRef.current) {
+      inputRef.current.style.height = "0px";
+      const scrollHeight = inputRef.current.scrollHeight;
+
+      inputRef.current.style.height = Math.min(scrollHeight, MAX_HEIGHT) + "px";
+    }
+  }, [autogrow, inputRef, inputProps.value]);
 
   return (
     <Flex
@@ -67,11 +79,11 @@ function _TextArea(
           {label}
         </Text>
       )}
-      <div role="group" className="relative" data-radius={roundness} data-shadow={elevation}>
+      <Flex role="group" className="relative" data-radius={roundness} data-shadow={elevation}>
         <textarea
           {...inputProps}
           ref={inputRef}
-          className={cn('dx', 'w-full', textArea({ size, roundness, elevation }))}
+          className={cn('dx', 'w-full resize-none', textArea({ size, roundness, elevation }))}
           data-disabled={props.isDisabled || undefined}
           data-invalid={validation.isInvalid || undefined}
           data-readonly={props.isReadOnly || undefined}
@@ -92,7 +104,7 @@ function _TextArea(
                 : validation.validationErrors.join(' ')}
           </Text>
         )}
-      </div>
+      </Flex>
       {description && (
         <Text size={1} variant="tertiary" {...descriptionProps}>
           {description}

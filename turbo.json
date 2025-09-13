@@ -3,7 +3,15 @@
   "tasks": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": [
+        "NEXT_PUBLIC_DASHX_BASE_URI",
+        "NEXT_PUBLIC_DASHX_REALTIME_URI",
+        "NEXT_PUBLIC_DASHX_PUBLIC_KEY",
+        "NEXT_PUBLIC_DASHX_TARGET_ENVIRONMENT",
+        "NEXT_PUBLIC_DASHX_TARGET_PRODUCT",
+        "NEXT_PUBLIC_DASHX_AI_AGENT_PUBLIC_EMBED_KEY"
+      ]
     },
     "test": {
       "outputs": ["coverage/**"],

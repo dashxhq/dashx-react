@@ -1,12 +1,13 @@
 import DashX from '@dashx/browser';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import type { Client, ClientParams, WebsocketMessageType } from '@dashx/browser';
+import type { Client, ClientParams, WebSocketManager, WebsocketMessageType } from '@dashx/browser';
 
 const DashXContext = createContext<Client | null>(null);
 
 type WebSocketContextType = {
   isConnected: boolean;
   subscribe: (callback: (message: WebsocketMessageType) => void) => () => void;
+  wsManagerRef: React.RefObject<WebSocketManager>;
 };
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
@@ -35,7 +36,7 @@ function DashXProvider({
 
   // WebSocket state
   const [isConnected, setIsConnected] = useState(false);
-  const wsManagerRef = useRef<any>(null);
+  const wsManagerRef = useRef<WebSocketManager | null>(null);
   const subscribersRef = useRef<Set<(message: WebsocketMessageType) => void>>(new Set());
 
   const subscribe = (callback: (message: WebsocketMessageType) => void) => {
@@ -99,7 +100,7 @@ function DashXProvider({
 
   return (
     <DashXContext.Provider value={dashX}>
-      <WebSocketContext.Provider value={{ isConnected, subscribe }}>
+      <WebSocketContext.Provider value={{ isConnected, subscribe, wsManagerRef }}>
         {children}
       </WebSocketContext.Provider>
     </DashXContext.Provider>
