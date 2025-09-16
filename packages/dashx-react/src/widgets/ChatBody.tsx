@@ -1,6 +1,6 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import React, { useEffect, useRef, useCallback } from 'react';
-import type { AiAgent, AiMessage, AiAgentStarterSuggestion } from '@dashx/browser';
+import type { AiAgent, AiNotification, AiAgentStarterSuggestion } from '@dashx/browser';
 
 import { Button, Flex, Text } from '../components';
 import { cn } from '../utils/cn.js';
@@ -12,7 +12,7 @@ const USER_MESSAGE_WIDTH_CLASS = 'max-w-[80%]';
 
 type ChatBodyProps = {
   agent: AiAgent;
-  messages: AiMessage[];
+  messages: AiNotification[];
   isThinking: boolean;
   error: string | null;
   sendMessage: (message: string) => void;
@@ -42,8 +42,8 @@ const ChatBody = ({
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     const hasNewMessage = messages.length > previousMessageCountRef.current;
-
-    if (hasNewMessage && lastMessage?.role === 'assistant') {
+    
+    if (hasNewMessage && lastMessage?.aiRole === 'assistant') {
       setIsAnimating(true);
     }
 
@@ -84,8 +84,8 @@ const ChatBody = ({
     sendMessage(suggestion.content);
   };
 
-  const renderMessage = (message: AiMessage, index: number) => {
-    const isUser = message.role === 'user';
+  const renderMessage = (message: AiNotification, index: number) => {
+    const isUser = message.aiRole === 'user';
     const isLastMessage = index === messages.length - 1;
     const isLastAgentMessage = isLastMessage && !isUser;
     const isNewMessage = index >= initialMessageCountRef.current;
@@ -101,7 +101,7 @@ const ChatBody = ({
         ])}
       >
         <MarkdownRenderer animate={shouldAnimate} onAnimationComplete={handleAnimationComplete}>
-          {message.content || ''}
+          {message.renderedContent || ''}
         </MarkdownRenderer>
       </div>
     );
