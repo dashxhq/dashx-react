@@ -1,6 +1,6 @@
 import uuid from 'uuid-random';
 import { useState, useEffect, useCallback } from 'react';
-import type { AiAgent, AiMessage } from '@dashx/browser';
+import type { AiAgent, AiNotification } from '@dashx/browser';
 
 import useDashXProvider from './use-dashx-provider.js';
 
@@ -11,7 +11,7 @@ type UseAgentHookProps = {
 type UseAgentHookResponse = {
   agent?: AiAgent;
   conversationId: string | null;
-  messages: AiMessage[];
+  messages: AiNotification[];
   isThinking: boolean;
   error: string | null;
   sendMessage: (text: string) => Promise<void>;
@@ -23,7 +23,7 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
   const [agent, setAgent] = useState<AiAgent>();
 
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<AiMessage[]>([]);
+  const [messages, setMessages] = useState<AiNotification[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,9 +48,9 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
       try {
         setMessages((prev) => [...prev, {
           id: uuid(),
-          role: 'user',
-          content: text
-        } as AiMessage]);
+          aiRole: 'user',
+          renderedContent: text
+        } as AiNotification]);
         setIsThinking(true);
         setError(null);
 
