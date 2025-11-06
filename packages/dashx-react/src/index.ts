@@ -1,4 +1,4 @@
-export type * from '@dashx/browser';
+export { WebsocketMessage } from '@dashx/browser';
 
 export * from './components/index.js';
 export * from './hooks/index.js';
