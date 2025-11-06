@@ -124,11 +124,13 @@ function DashXProvider({
     if (initializeWebSocketOnLoad) {
       initializeWebSocket(webSocketQueryParams);
     }
+  }, [ initializeWebSocketOnLoad, webSocketQueryParams ]);
 
+  useEffect(() => {
     return () => {
       disconnectWebSocket();
     };
-  }, [initializeWebSocketOnLoad, webSocketQueryParams, initializeWebSocket, disconnectWebSocket]);
+  }, [ disconnectWebSocket ]);
 
   return (
     <DashXContext.Provider value={dashX}>
