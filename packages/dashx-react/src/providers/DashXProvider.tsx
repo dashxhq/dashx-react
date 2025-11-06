@@ -9,7 +9,6 @@ type WebSocketContextType = {
   subscribe: (callback: (message: WebsocketMessageType) => void) => () => void;
   wsManagerRef: React.RefObject<WebSocketManager>;
   initializeWebSocket: (queryParams?: Record<string, any>) => void;
-  disconnectWebSocket: () => void;
 };
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
@@ -55,15 +54,6 @@ function DashXProvider({
     return () => {
       subscribersRef.current.delete(callback);
     };
-  }, []);
-
-  const disconnectWebSocket = useCallback(() => {
-    if (wsManagerRef.current) {
-      console.log('Disconnecting WebSocket');
-      wsManagerRef.current.disconnect();
-      wsManagerRef.current = null;
-      setIsConnected(false);
-    }
   }, []);
 
   const initializeWebSocket = useCallback((customQueryParams?: Record<string, any>) => {
@@ -126,12 +116,6 @@ function DashXProvider({
     }
   }, [ initializeWebSocketOnLoad, webSocketQueryParams ]);
 
-  useEffect(() => {
-    return () => {
-      disconnectWebSocket();
-    };
-  }, [ disconnectWebSocket ]);
-
   return (
     <DashXContext.Provider value={dashX}>
       <WebSocketContext.Provider
@@ -139,8 +123,7 @@ function DashXProvider({
           isConnected,
           subscribe,
           wsManagerRef,
-          initializeWebSocket,
-          disconnectWebSocket
+          initializeWebSocket
         }}
       >
         {children}
