@@ -76,10 +76,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-3.1.1.tgz#63085d2995ca0f0e55aa8b8a07d69bfd48b844fe"
   integrity sha512-a7cxGcJ2wIlMFLlh8z2ONm+715QkPHiyJcxwQlKOz/03GPw1COpfhcmC9wm4xlZfp//jWHNNMwzjtqHXVWU9KA==
 
-"@dashx/browser@^0.4.13":
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/@dashx/browser/-/browser-0.4.13.tgz#79ac41c4f6d83cf1f6235776def3c58813e3e4a1"
-  integrity sha512-FaFrf2V94DvmlKvHNpfjamyYUH4EPrIKaQFVjIghW9gj+fI55sB6WMRF7gFRHIox7ame/1viy7+LfmvIcxTeaw==
+"@dashx/browser@^0.4.14":
+  version "0.4.14"
+  resolved "https://registry.yarnpkg.com/@dashx/browser/-/browser-0.4.14.tgz#26ccf8c75cd0697618fae5ef48a23bb9b7860bc0"
+  integrity sha512-83JSPnJUGHvAmT9wfQEwYmZLXuSx81qgbaXztNvTFj8HXz8teFq1QY7P2B9AT7jhwoTfeB0GkVwARXwHJ+RgJQ==
   dependencies:
     "@apollo/client" "^3.13.8"
     "@graphql-typed-document-node/core" "^3.2.0"
