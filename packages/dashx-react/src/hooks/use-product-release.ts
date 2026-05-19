@@ -20,6 +20,7 @@ const useProductRelease = (): UseProductReleaseHookResponse => {
     dashX
       .fetchProductVariantRelease()
       .then(setProductVariantRelease)
+      .catch(() => setProductVariantRelease(null));
     // Set up product variant release rule watcher (automatically refetch on WebSocket reconnection)
     dashX.watchFetchProductVariantReleaseRule(setProductVariantReleaseRule);
   }, [dashX]);
