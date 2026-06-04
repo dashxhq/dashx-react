@@ -4,12 +4,12 @@ import { useInApp } from '../hooks/index.js';
 import { Button, Card, Flex, Heading, Popover, Text, Theme, Tooltip } from '../components';
 import { Inbox, Mail, MailOpen, X } from '../icons/index.js';
 
-const NotificationBell = () => {
+const MessageBell = () => {
   let {
-    markNotificationAsRead,
-    markNotificationAsUnread,
-    notifications,
-    unreadNotificationsCount,
+    markMessageAsRead,
+    markMessageAsUnread,
+    messages,
+    unreadMessagesCount,
   } = useInApp();
 
   return (
@@ -21,18 +21,18 @@ const NotificationBell = () => {
               <Button
                 shape="square"
                 roundness="full"
-                variant={unreadNotificationsCount ? 'fill' : 'ghost'}
+                variant={unreadMessagesCount ? 'fill' : 'ghost'}
               >
                 <Inbox />
               </Button>
             </Popover.Trigger>
           </Tooltip.Trigger>
-          <Tooltip.Content content="Notification" />
+          <Tooltip.Content content="Messages" />
         </Tooltip.Root>
         <Popover.Content spacing="large" width="350px" height="450px">
           <Popover.Header asChild>
             <Flex justify="between" align="center">
-              <Heading size={3}>Notifications</Heading>
+              <Heading size={3}>Messages</Heading>
               <Popover.Close>
                 <Button shape="square" roundness="full" variant="ghost" mode="subtle" inset="right">
                   <X />
@@ -42,22 +42,22 @@ const NotificationBell = () => {
           </Popover.Header>
           <Popover.Body>
             <Flex direction="column" gap={1}>
-              {notifications.length === 0 && (
+              {messages.length === 0 && (
                 <Flex justify="center" align="center">
                   <Text variant="tertiary" size={2}>
-                    No notifications yet.
+                    No messages yet.
                   </Text>
                 </Flex>
               )}
-              {notifications.map((notification) => (
-                <Card key={notification.id}>
+              {messages.map((message) => (
+                <Card key={message.id}>
                   <Flex align="center" gap={4} justify="between">
                     <Flex direction="column" gap={1}>
                       <Text as="p" variant="secondary" weight="semibold" size={2}>
-                        {notification.renderedContent.body}
+                        {message.renderedContent.body}
                       </Text>
                       <Text size={1} variant="tertiary">
-                        {intlFormatDistance(notification.sentAt, new Date())}
+                        {intlFormatDistance(message.sentAt, new Date())}
                       </Text>
                     </Flex>
                     <Tooltip.Root>
@@ -66,20 +66,20 @@ const NotificationBell = () => {
                           shape="square"
                           variant="ghost"
                           roundness="full"
-                          mode={notification.readAt ? 'subtle' : 'distinct'}
+                          mode={message.readAt ? 'subtle' : 'distinct'}
                           onPress={() => {
-                            if (notification.readAt) {
-                              markNotificationAsUnread(notification.id);
+                            if (message.readAt) {
+                              markMessageAsUnread(message.id);
                             } else {
-                              markNotificationAsRead(notification.id);
+                              markMessageAsRead(message.id);
                             }
                           }}
                         >
-                          {notification.readAt ? <MailOpen /> : <Mail />}
+                          {message.readAt ? <MailOpen /> : <Mail />}
                         </Button>
                       </Tooltip.Trigger>
                       <Tooltip.Content
-                        content={notification.readAt ? 'Mark as unread' : 'Mark as read'}
+                        content={message.readAt ? 'Mark as unread' : 'Mark as read'}
                       />
                     </Tooltip.Root>
                   </Flex>
@@ -98,4 +98,4 @@ const NotificationBell = () => {
   );
 };
 
-export default NotificationBell;
+export default MessageBell;

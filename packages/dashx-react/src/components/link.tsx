@@ -71,7 +71,7 @@ function _Link(props: LinkProps, ref: ForwardedRef<HTMLAnchorElement>) {
       {...filterDOMProps(props)}
       {...mergeProps(linkProps, focusProps, hoverProps)}
       slot={props.slot || undefined}
-      ref={mergeRefs(ref, innerRef)}
+      ref={mergeRefs(ref, innerRef) as any}
       data-disabled={props.isDisabled || undefined}
       data-pressed={isPressed || undefined}
       data-hovered={isHovered || undefined}

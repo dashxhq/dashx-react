@@ -1,18 +1,19 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import React, { useEffect, useRef, useCallback } from 'react';
-import type { AiAgent, AiNotification, AiAgentStarterSuggestion } from '@dashx/browser';
+import type { AiAgent, AiAgentStarterSuggestion } from '@dashx/browser';
 
 import { Button, Flex, Text } from '../components';
 import { cn } from '../utils/cn.js';
 import { MarkdownRenderer } from '../components/markdown-renderer.js';
 import useAutoScroll from '../hooks/use-auto-scroll.js';
+import type { AiMessage } from '../hooks/use-agent.js';
 
 const AGENT_MESSAGE_WIDTH_CLASS = 'max-w-[max(80%,350px)]';
 const USER_MESSAGE_WIDTH_CLASS = 'max-w-[80%]';
 
 type ChatBodyProps = {
   agent: AiAgent;
-  messages: AiNotification[];
+  messages: AiMessage[];
   isThinking: boolean;
   error: string | null;
   sendMessage: (message: string) => void;
@@ -84,7 +85,7 @@ const ChatBody = ({
     sendMessage(suggestion.content);
   };
 
-  const renderMessage = (message: AiNotification, index: number) => {
+  const renderMessage = (message: AiMessage, index: number) => {
     const isUser = message.aiRole === 'user';
     const isLastMessage = index === messages.length - 1;
     const isLastAgentMessage = isLastMessage && !isUser;

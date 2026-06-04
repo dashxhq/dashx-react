@@ -1,42 +1,42 @@
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { WebsocketMessage } from '@dashx/browser';
-import type { InAppNotifications, WebsocketMessageType } from '@dashx/browser';
+import type { InAppMessages, WebsocketMessageType } from '@dashx/browser';
 
 import useDashXProvider from './use-dashx-provider.js';
 import { useWebSocket } from '../providers/DashXProvider.js';
 
 type UseInAppHookResponse = {
-  notifications: InAppNotifications;
-  unreadNotificationsCount: number | null;
-  markNotificationAsRead: (id: string) => Promise<any>;
-  markNotificationAsUnread: (id: string) => Promise<any>;
+  messages: InAppMessages;
+  unreadMessagesCount: number | null;
+  markMessageAsRead: (id: string) => Promise<any>;
+  markMessageAsUnread: (id: string) => Promise<any>;
 };
 
 const useInApp = (): UseInAppHookResponse => {
   let dashX = useDashXProvider();
   const { subscribe } = useWebSocket();
-  const [notifications, setNotifications] = useState<InAppNotifications>([]);
-  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number | null>(null);
+  const [messages, setMessages] = useState<InAppMessages>([]);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number | null>(null);
 
-  const markNotificationAsRead = (id: string) => dashX.trackNotification({ id, status: 'READ' });
+  const markMessageAsRead = (id: string) => dashX.trackMessage({ id, status: 'READ' });
 
-  const markNotificationAsUnread = async (id: string) =>
-    dashX.trackNotification({ id, status: 'UNREAD' });
+  const markMessageAsUnread = async (id: string) =>
+    dashX.trackMessage({ id, status: 'UNREAD' });
 
 
   useEffect(() => {
-    // Set up notification watchers (automatically refetch on WebSocket reconnection)
-    dashX.watchFetchInAppNotifications(setNotifications);
-    dashX.watchFetchInAppNotificationsAggregate(setUnreadNotificationsCount);
+    // Set up in-app message watchers (automatically refetch on WebSocket reconnection)
+    dashX.watchFetchInAppMessages(setMessages);
+    dashX.watchFetchInAppMessagesAggregate(setUnreadMessagesCount);
   }, [dashX]);
 
   useEffect(() => {
-    // Subscribe to WebSocket messages for notifications
+    // Subscribe to WebSocket messages for in-app messages
     const unsubscribe = subscribe((message: WebsocketMessageType) => {
-      // Handle only IN_APP_NOTIFICATION for toast display
+      // Handle only IN_APP_MESSAGE for toast display
       // The client handles all other message processing internally
-      if (message?.type === WebsocketMessage.IN_APP_NOTIFICATION) {
+      if (message?.type === WebsocketMessage.IN_APP_MESSAGE) {
         toast(message.data.renderedContent.body);
       }
     });
@@ -45,10 +45,10 @@ const useInApp = (): UseInAppHookResponse => {
   }, [subscribe]);
 
   return {
-    notifications,
-    unreadNotificationsCount,
-    markNotificationAsRead,
-    markNotificationAsUnread,
+    messages,
+    unreadMessagesCount,
+    markMessageAsRead,
+    markMessageAsUnread,
   };
 };
 

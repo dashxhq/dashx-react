@@ -63,7 +63,7 @@ function _Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>)
       {...filterDOMProps(props)}
       {...mergeProps(buttonProps, focusProps, hoverProps)}
       slot={props.slot || undefined}
-      ref={mergeRefs(ref, innerRef)}
+      ref={mergeRefs(ref, innerRef) as React.Ref<HTMLElement>}
       data-disabled={props.isDisabled || undefined}
       data-pressed={isPressed || undefined}
       data-hovered={isHovered || undefined}

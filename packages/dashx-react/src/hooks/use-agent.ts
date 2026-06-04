@@ -1,6 +1,6 @@
 import uuid from 'uuid-random';
 import { useState, useEffect, useCallback } from 'react';
-import type { AiAgent, AiNotification } from '@dashx/browser';
+import type { AiAgent } from '@dashx/browser';
 
 import useDashXProvider from './use-dashx-provider.js';
 
@@ -8,10 +8,19 @@ type UseAgentHookProps = {
   publicEmbedKey: string;
 }
 
+// UI-level chat message. `aiRole` is a presentation concern maintained by the
+// hook (the SDK's invokeAiAgent messages don't carry a role) to distinguish
+// user-entered messages from agent responses.
+type AiMessage = {
+  id: string;
+  aiRole: 'user' | 'assistant';
+  renderedContent: any;
+}
+
 type UseAgentHookResponse = {
   agent?: AiAgent;
   conversationId: string | null;
-  messages: AiNotification[];
+  messages: AiMessage[];
   isThinking: boolean;
   error: string | null;
   sendMessage: (text: string) => Promise<void>;
@@ -23,7 +32,7 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
   const [agent, setAgent] = useState<AiAgent>();
 
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<AiNotification[]>([]);
+  const [messages, setMessages] = useState<AiMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,8 +58,8 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
         setMessages((prev) => [...prev, {
           id: uuid(),
           aiRole: 'user',
-          renderedContent: text
-        } as AiNotification]);
+          renderedContent: text,
+        }]);
         setIsThinking(true);
         setError(null);
 
@@ -60,11 +69,21 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
           publicEmbedKey,
         });
 
-        if (response.conversationId && !conversationId) {
-          setConversationId(response.conversationId);
+        const responseConversationId = response.messages.find(
+          (message) => message.conversationId,
+        )?.conversationId;
+        if (responseConversationId && !conversationId) {
+          setConversationId(responseConversationId);
         }
 
-        setMessages((prev) => [...prev, response]);
+        setMessages((prev) => [
+          ...prev,
+          ...response.messages.map((message) => ({
+            id: message.id,
+            aiRole: 'assistant' as const,
+            renderedContent: message.renderedContent,
+          })),
+        ]);
       } catch (err) {
         setError('Failed to send message');
       } finally {
@@ -84,6 +103,6 @@ const useAgent = ({ publicEmbedKey }: UseAgentHookProps): UseAgentHookResponse =
   };
 };
 
-export type { UseAgentHookProps, UseAgentHookResponse };
+export type { UseAgentHookProps, UseAgentHookResponse, AiMessage };
 
 export default useAgent;

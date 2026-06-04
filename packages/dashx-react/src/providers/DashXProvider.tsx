@@ -31,7 +31,7 @@ function DashXProvider({
 }: React.PropsWithChildren<DashXProviderProps>) {
   const dashX = React.useMemo(
     () =>
-      DashX({
+      DashX.configure({
         publicKey: publicKey,
         baseUri: baseUri,
         realtimeBaseUri: realtimeBaseUri,

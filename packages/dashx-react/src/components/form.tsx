@@ -2,15 +2,15 @@ import { FormContext } from 'react-aria-components';
 import { FormValidationContext } from 'react-stately';
 import { forwardRef } from 'react';
 
-import type { FormProps as _FormProps } from '@react-types/form';
 import type { CSSProperties, ForwardedRef, ReactNode } from 'react';
-import type { DOMProps } from '@react-types/shared';
+import type { DOMProps, ValidationErrors } from '@react-types/shared';
 
-export interface FormProps extends _FormProps, DOMProps {
+export interface FormProps extends DOMProps {
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
   noValidate?: boolean;
+  validationErrors?: ValidationErrors;
 }
 
 function _Form(props: FormProps, ref: ForwardedRef<HTMLFormElement>) {
