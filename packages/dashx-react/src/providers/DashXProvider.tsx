@@ -62,12 +62,13 @@ function DashXProvider({
       return;
     }
 
-    // Disconnect any existing connection first
+    // Reuse an existing manager — it owns its own throttled reconnect
+    // lifecycle. Tearing it down and creating a new one on every call (e.g.
+    // when a consumer re-invokes this as `isConnected` flips to false on each
+    // close) resets the per-instance reconnect throttle and reconnects
+    // immediately, defeating the backoff. Create one only if none exists.
     if (wsManagerRef.current) {
-      console.log('Disconnecting existing WebSocket before reinitializing');
-      wsManagerRef.current.disconnect();
-      wsManagerRef.current = null;
-      setIsConnected(false);
+      return;
     }
 
     const queryParams = {
