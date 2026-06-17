@@ -17,15 +17,19 @@ type DashXProviderProps = ClientParams & {
   initializeWebSocketOnLoad?: boolean,
   webSocketQueryParams?: Record<string, any>,
   /**
+   * The visitor's account uid, addressed on both transports (GraphQL + WS).
+   * Pass `null` to explicitly clear it (e.g. on logout); omit (`undefined`) to
+   * leave it unchanged. Pair with `identityToken` for the same identity.
+   */
+  identityUid?: string | null,
+  /**
    * Identity token (minted with your DashX server SDK's `generateIdentityToken`,
    * or from an exchange endpoint you control). When set, the SDK uses it for both
    * GraphQL (`X-Identity-Token` header) and the WebSocket handshake — the server
    * identifies the visitor from it, which is the ownership key for InApp Chat.
-   *
-   * Pair with `identityUid` to address the same identity on both transports.
+   * Pass `null` to clear it on logout; omit (`undefined`) to leave it unchanged.
    */
-  identityUid?: string,
-  identityToken?: string,
+  identityToken?: string | null,
 }
 
 function DashXProvider({
