@@ -6,11 +6,11 @@ import useDashXProvider from './use-dashx-provider.js';
 import { useWebSocket } from '../providers/DashXProvider.js';
 
 type UseInAppChatHookProps = {
-  // The workspace's DASHX chat-identity id (the receiving surface). Created on
-  // installation; pasted-in config alongside the public key.
+  // The workspace's chat-identity id (the receiving surface), created when the
+  // chat integration is installed; pasted into config alongside the public key.
   identityId: string;
-  // SDK-supplied conversation key; composed server-side into the conversation's
-  // idempotency key so repeat opens resolve to the same thread.
+  // Caller-supplied conversation key; the server uses it so repeat opens with
+  // the same key resolve to the same conversation thread.
   idempotencyKey: string;
   // Optional automated first message sent when the conversation is first
   // created (e.g. "Help with order #123"). Sent via `startInAppChatConversation`
@@ -19,8 +19,8 @@ type UseInAppChatHookProps = {
 };
 
 // UI-level message. `aiRole` distinguishes the visitor from agent/AI replies and
-// drives alignment; the backend emits it lowercase ('user'/'assistant'), so the
-// widget compares it case-insensitively (see `isOutgoing`).
+// drives alignment; it arrives lowercase ('user'/'assistant'), so the widget
+// compares it case-insensitively (see `isOutgoing`).
 type InAppChatMessage = {
   id: string;
   externalUid: string | null;
@@ -52,10 +52,10 @@ const toUiMessage = (message: InAppChatMessageData): InAppChatMessage => ({
 });
 
 // Dedup by externalUid (server message replaces the optimistic pending one)
-// then id; order by createdAt as the authoritative key. `turnSeq` is
-// GraphQL-hidden so it's absent from fetched history (the backend already
-// returns history in turn_seq order, preserved by the stable sort); it only
-// breaks same-createdAt ties among realtime WS events, which carry it.
+// then id; order by createdAt as the authoritative key. `turnSeq` isn't in the
+// fetched message fields, so it's absent from history (which already arrives
+// ordered, preserved by the stable sort); it only breaks same-createdAt ties
+// among realtime WS events, which carry it.
 const mergeMessages = (
   existing: InAppChatMessage[],
   incoming: InAppChatMessage[],
@@ -128,9 +128,9 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
           identityId,
           clientIdempotencyKey: idempotencyKey,
           // Stable client message id → the automated message is inserted once,
-          // even if the conversation is reopened (server dedups by external_uid).
-          // Separator must be `-` (not `:`) — client ids are restricted to
-          // `[A-Za-z0-9._-]` by the backend's validate_client_short_id.
+          // even if the conversation is reopened (the server dedups repeat sends).
+          // Separator must be `-` (not `:`) — client ids allow only
+          // `[A-Za-z0-9._-]`.
           ...(initialMessage
             ? { content: { text: initialMessage }, clientMessageId: `${idempotencyKey}-intro` }
             : {}),

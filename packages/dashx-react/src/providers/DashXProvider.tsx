@@ -17,11 +17,10 @@ type DashXProviderProps = ClientParams & {
   initializeWebSocketOnLoad?: boolean,
   webSocketQueryParams?: Record<string, any>,
   /**
-   * Identity token (from `dashx.generateIdentityToken` on the backend or
-   * an exchange endpoint you control). When set, the SDK uses it for both
-   * GraphQL (`X-Identity-Token` header) and the WebSocket handshake — the
-   * backend resolves `request_meta.identity_id` from it, which is the
-   * ownership key for InApp Chat.
+   * Identity token (minted with your DashX server SDK's `generateIdentityToken`,
+   * or from an exchange endpoint you control). When set, the SDK uses it for both
+   * GraphQL (`X-Identity-Token` header) and the WebSocket handshake — the server
+   * identifies the visitor from it, which is the ownership key for InApp Chat.
    *
    * Pair with `identityUid` to address the same identity on both transports.
    */
