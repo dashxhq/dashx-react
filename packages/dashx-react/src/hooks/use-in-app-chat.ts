@@ -129,10 +129,10 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
           clientIdempotencyKey: idempotencyKey,
           // Stable client message id → the automated message is inserted once,
           // even if the conversation is reopened (the server dedups repeat sends).
-          // Separator must be `-` (not `:`) — client ids allow only
-          // `[A-Za-z0-9._-]`.
+          // `-` separator (client ids allow only `[A-Za-z0-9._-]`); the key is
+          // truncated so the suffixed id stays within the 1-128 char limit.
           ...(initialMessage
-            ? { content: { text: initialMessage }, clientMessageId: `${idempotencyKey}-intro` }
+            ? { content: { text: initialMessage }, clientMessageId: `${idempotencyKey.slice(0, 122)}-intro` }
             : {}),
         });
         if (isStale()) return;
