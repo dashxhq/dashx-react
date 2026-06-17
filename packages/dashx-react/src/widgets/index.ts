@@ -1,5 +1,7 @@
 export { default as Chat } from './Chat.js';
 export { default as ChatPopover } from './ChatPopover.js';
+export { default as InAppChat } from './InAppChat.js';
+export { default as InAppChatButton } from './InAppChatButton.js';
 export { default as MessageBell } from './MessageBell.js';
 export { default as Preference } from './Preference.js';
 export { default as Preferences } from './Preferences.js';

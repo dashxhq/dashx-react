@@ -15,7 +15,18 @@ const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
 type DashXProviderProps = ClientParams & {
   initializeWebSocketOnLoad?: boolean,
-  webSocketQueryParams?: Record<string, any>
+  webSocketQueryParams?: Record<string, any>,
+  /**
+   * Identity token (from `dashx.generateIdentityToken` on the backend or
+   * an exchange endpoint you control). When set, the SDK uses it for both
+   * GraphQL (`X-Identity-Token` header) and the WebSocket handshake — the
+   * backend resolves `request_meta.identity_id` from it, which is the
+   * ownership key for InApp Chat.
+   *
+   * Pair with `identityUid` to address the same identity on both transports.
+   */
+  identityUid?: string,
+  identityToken?: string,
 }
 
 function DashXProvider({
@@ -28,17 +39,30 @@ function DashXProvider({
   targetVersion,
   initializeWebSocketOnLoad = false,
   webSocketQueryParams = {},
+  identityUid,
+  identityToken,
 }: React.PropsWithChildren<DashXProviderProps>) {
   const dashX = React.useMemo(
-    () =>
-      DashX.configure({
+    () => {
+      const client = DashX.configure({
         publicKey: publicKey,
         baseUri: baseUri,
         realtimeBaseUri: realtimeBaseUri,
         targetEnvironment: targetEnvironment,
         targetProduct,
         targetVersion,
-      }),
+      });
+      // Apply identity synchronously at creation so a child that starts work in
+      // its own mount effect (child effects run before this provider's effects)
+      // sees the token already set. Later prop changes go through the effect
+      // below; identity is intentionally not a useMemo dep (we don't recreate
+      // the client when it changes).
+      if (identityUid !== undefined || identityToken !== undefined) {
+        client.setIdentity(identityUid, identityToken);
+      }
+      return client;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [publicKey, baseUri, realtimeBaseUri, targetEnvironment, targetProduct, targetVersion],
   );
 
@@ -110,6 +134,32 @@ function DashXProvider({
     wsManagerRef.current = wsManager;
     wsManager.connect();
   }, [dashX]);
+
+  // Forward `identityUid` + `identityToken` into the dashX client so the same
+  // identity is used by GraphQL and the WS. Pass the props as-is: `setIdentity`
+  // treats `undefined` as "leave unchanged", so setting only `identityToken`
+  // won't clobber an existing account uid (and vice versa).
+  const previousIdentityTokenRef = useRef(identityToken);
+  useEffect(() => {
+    if (!dashX || (identityUid === undefined && identityToken === undefined)) {
+      return;
+    }
+
+    dashX.setIdentity(identityUid, identityToken);
+
+    // This provider owns the socket (created via `createWebSocketConnection`,
+    // not the client's internal manager that `setIdentity` reconnects), so on a
+    // token change we recreate it here to put the new identity_token in the WS
+    // URL. GraphQL picks up the new header on its own; tracked chat channels
+    // re-subscribe on the new socket's `onOpen`.
+    const tokenChanged = identityToken !== previousIdentityTokenRef.current;
+    previousIdentityTokenRef.current = identityToken;
+    if (tokenChanged && wsManagerRef.current) {
+      wsManagerRef.current.disconnect();
+      wsManagerRef.current = null;
+      initializeWebSocket(webSocketQueryParams);
+    }
+  }, [ dashX, identityUid, identityToken, initializeWebSocket, webSocketQueryParams ]);
 
   useEffect(() => {
     if (initializeWebSocketOnLoad) {
