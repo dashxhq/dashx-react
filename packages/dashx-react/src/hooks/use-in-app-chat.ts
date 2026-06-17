@@ -18,8 +18,9 @@ type UseInAppChatHookProps = {
   initialMessage?: string;
 };
 
-// UI-level message. `aiRole` is 'USER' for the visitor's own messages and
-// 'ASSISTANT' for agent/AI replies (drives alignment).
+// UI-level message. `aiRole` distinguishes the visitor from agent/AI replies and
+// drives alignment; the backend emits it lowercase ('user'/'assistant'), so the
+// widget compares it case-insensitively (see `isOutgoing`).
 type InAppChatMessage = {
   id: string;
   externalUid: string | null;
