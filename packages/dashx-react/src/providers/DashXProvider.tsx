@@ -69,6 +69,16 @@ function DashXProvider({
     [publicKey, baseUri, realtimeBaseUri, targetEnvironment, targetProduct, targetVersion],
   );
 
+  // `webSocketQueryParams` defaults to a fresh `{}` each render and is a dep of
+  // the effects below, so memoize on its content to keep the reference stable —
+  // otherwise those effects (setIdentity / WS init) re-run on every render.
+  const webSocketQueryParamsKey = JSON.stringify(webSocketQueryParams ?? {});
+  const stableWebSocketQueryParams = React.useMemo(
+    () => webSocketQueryParams ?? {},
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [webSocketQueryParamsKey],
+  );
+
   // WebSocket state
   const [isConnected, setIsConnected] = useState(false);
   const wsManagerRef = useRef<WebSocketManager | null>(null);
@@ -160,15 +170,15 @@ function DashXProvider({
     if (tokenChanged && wsManagerRef.current) {
       wsManagerRef.current.disconnect();
       wsManagerRef.current = null;
-      initializeWebSocket(webSocketQueryParams);
+      initializeWebSocket(stableWebSocketQueryParams);
     }
-  }, [ dashX, identityUid, identityToken, initializeWebSocket, webSocketQueryParams ]);
+  }, [ dashX, identityUid, identityToken, initializeWebSocket, stableWebSocketQueryParams ]);
 
   useEffect(() => {
     if (initializeWebSocketOnLoad) {
-      initializeWebSocket(webSocketQueryParams);
+      initializeWebSocket(stableWebSocketQueryParams);
     }
-  }, [ initializeWebSocketOnLoad, webSocketQueryParams ]);
+  }, [ initializeWebSocketOnLoad, initializeWebSocket, stableWebSocketQueryParams ]);
 
   return (
     <DashXContext.Provider value={dashX}>

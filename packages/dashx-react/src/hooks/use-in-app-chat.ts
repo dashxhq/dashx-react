@@ -44,9 +44,11 @@ const CHAT_CHANNEL_PREFIX = 'in_app_chat:conversation:';
 
 const toUiMessage = (message: InAppChatMessageData): InAppChatMessage => ({
   id: message.id,
-  externalUid: message.externalUid,
+  // `externalUid` / `aiRole` are nullable in the schema, so the SDK types them as
+  // optional; normalize the absent case to null for the UI message shape.
+  externalUid: message.externalUid ?? null,
   renderedContent: message.renderedContent,
-  aiRole: message.aiRole,
+  aiRole: message.aiRole ?? null,
   createdAt: message.createdAt,
   turnSeq: message.turnSeq,
 });
