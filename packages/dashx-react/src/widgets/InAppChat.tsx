@@ -46,8 +46,11 @@ const InAppChat = ({
 
   const handleSubmit = () => {
     if (!inputValue.trim()) return;
-    sendMessage(inputValue);
-    setInputValue('');
+    // `sendMessage` is synchronous: it returns true the instant the message is
+    // optimistically queued (network send runs in the background). Clear the
+    // composer right away on success so a fast second Enter can't re-send the same
+    // text as a duplicate; on false (chat not ready) keep the visitor's text.
+    if (sendMessage(inputValue)) setInputValue('');
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {

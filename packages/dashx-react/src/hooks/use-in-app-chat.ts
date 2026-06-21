@@ -37,7 +37,10 @@ type UseInAppChatHookResponse = {
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
-  sendMessage: (text: string) => Promise<void>;
+  // Returns `true` if the message was optimistically queued, `false` if the chat
+  // wasn't ready (no conversation yet). Synchronous so the caller can clear the
+  // composer immediately on `true`; callers keep the input populated on `false`.
+  sendMessage: (text: string) => boolean;
 };
 
 const CHAT_CHANNEL_PREFIX = 'in_app_chat:conversation:';
@@ -195,10 +198,17 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
     };
   }, [dashX, identityId, idempotencyKey, initialMessage, initializeWebSocket, appendMessages]);
 
+  // Synchronous on purpose: it returns `true` the moment the message is optimistically
+  // queued and runs the network send in the background. The caller clears the composer
+  // on `true` immediately — if it instead awaited the round-trip, a fast second Enter
+  // would re-send the still-present text as a new message (fresh clientMessageId, so the
+  // backend won't dedupe it) and create a duplicate.
   const sendMessage = useCallback(
-    async (text: string) => {
+    (text: string): boolean => {
       const convId = conversationIdRef.current;
-      if (!text.trim() || !convId) return;
+      // Not ready (conversation still starting, or start failed) — report back so
+      // the caller can keep the typed text instead of clearing it on a no-op send.
+      if (!text.trim() || !convId) return false;
 
       // Pin the generation so a response that resolves after the identity/key
       // changed (or unmount) can't contaminate the new conversation's state.
@@ -214,19 +224,24 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
       };
       appendMessages([optimistic]);
 
-      try {
-        const serverMessage = await dashX.sendInAppChatMessage({
-          conversationId: convId,
-          identityId,
-          content: { text },
-          clientMessageId,
-        });
-        if (generation !== generationRef.current) return;
-        // Reconcile by externalUid (the WS echo reconciles too — both idempotent).
-        appendMessages([toUiMessage(serverMessage)]);
-      } catch {
-        if (generation === generationRef.current) setError('Failed to send message');
-      }
+      void (async () => {
+        try {
+          const serverMessage = await dashX.sendInAppChatMessage({
+            conversationId: convId,
+            identityId,
+            content: { text },
+            clientMessageId,
+          });
+          if (generation !== generationRef.current) return;
+          // Reconcile by externalUid (the WS echo reconciles too — both idempotent).
+          appendMessages([toUiMessage(serverMessage)]);
+        } catch {
+          if (generation === generationRef.current) setError('Failed to send message');
+        }
+      })();
+
+      // Queued (optimistically appended) — the background send reconciles/errors later.
+      return true;
     },
     [dashX, identityId, appendMessages],
   );

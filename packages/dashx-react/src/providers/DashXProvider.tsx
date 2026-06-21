@@ -111,6 +111,10 @@ function DashXProvider({
     const queryParams = {
       publicKey: dashX.publicKey,
       ...(dashX.targetEnvironment && { targetEnvironment: dashX.targetEnvironment }),
+      // Provider-level defaults apply to every provider-owned socket — including
+      // when the chat hook (or any consumer) opens the socket first by calling
+      // `initializeWebSocket()` with no args. Explicit call-site params override.
+      ...stableWebSocketQueryParams,
       ...customQueryParams,
     };
 
@@ -146,7 +150,7 @@ function DashXProvider({
 
     wsManagerRef.current = wsManager;
     wsManager.connect();
-  }, [dashX]);
+  }, [dashX, stableWebSocketQueryParams]);
 
   // Forward `identityUid` + `identityToken` into the dashX client so the same
   // identity is used by GraphQL and the WS. Pass the props as-is: `setIdentity`
