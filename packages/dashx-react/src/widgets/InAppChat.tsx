@@ -11,6 +11,9 @@ import useInAppChat, {
   type UseInAppChatHookProps,
   type UseInAppChatHookResponse,
 } from '../hooks/use-in-app-chat.js';
+import useInAppChatNotifications, {
+  type InAppChatNotificationOptions,
+} from '../hooks/use-in-app-chat-notifications.js';
 
 type InAppChatProps = UseInAppChatHookResponse & {
   withChatHeader?: boolean;
@@ -151,10 +154,35 @@ const InAppChat = ({
   );
 };
 
-type InAppChatWrapperProps = Omit<InAppChatProps, keyof UseInAppChatHookResponse> & UseInAppChatHookProps;
+type InAppChatWrapperProps = Omit<InAppChatProps, keyof UseInAppChatHookResponse>
+  & Omit<UseInAppChatHookProps, 'enabled' | 'onInboundMessage'>
+  & {
+    // Foreground browser notifications for incoming agent/AI messages while the
+    // chat isn't focused. `false` disables; an object customizes title/icon/body.
+    // Default: enabled but silent until permission is granted (this always-visible
+    // surface never auto-prompts — call `Client.requestNotificationPermission()`
+    // from your own UI, or use `<InAppChatButton>` which prompts on first open).
+    notifications?: boolean | InAppChatNotificationOptions;
+  };
 
-const InAppChatWrapper = ({ identityId, idempotencyKey, initialMessage, ...props }: InAppChatWrapperProps) => {
-  const chat = useInAppChat({ identityId, idempotencyKey, initialMessage });
+const InAppChatWrapper = ({ identityId, idempotencyKey, initialMessage, notifications = true, ...props }: InAppChatWrapperProps) => {
+  // Always-visible surface: treat as "open" and gate notifications on tab
+  // visibility/focus only. No launcher gesture exists here, so default to
+  // 'manual' permission (auto-requesting would prompt on mount).
+  const notifier = useInAppChatNotifications({
+    isOpen: true,
+    enabled: notifications !== false,
+    options: {
+      requestPermissionOn: 'manual',
+      ...(typeof notifications === 'object' ? notifications : undefined),
+    },
+  });
+  const chat = useInAppChat({
+    identityId,
+    idempotencyKey,
+    initialMessage,
+    onInboundMessage: notifier.handleInboundMessage,
+  });
   return <InAppChat {...chat} {...props} />;
 };
 

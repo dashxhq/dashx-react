@@ -16,6 +16,15 @@ type UseInAppChatHookProps = {
   // created (e.g. "Help with order #123"). Sent via `startInAppChatConversation`
   // with a stable client message id, so it lands exactly once across reopens.
   initialMessage?: string;
+  // When false, the hook is idle: no conversation is started, subscribed, or
+  // fetched. Lets `<InAppChatButton>` defer the conversation until the visitor
+  // first opens the launcher, while keeping the hook mounted afterwards so its
+  // subscription (and thus notifications) survive the panel being closed.
+  enabled?: boolean;
+  // Invoked once per LIVE inbound message (not for history load / reconnect
+  // refetch). Drives browser notifications without having to diff backfilled
+  // history against live events.
+  onInboundMessage?: (message: InAppChatMessageData) => void;
 };
 
 // UI-level message. `aiRole` distinguishes the visitor from agent/AI replies and
@@ -94,7 +103,7 @@ const mergeMessages = (
  * this by starting lazily when the visitor opens it, by which point the provider
  * has applied the token.
  */
-const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppChatHookProps): UseInAppChatHookResponse => {
+const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = true, onInboundMessage }: UseInAppChatHookProps): UseInAppChatHookResponse => {
   const dashX = useDashXProvider();
   const { isConnected, initializeWebSocket } = useWebSocket();
 
@@ -108,6 +117,11 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
   const generationRef = useRef(0);
   const conversationIdRef = useRef<string | null>(null);
 
+  // Latest live-message callback, kept in a ref so changing its identity doesn't
+  // tear down and re-create the channel subscription.
+  const onInboundMessageRef = useRef(onInboundMessage);
+  onInboundMessageRef.current = onInboundMessage;
+
   const appendMessages = useCallback((incoming: InAppChatMessage[]) => {
     setMessages((prev) => mergeMessages(prev, incoming));
   }, []);
@@ -118,9 +132,17 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
 
     setConversationId(null);
     setMessages([]);
-    setIsLoading(true);
     setError(null);
     conversationIdRef.current = null;
+
+    // Idle until enabled (e.g. before the launcher's first open): don't create a
+    // conversation, subscribe, or fetch.
+    if (!enabled) {
+      setIsLoading(false);
+      return () => { generationRef.current += 1; };
+    }
+
+    setIsLoading(true);
 
     // Ensure the WS exists (idempotent — returns early if already created).
     initializeWebSocket();
@@ -159,7 +181,12 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
         const subscription = dashX.subscribeToChannel(
           `${CHAT_CHANNEL_PREFIX}${convId}`,
           (event) => {
-            if (!isStale()) appendMessages([toUiMessage(event)]);
+            if (isStale()) return;
+            appendMessages([toUiMessage(event)]);
+            // LIVE messages only — history load / reconnect refetch go through
+            // `refetchHistory`, so notification consumers never fire for
+            // backfilled messages.
+            onInboundMessageRef.current?.(event);
           },
           {
             onReconnectAck: () => {
@@ -196,7 +223,7 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage }: UseInAppCh
       generationRef.current += 1;
       unsubscribe?.();
     };
-  }, [dashX, identityId, idempotencyKey, initialMessage, initializeWebSocket, appendMessages]);
+  }, [dashX, identityId, idempotencyKey, initialMessage, enabled, initializeWebSocket, appendMessages]);
 
   // Synchronous on purpose: it returns `true` the moment the message is optimistically
   // queued and runs the network send in the background. The caller clears the composer
