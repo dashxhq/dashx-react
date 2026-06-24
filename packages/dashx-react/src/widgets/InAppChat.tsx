@@ -80,7 +80,7 @@ const InAppChat = ({
         )}
 
         <Flex direction="column" className="grow overflow-auto bg-gray-50">
-          <ScrollArea.Root ref={scrollAreaRef} className="h-full grow-1 p-6">
+          <ScrollArea.Root ref={scrollAreaRef} className="h-full grow p-6">
             <ScrollArea.Viewport className="h-full">
               <Flex direction="column" gap={3}>
                 {messages.map((message) => (
@@ -123,7 +123,7 @@ const InAppChat = ({
 
         <div className="shrink-0 grow-0 border-t border-t-gray-400/40">
           <Flex gap={2} align="end" className="w-full">
-            <div className="w-full [&_textarea]:!border-none [&_textarea]:!outline-none">
+            <div className="w-full [&_textarea]:border-none! [&_textarea]:outline-none!">
               <TextArea
                 aria-label="message"
                 size="extralarge"
