@@ -14,6 +14,7 @@ type UseInAppHookResponse = {
   loadMore: () => Promise<void>;
   markMessageAsRead: (id: string) => Promise<any>;
   markMessageAsUnread: (id: string) => Promise<any>;
+  markAllMessagesAsRead: () => Promise<any>;
 };
 
 const useInApp = (): UseInAppHookResponse => {
@@ -28,6 +29,10 @@ const useInApp = (): UseInAppHookResponse => {
 
   const markMessageAsUnread = async (id: string) =>
     dashX.trackMessage({ id, status: 'UNREAD' });
+
+  // One mutation marking everything unread (sent up to now) as read - including messages
+  // beyond the loaded pages - instead of one trackMessage call per message.
+  const markAllMessagesAsRead = () => dashX.trackAllMessages();
 
   const loadMore = async () => {
     if (isLoadingMore || !hasMore) return;
@@ -76,6 +81,7 @@ const useInApp = (): UseInAppHookResponse => {
     loadMore,
     markMessageAsRead,
     markMessageAsUnread,
+    markAllMessagesAsRead,
   };
 };
 
