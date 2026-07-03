@@ -25,14 +25,20 @@ const useInApp = (): UseInAppHookResponse => {
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const markMessageAsRead = (id: string) => dashX.trackMessage({ id, status: 'READ' });
+  const markMessageAsRead = (id: string) =>
+    dashX.trackMessage({ id, status: 'READ' }).catch((error: unknown) => {
+      console.error('DashX: failed to mark in-app message as read', error);
+    });
 
-  const markMessageAsUnread = async (id: string) =>
-    dashX.trackMessage({ id, status: 'UNREAD' });
+  const markMessageAsUnread = (id: string) =>
+    dashX.trackMessage({ id, status: 'UNREAD' }).catch((error: unknown) => {
+      console.error('DashX: failed to mark in-app message as unread', error);
+    });
 
-  // One mutation marking everything unread (sent up to now) as read - including messages
-  // beyond the loaded pages - instead of one trackMessage call per message.
-  const markAllMessagesAsRead = () => dashX.trackAllMessages();
+  const markAllMessagesAsRead = () =>
+    dashX.trackAllMessages().catch((error: unknown) => {
+      console.error('DashX: failed to mark all in-app messages as read', error);
+    });
 
   const loadMore = async () => {
     if (isLoadingMore || !hasMore) return;
@@ -40,6 +46,9 @@ const useInApp = (): UseInAppHookResponse => {
     try {
       const { hasMore: more } = await dashX.fetchMoreInAppMessages();
       setHasMore(more);
+    } catch (error) {
+      // hasMore stays true so a later scroll retries the page.
+      console.error('DashX: failed to fetch more in-app messages', error);
     } finally {
       setIsLoadingMore(false);
     }
@@ -49,10 +58,8 @@ const useInApp = (): UseInAppHookResponse => {
     // Set up in-app message watchers (automatically refetch on WebSocket reconnection)
     dashX.watchFetchInAppMessages((nextMessages) => {
       setMessages(nextMessages);
-      // Re-derive hasMore whenever the list is a fresh first page (<= one page): an empty
-      // inbox (no more), the initial load, or after the client refetches page 1 on
-      // reconnect (which resets the cache). A full first page implies more; a short or
-      // empty one doesn't. Once paged past the first page, fetchMoreInAppMessages owns it.
+      // While the list is a single page (initial load, empty inbox, or a reconnect
+      // refetch of page 1), a full page implies more; past that, loadMore owns hasMore.
       if (nextMessages.length <= IN_APP_MESSAGES_PAGE_SIZE) {
         setHasMore(nextMessages.length === IN_APP_MESSAGES_PAGE_SIZE);
       }
