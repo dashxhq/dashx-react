@@ -25,8 +25,7 @@ const POSITION_CLASS: Record<LauncherPosition, string> = {
 
 const InAppChatButton = ({
   identityId,
-  idempotencyKey,
-  initialMessage,
+  conversationId,
   notifications = true,
   position = 'bottom-right',
   theme,
@@ -36,8 +35,10 @@ const InAppChatButton = ({
 
   // Latch: once the launcher has been opened, keep the chat hook active so its
   // channel subscription persists while the panel is closed — that's what lets
-  // us notify on replies that land while the panel is shut. Before the first
-  // open the hook is idle, so no conversation is created on page load.
+  // us notify on replies that land while the panel is shut. Before the first open
+  // the hook is idle, so a page that never opens the launcher does no chat work
+  // (no subscription, no history fetch). It never created a conversation either —
+  // the conversation is created by your backend and passed in as `conversationId`.
   const hasOpenedRef = useRef(false);
   if (isOpen) hasOpenedRef.current = true;
   const enabled = hasOpenedRef.current;
@@ -64,8 +65,7 @@ const InAppChatButton = ({
 
   const chat = useInAppChat({
     identityId,
-    idempotencyKey,
-    initialMessage,
+    conversationId,
     enabled,
     onInboundMessage: handleInboundMessage,
   });
@@ -82,7 +82,7 @@ const InAppChatButton = ({
           {/* The chat hook lives at the launcher level (above the popover) so its
               subscription survives the panel closing — required to notify on
               replies that arrive while the panel is shut. It activates lazily on
-              first open, so no empty conversation is created on page load. */}
+              first open, so a launcher the visitor never opens costs nothing. */}
           <Popover.Content spacing="large" width="350px" height="450px">
             <InAppChat
               {...chat}

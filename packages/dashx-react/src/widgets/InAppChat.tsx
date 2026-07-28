@@ -154,6 +154,10 @@ const InAppChat = ({
   );
 };
 
+// `conversationId` is required (inherited from the hook's props): this widget
+// participates in a conversation your BACKEND created — it cannot create one, because
+// creating a chat is server-only in DashX. Pass `null` while you're still fetching the
+// id and the widget renders its empty/loading state instead of guessing.
 type InAppChatWrapperProps = Omit<InAppChatProps, keyof UseInAppChatHookResponse>
   & Omit<UseInAppChatHookProps, 'enabled' | 'onInboundMessage'>
   & {
@@ -165,7 +169,7 @@ type InAppChatWrapperProps = Omit<InAppChatProps, keyof UseInAppChatHookResponse
     notifications?: boolean | InAppChatNotificationOptions;
   };
 
-const InAppChatWrapper = ({ identityId, idempotencyKey, initialMessage, notifications = true, ...props }: InAppChatWrapperProps) => {
+const InAppChatWrapper = ({ identityId, conversationId, notifications = true, ...props }: InAppChatWrapperProps) => {
   // Always-visible surface: treat as "open" and gate notifications on tab
   // visibility/focus only. No launcher gesture exists here, so default to
   // 'manual' permission (auto-requesting would prompt on mount).
@@ -179,8 +183,7 @@ const InAppChatWrapper = ({ identityId, idempotencyKey, initialMessage, notifica
   });
   const chat = useInAppChat({
     identityId,
-    idempotencyKey,
-    initialMessage,
+    conversationId,
     onInboundMessage: notifier.handleInboundMessage,
   });
   return <InAppChat {...chat} {...props} />;

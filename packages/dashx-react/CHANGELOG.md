@@ -2,6 +2,37 @@
 
 All notable changes to `@dashx/react` are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
 
+## [0.4.0] — 2026-07-29
+
+### Changed
+
+- **BREAKING — In-App Chat no longer creates conversations; the caller supplies one.** `useInAppChat` and both widgets participate in an EXISTING conversation:
+
+  ```diff
+  - useInAppChat({ identityId, idempotencyKey, initialMessage? })
+  + useInAppChat({ identityId, conversationId })
+  ```
+
+  `idempotencyKey` and `initialMessage` are gone, along with the create-on-mount behaviour. `<InAppChat>` and `<InAppChatButton>` take a required `conversationId` prop in place of `idempotencyKey`/`initialMessage`.
+
+  **Why.** Creating a chat is now server-only in DashX: identity-token callers are rejected outright, and the operation requires an `accountUid` naming the visitor — a claim no browser should be able to make. The conversation's `data`/`issueProperties` are metadata the agent console trusts, so they must be derived server-side. `@dashx/browser@0.10.0` therefore removes `startInAppChatConversation`, which is what this hook used.
+
+  **Migration.** Create the conversation in your backend (for JVM services, `dashx-java` ≥ 1.5.0 exposes `DashX.startInAppChatConversation(input)`), return the id to your client, and pass it in:
+
+  ```tsx
+  const { conversationId } = useMyBackendChatSession(); // your endpoint
+  <InAppChatButton identityId="<chat-identity-id>" conversationId={conversationId} />
+  ```
+
+  `conversationId` accepts `null` while you're still fetching it — the hook stays idle (no subscription, no history fetch) rather than guessing, so you can render the widget unconditionally.
+- **`conversationId` is no longer returned from the hook.** The caller now owns it, so echoing it back was noise. Everything else in the response is unchanged: `messages`, `isLoading`, `isConnected`, `error`, `sendMessage`.
+- `sendMessage(text)` returns `false` when there is no `conversationId` yet (or the hook is disabled) — same contract as before, so callers that keep the composer populated on `false` need no change.
+- **`@dashx/browser` dependency raised to `^0.10.0`** (a regular `dependencies` entry, as before), which is the release that removes the creation method.
+
+### Unchanged
+
+- History fetch, realtime subscribe, optimistic send + reconciliation, reconnect refetch, and the notification hook all behave exactly as before. `<InAppChatButton>` still activates lazily on first open, so a launcher the visitor never opens does no chat work.
+
 ## [0.3.0] — 2026-06-18
 
 ### Added

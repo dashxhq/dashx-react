@@ -9,17 +9,15 @@ type UseInAppChatHookProps = {
   // The workspace's chat-identity id (the receiving surface), created when the
   // chat integration is installed; pasted into config alongside the public key.
   identityId: string;
-  // Caller-supplied conversation key; the server uses it so repeat opens with
-  // the same key resolve to the same conversation thread.
-  idempotencyKey: string;
-  // Optional automated first message sent when the conversation is first
-  // created (e.g. "Help with order #123"). Sent via `startInAppChatConversation`
-  // with a stable client message id, so it lands exactly once across reopens.
-  initialMessage?: string;
-  // When false, the hook is idle: no conversation is started, subscribed, or
-  // fetched. Lets `<InAppChatButton>` defer the conversation until the visitor
-  // first opens the launcher, while keeping the hook mounted afterwards so its
-  // subscription (and thus notifications) survive the panel being closed.
+  // The conversation to participate in. This hook does NOT create conversations:
+  // creating one is server-only (DashX rejects identity-token callers), so your
+  // backend creates it and hands you the id. Pass `null` while you don't have one
+  // yet — the hook stays idle rather than guessing.
+  conversationId: string | null;
+  // When false, the hook is idle: nothing is subscribed or fetched. Lets
+  // `<InAppChatButton>` defer the subscription until the visitor first opens the
+  // launcher, while keeping the hook mounted afterwards so its subscription (and
+  // thus notifications) survive the panel being closed.
   enabled?: boolean;
   // Invoked once per LIVE inbound message (not for history load / reconnect
   // refetch). Drives browser notifications without having to diff backfilled
@@ -41,14 +39,14 @@ type InAppChatMessage = {
 };
 
 type UseInAppChatHookResponse = {
-  conversationId: string | null;
   messages: InAppChatMessage[];
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
   // Returns `true` if the message was optimistically queued, `false` if the chat
-  // wasn't ready (no conversation yet). Synchronous so the caller can clear the
-  // composer immediately on `true`; callers keep the input populated on `false`.
+  // wasn't ready (no `conversationId`, or disabled). Synchronous so the caller can
+  // clear the composer immediately on `true`; callers keep the input populated on
+  // `false`.
   sendMessage: (text: string) => boolean;
 };
 
@@ -91,31 +89,33 @@ const mergeMessages = (
 };
 
 /**
- * Two-way InApp Chat for a visitor.
+ * Two-way InApp Chat within an EXISTING conversation.
+ *
+ * This hook participates; it never creates. Creating a conversation is a
+ * server-only operation — DashX rejects identity-token callers and requires an
+ * `accountUid` the browser has no authority to assert, and the conversation's
+ * metadata must be derived server-side. So the flow is: your backend creates the
+ * conversation (e.g. via `dashx-java`) and returns its id; you pass that id here.
  *
  * PREREQUISITE: the surrounding `<DashXProvider>` must already have a valid
- * `identityToken` (and matching `identityUid`). The chat mutations require
- * identity-token auth — if the chat starts before an identity is resolved, they
- * are rejected and the hook surfaces an auth error. It does NOT auto-retry when
- * a token arrives later (its inputs are `identityId`/`idempotencyKey`, not the
- * visitor token), so only render the chat once `identityToken` is available —
- * e.g. `{identityToken && <InAppChat … />}`. `<InAppChatButton>` largely sidesteps
- * this by starting lazily when the visitor opens it, by which point the provider
- * has applied the token.
+ * `identityToken` (and matching `identityUid`). Fetching history, sending, and
+ * subscribing all require identity-token auth — if they run before an identity is
+ * resolved they are rejected and the hook surfaces an error. It does NOT auto-retry
+ * when a token arrives later (its inputs are `identityId`/`conversationId`, not the
+ * visitor token), so only render the chat once `identityToken` is available — e.g.
+ * `{identityToken && <InAppChat … />}`.
  */
-const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = true, onInboundMessage }: UseInAppChatHookProps): UseInAppChatHookResponse => {
+const useInAppChat = ({ identityId, conversationId, enabled = true, onInboundMessage }: UseInAppChatHookProps): UseInAppChatHookResponse => {
   const dashX = useDashXProvider();
   const { isConnected, initializeWebSocket } = useWebSocket();
 
-  const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<InAppChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Bumped on every identity/key change and on unmount so stale start/fetch/send
-  // resolutions are ignored (the classic React async race).
+  // Bumped on every identity/conversation change and on unmount so stale
+  // fetch/send resolutions are ignored (the classic React async race).
   const generationRef = useRef(0);
-  const conversationIdRef = useRef<string | null>(null);
 
   // Latest live-message callback, kept in a ref so changing its identity doesn't
   // tear down and re-create the channel subscription.
@@ -130,14 +130,12 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
     const generation = (generationRef.current += 1);
     const isStale = () => generation !== generationRef.current;
 
-    setConversationId(null);
     setMessages([]);
     setError(null);
-    conversationIdRef.current = null;
 
-    // Idle until enabled (e.g. before the launcher's first open): don't create a
-    // conversation, subscribe, or fetch.
-    if (!enabled) {
+    // Idle until enabled (e.g. before the launcher's first open) and until the
+    // caller has a conversation to join: don't subscribe or fetch.
+    if (!enabled || !conversationId) {
       setIsLoading(false);
       return () => { generationRef.current += 1; };
     }
@@ -151,34 +149,8 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
 
     (async () => {
       try {
-        // `content` + `clientMessageId` travel together: `StartInAppChatConversationArgs`
-        // is a union of "empty start" and "start with a first message", because the
-        // backend rejects metadata with no message to attach it to. The branch must
-        // therefore stay OUTSIDE the object literal — a conditional spread collapses to
-        // `content?: … | undefined` and loses the correlation, matching neither arm.
-        //
-        // Stable client message id → the automated message is inserted once, even if the
-        // conversation is reopened (the server dedups repeat sends). `-` separator
-        // (client ids allow only `[A-Za-z0-9._-]`); the key is truncated so the suffixed
-        // id stays within the 1-128 char limit.
-        const startArgs = initialMessage
-          ? {
-            identityId,
-            clientIdempotencyKey: idempotencyKey,
-            content: { text: initialMessage },
-            clientMessageId: `${idempotencyKey.slice(0, 122)}-intro`,
-          }
-          : { identityId, clientIdempotencyKey: idempotencyKey };
-
-        const conversation = await dashX.startInAppChatConversation(startArgs);
-        if (isStale()) return;
-
-        const convId = conversation.id;
-        setConversationId(convId);
-        conversationIdRef.current = convId;
-
         const refetchHistory = async () => {
-          const history = await dashX.fetchInAppChatMessages({ conversationId: convId });
+          const history = await dashX.fetchInAppChatMessages({ conversationId });
           if (isStale()) return;
           appendMessages(history.map(toUiMessage));
         };
@@ -188,7 +160,7 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
         // on a first ack that arrives after a `ready` timeout — both mean we are
         // (now) subscribed, so clear any connection error and (re)load history.
         const subscription = dashX.subscribeToChannel(
-          `${CHAT_CHANNEL_PREFIX}${convId}`,
+          `${CHAT_CHANNEL_PREFIX}${conversationId}`,
           (event) => {
             if (isStale()) return;
             appendMessages([toUiMessage(event)]);
@@ -220,7 +192,7 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
         if (isStale()) return;
         await refetchHistory();
       } catch {
-        if (!isStale()) setError('Failed to start chat');
+        if (!isStale()) setError('Failed to load chat');
       } finally {
         if (!isStale()) setIsLoading(false);
       }
@@ -232,7 +204,7 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
       generationRef.current += 1;
       unsubscribe?.();
     };
-  }, [dashX, identityId, idempotencyKey, initialMessage, enabled, initializeWebSocket, appendMessages]);
+  }, [dashX, identityId, conversationId, enabled, initializeWebSocket, appendMessages]);
 
   // Synchronous on purpose: it returns `true` the moment the message is optimistically
   // queued and runs the network send in the background. The caller clears the composer
@@ -241,10 +213,10 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
   // backend won't dedupe it) and create a duplicate.
   const sendMessage = useCallback(
     (text: string): boolean => {
-      const convId = conversationIdRef.current;
-      // Not ready (conversation still starting, or start failed) — report back so
-      // the caller can keep the typed text instead of clearing it on a no-op send.
-      if (!text.trim() || !convId) return false;
+      // Not ready (no conversation supplied yet, or the hook is disabled) — report
+      // back so the caller can keep the typed text instead of clearing it on a
+      // no-op send.
+      if (!text.trim() || !conversationId || !enabled) return false;
 
       // Pin the generation so a response that resolves after the identity/key
       // changed (or unmount) can't contaminate the new conversation's state.
@@ -263,7 +235,7 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
       void (async () => {
         try {
           const serverMessage = await dashX.sendInAppChatMessage({
-            conversationId: convId,
+            conversationId,
             identityId,
             content: { text },
             clientMessageId,
@@ -279,10 +251,10 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
       // Queued (optimistically appended) — the background send reconciles/errors later.
       return true;
     },
-    [dashX, identityId, appendMessages],
+    [dashX, identityId, conversationId, enabled, appendMessages],
   );
 
-  return { conversationId, messages, isLoading, isConnected, error, sendMessage };
+  return { messages, isLoading, isConnected, error, sendMessage };
 };
 
 export type { UseInAppChatHookProps, UseInAppChatHookResponse, InAppChatMessage };
