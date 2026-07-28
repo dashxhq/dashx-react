@@ -151,17 +151,26 @@ const useInAppChat = ({ identityId, idempotencyKey, initialMessage, enabled = tr
 
     (async () => {
       try {
-        const conversation = await dashX.startInAppChatConversation({
-          identityId,
-          clientIdempotencyKey: idempotencyKey,
-          // Stable client message id → the automated message is inserted once,
-          // even if the conversation is reopened (the server dedups repeat sends).
-          // `-` separator (client ids allow only `[A-Za-z0-9._-]`); the key is
-          // truncated so the suffixed id stays within the 1-128 char limit.
-          ...(initialMessage
-            ? { content: { text: initialMessage }, clientMessageId: `${idempotencyKey.slice(0, 122)}-intro` }
-            : {}),
-        });
+        // `content` + `clientMessageId` travel together: `StartInAppChatConversationArgs`
+        // is a union of "empty start" and "start with a first message", because the
+        // backend rejects metadata with no message to attach it to. The branch must
+        // therefore stay OUTSIDE the object literal — a conditional spread collapses to
+        // `content?: … | undefined` and loses the correlation, matching neither arm.
+        //
+        // Stable client message id → the automated message is inserted once, even if the
+        // conversation is reopened (the server dedups repeat sends). `-` separator
+        // (client ids allow only `[A-Za-z0-9._-]`); the key is truncated so the suffixed
+        // id stays within the 1-128 char limit.
+        const startArgs = initialMessage
+          ? {
+            identityId,
+            clientIdempotencyKey: idempotencyKey,
+            content: { text: initialMessage },
+            clientMessageId: `${idempotencyKey.slice(0, 122)}-intro`,
+          }
+          : { identityId, clientIdempotencyKey: idempotencyKey };
+
+        const conversation = await dashX.startInAppChatConversation(startArgs);
         if (isStale()) return;
 
         const convId = conversation.id;
