@@ -2,6 +2,21 @@
 
 All notable changes to `@dashx/react` are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
 
+## [0.4.1] — 2026-08-05
+
+### Changed
+
+- **`useInAppChatNotifications`'s `onActivate` now receives the message that raised the notification.**
+
+  ```diff
+  - onActivate?: () => void
+  + onActivate?: (message: InAppChatMessageData) => void
+  ```
+
+  Notifications are tagged per conversation, so a surface watching more than one thread could raise several at once — but the old zero-argument callback gave the handler no way to tell them apart, and it closed over whichever message arrived last. Clicking an older notification opened the wrong conversation.
+
+  **Backward compatible.** A `() => void` handler is still assignable and still behaves as before; take the parameter only if you need to route by `message.conversationId`. `InAppChatMessageData` is imported from `@dashx/browser`, same as the existing `renderBody` option on this hook.
+
 ## [0.4.0] — 2026-07-29
 
 ### Changed

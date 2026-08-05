@@ -27,8 +27,10 @@ type UseInAppChatNotificationsProps = {
   enabled?: boolean;
   options?: InAppChatNotificationOptions;
   // Invoked when the visitor clicks a notification — focus is handled by the
-  // SDK; this opens the chat panel.
-  onActivate?: () => void;
+  // SDK; this opens the chat panel. Receives the message that raised THAT
+  // notification, so a surface watching several conversations can open the right
+  // one: without it, every notification resolves to whichever arrived last.
+  onActivate?: (message: InAppChatMessageData) => void;
 };
 
 const textFromContent = (content: any): string => {
@@ -86,7 +88,7 @@ const useInAppChatNotifications = ({
         body,
         icon: optionsRef.current?.icon,
         tag: message.conversationId ? `in_app_chat:${message.conversationId}` : undefined,
-        onClick: () => onActivateRef.current?.(),
+        onClick: () => onActivateRef.current?.(message),
       });
     },
     [dashX],
