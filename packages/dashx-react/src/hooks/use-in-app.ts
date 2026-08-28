@@ -17,7 +17,17 @@ type UseInAppHookResponse = {
   markAllMessagesAsRead: () => Promise<any>;
 };
 
-const useInApp = (): UseInAppHookResponse => {
+type UseInAppOptions = {
+  /**
+   * Fires a react-hot-toast for every live IN_APP_MESSAGE. Only useful with a mounted
+   * `<Toast>`, which is also what runs react-hot-toast's expiration timers - without one
+   * the toasts never render and its store just retains the last few entries. Set false
+   * when the host renders its own notification stack.
+   */
+  showToast?: boolean;
+};
+
+const useInApp = ({ showToast = true }: UseInAppOptions = {}): UseInAppHookResponse => {
   let dashX = useDashXProvider();
   const { subscribe } = useWebSocket();
   const [messages, setMessages] = useState<InAppMessages>([]);
@@ -68,6 +78,8 @@ const useInApp = (): UseInAppHookResponse => {
   }, [dashX]);
 
   useEffect(() => {
+    if (!showToast) return;
+
     // Subscribe to WebSocket messages for in-app messages
     const unsubscribe = subscribe((message: WebsocketMessageType) => {
       // Handle only IN_APP_MESSAGE for toast display
@@ -78,7 +90,7 @@ const useInApp = (): UseInAppHookResponse => {
     });
 
     return unsubscribe;
-  }, [subscribe]);
+  }, [subscribe, showToast]);
 
   return {
     messages,
@@ -93,3 +105,4 @@ const useInApp = (): UseInAppHookResponse => {
 };
 
 export default useInApp;
+export type { UseInAppOptions };
