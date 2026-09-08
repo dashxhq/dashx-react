@@ -65,8 +65,10 @@ const useInApp = ({ showToast = true }: UseInAppOptions = {}): UseInAppHookRespo
   };
 
   useEffect(() => {
-    // Set up in-app message watchers (automatically refetch on WebSocket reconnection)
-    dashX.watchFetchInAppMessages((nextMessages) => {
+    // Set up in-app message watchers (automatically refetch on WebSocket reconnection).
+    // Both return an unsubscribe; without calling it the watchQuery subscriptions outlive
+    // the component and keep pushing state into it after unmount.
+    const unwatchMessages = dashX.watchFetchInAppMessages((nextMessages) => {
       setMessages(nextMessages);
       // While the list is a single page (initial load, empty inbox, or a reconnect
       // refetch of page 1), a full page implies more; past that, loadMore owns hasMore.
@@ -74,7 +76,12 @@ const useInApp = ({ showToast = true }: UseInAppOptions = {}): UseInAppHookRespo
         setHasMore(nextMessages.length === IN_APP_MESSAGES_PAGE_SIZE);
       }
     });
-    dashX.watchFetchInAppMessagesAggregate(setUnreadMessagesCount);
+    const unwatchAggregate = dashX.watchFetchInAppMessagesAggregate(setUnreadMessagesCount);
+
+    return () => {
+      unwatchMessages();
+      unwatchAggregate();
+    };
   }, [dashX]);
 
   useEffect(() => {
