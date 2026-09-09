@@ -35,20 +35,46 @@ const useInApp = ({ showToast = true }: UseInAppOptions = {}): UseInAppHookRespo
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // `trackMessage` and `trackAllMessages` throw SYNCHRONOUSLY when no account is
+  // identified, before any promise exists, so a chained `.catch` never sees it and the
+  // error escapes into the caller's click handler. Route both shapes through one guard.
+  const reportFailure = (message: string) => (error: unknown) => {
+    console.error(message, error);
+  };
+
+  const trackQuietly = (track: () => unknown, message: string): Promise<void> => {
+    const onFailure = reportFailure(message);
+
+    try {
+      return Promise.resolve(track()).then(
+        () => undefined,
+        (error: unknown) => {
+          onFailure(error);
+        },
+      );
+    } catch (error) {
+      onFailure(error);
+      return Promise.resolve();
+    }
+  };
+
   const markMessageAsRead = (id: string) =>
-    dashX.trackMessage({ id, status: 'READ' }).catch((error: unknown) => {
-      console.error('DashX: failed to mark in-app message as read', error);
-    });
+    trackQuietly(
+      () => dashX.trackMessage({ id, status: 'READ' }),
+      'DashX: failed to mark in-app message as read',
+    );
 
   const markMessageAsUnread = (id: string) =>
-    dashX.trackMessage({ id, status: 'UNREAD' }).catch((error: unknown) => {
-      console.error('DashX: failed to mark in-app message as unread', error);
-    });
+    trackQuietly(
+      () => dashX.trackMessage({ id, status: 'UNREAD' }),
+      'DashX: failed to mark in-app message as unread',
+    );
 
   const markAllMessagesAsRead = () =>
-    dashX.trackAllMessages().catch((error: unknown) => {
-      console.error('DashX: failed to mark all in-app messages as read', error);
-    });
+    trackQuietly(
+      () => dashX.trackAllMessages(),
+      'DashX: failed to mark all in-app messages as read',
+    );
 
   const loadMore = async () => {
     if (isLoadingMore || !hasMore) return;
