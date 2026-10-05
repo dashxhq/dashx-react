@@ -44,6 +44,7 @@ function DashXProvider({
   webSocketQueryParams = {},
   identityUid,
   identityToken,
+  autocapture,
 }: React.PropsWithChildren<DashXProviderProps>) {
   const dashX = React.useMemo(
     () => {
@@ -177,6 +178,19 @@ function DashXProvider({
       initializeWebSocket(stableWebSocketQueryParams);
     }
   }, [ dashX, identityUid, identityToken, initializeWebSocket, stableWebSocketQueryParams ]);
+
+  // Started here rather than passed to `configure`: StrictMode runs the client `useMemo` twice and
+  // keeps one, which would leave the discarded client's listeners capturing every page view.
+  const autocaptureKey = JSON.stringify(autocapture ?? false);
+  useEffect(() => {
+    if (!dashX || !autocapture) {
+      return;
+    }
+
+    dashX.startAutocapture(autocapture === true ? {} : autocapture);
+    return () => dashX.stopAutocapture();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ dashX, autocaptureKey ]);
 
   useEffect(() => {
     if (initializeWebSocketOnLoad) {
