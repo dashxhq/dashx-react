@@ -1,6 +1,6 @@
 import DashX from '@dashx/browser';
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
-import type { Client, ClientParams, WebSocketManager, WebsocketMessageType } from '@dashx/browser';
+import type { BeforeSend, CapturedEvent, Client, ClientParams, WebSocketManager, WebsocketMessageType } from '@dashx/browser';
 
 const DashXContext = createContext<Client | null>(null);
 
@@ -44,7 +44,26 @@ function DashXProvider({
   webSocketQueryParams = {},
   identityUid,
   identityToken,
+  autocapture,
+  maskPersonalDataProperties,
+  customPersonalDataProperties,
+  beforeSend,
 }: React.PropsWithChildren<DashXProviderProps>) {
+  // Read through a ref so an inline `beforeSend` takes effect without recreating the client on
+  // every render.
+  const beforeSendRef = useRef(beforeSend);
+  beforeSendRef.current = beforeSend;
+  const stableBeforeSend = useCallback<BeforeSend>((event) => {
+    let result: CapturedEvent | null = event;
+    for (const fn of [ beforeSendRef.current ?? [] ].flat()) {
+      if (!result) break;
+      result = fn(result);
+    }
+    return result;
+  }, []);
+
+  const customPersonalDataPropertiesKey = JSON.stringify(customPersonalDataProperties ?? []);
+
   const dashX = React.useMemo(
     () => {
       const client = DashX.configure({
@@ -54,6 +73,9 @@ function DashXProvider({
         targetEnvironment: targetEnvironment,
         targetProduct,
         targetVersion,
+        maskPersonalDataProperties,
+        customPersonalDataProperties,
+        beforeSend: stableBeforeSend,
       });
       // Apply identity synchronously at creation so a child that starts work in
       // its own mount effect (child effects run before this provider's effects)
@@ -66,7 +88,16 @@ function DashXProvider({
       return client;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [publicKey, baseUri, realtimeBaseUri, targetEnvironment, targetProduct, targetVersion],
+    [
+      publicKey,
+      baseUri,
+      realtimeBaseUri,
+      targetEnvironment,
+      targetProduct,
+      targetVersion,
+      maskPersonalDataProperties,
+      customPersonalDataPropertiesKey,
+    ],
   );
 
   // `webSocketQueryParams` defaults to a fresh `{}` each render and is a dep of
@@ -177,6 +208,19 @@ function DashXProvider({
       initializeWebSocket(stableWebSocketQueryParams);
     }
   }, [ dashX, identityUid, identityToken, initializeWebSocket, stableWebSocketQueryParams ]);
+
+  // Started here rather than passed to `configure`: StrictMode runs the client `useMemo` twice and
+  // keeps one, which would leave the discarded client's listeners capturing every page view.
+  const autocaptureKey = JSON.stringify(autocapture ?? false);
+  useEffect(() => {
+    if (!dashX || !autocapture) {
+      return;
+    }
+
+    dashX.startAutocapture(autocapture === true ? {} : autocapture);
+    return () => dashX.stopAutocapture();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ dashX, autocaptureKey ]);
 
   useEffect(() => {
     if (initializeWebSocketOnLoad) {
