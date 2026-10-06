@@ -8,7 +8,9 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 - **`DashXProvider` accepts `autocapture`.** `<DashXProvider autocapture ...>` (or `autocapture={{ pageleave: false }}`) turns on `@dashx/browser`'s page view / page leave capture for the provider's client. It is started and stopped in an effect, so StrictMode's double render does not leave a second set of listeners behind. Route changes are picked up from the History API, so no router integration is needed.
 
-  Requires the `@dashx/browser` release that adds `startAutocapture`; bump the dependency when it is published.
+- **`DashXProvider` accepts the privacy options** `maskPersonalDataProperties`, `customPersonalDataProperties` and `beforeSend`, and passes them to the client. Changing either masking option recreates the client. `beforeSend` is read on every event, so an inline function or a changed array takes effect without recreating it.
+
+  Requires `@dashx/browser` 0.13.0 (`startAutocapture` and the privacy options); bump the dependency when it is published.
 
 ## [0.4.1] — 2026-08-05
 
