@@ -10,7 +10,7 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 - **`DashXProvider` accepts the privacy options** `maskPersonalDataProperties`, `customPersonalDataProperties` and `beforeSend`, and passes them to the client. Changing either masking option recreates the client. `beforeSend` is read on every event, so an inline function or a changed array takes effect without recreating it.
 
-  Requires `@dashx/browser` 0.13.0 (`startAutocapture` and the privacy options); bump the dependency when it is published.
+  Requires `@dashx/browser` 0.13.1 or later (`startAutocapture` and the privacy options). 0.13.0 was published from a stale build without them.
 
 - **README** documents `DashXProvider`, autocapture and the privacy props.
 
