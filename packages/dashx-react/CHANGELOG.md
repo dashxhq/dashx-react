@@ -12,6 +12,8 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
   Requires `@dashx/browser` 0.13.0 (`startAutocapture` and the privacy options); bump the dependency when it is published.
 
+- **README** documents `DashXProvider`, autocapture and the privacy props.
+
 ## [0.4.1] — 2026-08-05
 
 ### Changed
