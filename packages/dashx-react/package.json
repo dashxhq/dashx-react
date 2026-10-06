@@ -1,6 +1,6 @@
 {
   "name": "@dashx/react",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "license": "UNLICENSED",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
