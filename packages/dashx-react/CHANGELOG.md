@@ -2,6 +2,12 @@
 
 All notable changes to `@dashx/react` are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Requires `@dashx/browser` 0.14.** The range moves from `^0.13.1` to `^0.14.0`, so an app on `@dashx/browser` 0.14 (for `loadInAppChatAgent`) and `DashXProvider` share one client instead of the provider building its own from an older copy. No API changes here.
+
 ## [0.5.0] - 2026-10-06
 
 ### Added
