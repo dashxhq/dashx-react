@@ -4,7 +4,7 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 ## Unreleased
 
-### Added
+### [0.5.2] - 2026-10-07
 
 - **Click and form submit autocapture.** `<DashXProvider autocapture={{ clicks: true }}>` records clicks on links, buttons and other interactive elements, and form submits, as `$autocapture`. `autocapture` alone still captures only page views and page leaves.
 
