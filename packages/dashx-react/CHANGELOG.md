@@ -2,6 +2,16 @@
 
 All notable changes to `@dashx/react` are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- **Click and form submit autocapture.** `<DashXProvider autocapture={{ clicks: true }}>` records clicks on links, buttons and other interactive elements, and form submits, as `$autocapture`. `autocapture` alone still captures only page views and page leaves.
+
+### Changed
+
+- **Requires `@dashx/browser` 0.14.1** (for `clicks`). The range moves from `^0.14.0` to `^0.14.1`.
+
 ## [0.5.1] - 2026-10-07
 
 ### Changed

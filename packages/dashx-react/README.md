@@ -42,6 +42,14 @@ Pass `autocapture` to record a `$pageview` on load and on every client-side navi
 
 Pass `autocapture={{ pageleave: false }}` (or `pageviews: false`) to turn either event off. Autocapture starts when the provider mounts and stops when it unmounts, so React StrictMode's double mount does not record a page twice.
 
+Clicks and form submits are opt-in. Pass `clicks: true` to record them as `$autocapture`:
+
+```tsx
+<DashXProvider publicKey="..." targetEnvironment="production" autocapture={{ clicks: true }}>
+```
+
+Each click records the element's tag, visible text, link target, `id`, classes, `data-*` attributes and a short selector, never what was typed. Add the `dx-no-capture` class (or a `data-dx-no-capture` attribute) to an element to skip it and everything inside it.
+
 Events carry the page, a session id and the landing page's UTM campaign. See the `@dashx/browser` README for what each event contains.
 
 ### Privacy
