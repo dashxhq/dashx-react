@@ -4,6 +4,15 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 ## Unreleased
 
+### Added
+
+- **`identityTokenProvider` on `DashXProvider`.** It fetches an identity token from your backend, such as a member token that keeps a workspace member online. The client calls it before the socket connects, before each token expires and once after the server refuses one, and reconnects the socket each time. It is read through a ref, so an inline function does not recreate the client.
+
+### Changed
+
+- **The provider's socket is the client's own (`connectWebSocket`).** A new `identityToken` prop or a renewed token reconnects it inside `@dashx/browser`, and a replaced client now closes its socket instead of leaving it open. `wsManagerRef` follows the current manager.
+- **Requires `@dashx/browser` 0.15** (for `identityTokenProvider` and `connectWebSocket` options). The range moves from `^0.14.4` to `^0.15.0`.
+
 ### [0.5.2] - 2026-10-07
 
 - **Click and form submit autocapture.** `<DashXProvider autocapture={{ clicks: true }}>` records clicks on links, buttons and other interactive elements, and form submits, as `$autocapture`. `autocapture` alone still captures only page views and page leaves.

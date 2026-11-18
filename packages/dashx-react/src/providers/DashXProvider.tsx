@@ -30,6 +30,13 @@ type DashXProviderProps = ClientParams & {
    * Pass `null` to clear it on logout; omit (`undefined`) to leave it unchanged.
    */
   identityToken?: string | null,
+  /**
+   * Fetches an identity token from your backend, e.g. a member token that keeps a workspace member
+   * online. The client calls it before the socket connects, before each token expires and once after
+   * the server refuses one, and reconnects the socket each time. Read through a ref, so an inline
+   * function does not recreate the client.
+   */
+  identityTokenProvider?: () => Promise<string>,
 }
 
 function DashXProvider({
@@ -48,6 +55,7 @@ function DashXProvider({
   maskPersonalDataProperties,
   customPersonalDataProperties,
   beforeSend,
+  identityTokenProvider,
 }: React.PropsWithChildren<DashXProviderProps>) {
   // Read through a ref so an inline `beforeSend` takes effect without recreating the client on
   // every render.
@@ -60,6 +68,14 @@ function DashXProvider({
       result = fn(result);
     }
     return result;
+  }, []);
+
+  const identityTokenProviderRef = useRef(identityTokenProvider);
+  identityTokenProviderRef.current = identityTokenProvider;
+  const hasIdentityTokenProvider = Boolean(identityTokenProvider);
+  const stableIdentityTokenProvider = useCallback(() => {
+    const provider = identityTokenProviderRef.current;
+    return provider ? provider() : Promise.reject(new Error('identityTokenProvider was removed'));
   }, []);
 
   const customPersonalDataPropertiesKey = JSON.stringify(customPersonalDataProperties ?? []);
@@ -76,6 +92,7 @@ function DashXProvider({
         maskPersonalDataProperties,
         customPersonalDataProperties,
         beforeSend: stableBeforeSend,
+        identityTokenProvider: hasIdentityTokenProvider ? stableIdentityTokenProvider : undefined,
       });
       // Apply identity synchronously at creation so a child that starts work in
       // its own mount effect (child effects run before this provider's effects)
@@ -97,6 +114,7 @@ function DashXProvider({
       targetVersion,
       maskPersonalDataProperties,
       customPersonalDataPropertiesKey,
+      hasIdentityTokenProvider,
     ],
   );
 
@@ -112,6 +130,7 @@ function DashXProvider({
 
   // WebSocket state
   const [isConnected, setIsConnected] = useState(false);
+  // The client replaces its manager on every reconnect for a new identity token, so read it fresh.
   const wsManagerRef = useRef<WebSocketManager | null>(null);
   const subscribersRef = useRef<Set<(message: WebsocketMessageType) => void>>(new Set());
 
@@ -130,34 +149,33 @@ function DashXProvider({
       return;
     }
 
-    // Reuse an existing manager — it owns its own throttled reconnect
-    // lifecycle. Tearing it down and creating a new one on every call (e.g.
-    // when a consumer re-invokes this as `isConnected` flips to false on each
-    // close) resets the per-instance reconnect throttle and reconnects
-    // immediately, defeating the backoff. Create one only if none exists.
-    if (wsManagerRef.current) {
+    // Reuse the client's socket - it owns its own throttled reconnect lifecycle, and reconnects
+    // itself for a new identity token. Creating one per call (e.g. when a consumer re-invokes this
+    // as `isConnected` flips to false on each close) would reset that throttle and defeat the backoff.
+    if (dashX.webSocketManager) {
       return;
     }
 
+    // The client adds `publicKey` and `targetEnvironment` itself. Provider-level params apply to
+    // every provider-owned socket, including when a hook opens it first with no args.
     const queryParams = {
-      publicKey: dashX.publicKey,
-      ...(dashX.targetEnvironment && { targetEnvironment: dashX.targetEnvironment }),
-      // Provider-level defaults apply to every provider-owned socket — including
-      // when the chat hook (or any consumer) opens the socket first by calling
-      // `initializeWebSocket()` with no args. Explicit call-site params override.
       ...stableWebSocketQueryParams,
       ...customQueryParams,
     };
 
-    const wsManager = dashX.createWebSocketConnection({
+    const syncManager = () => {
+      wsManagerRef.current = dashX.webSocketManager;
+    };
+
+    dashX.connectWebSocket({
       queryParams,
       onError: (errorEvent: Event) => console.error({ errorEvent }),
       onClose: (closeEvent: CloseEvent) => {
         console.log({ closeEvent });
+        syncManager();
         setIsConnected(false);
       },
       onMessage: (message: WebsocketMessageType) => {
-        // Notify all subscribers
         subscribersRef.current.forEach((callback) => {
           try {
             callback(message);
@@ -168,6 +186,7 @@ function DashXProvider({
       },
       onOpen: () => {
         console.log('WebSocket connected successfully');
+        syncManager();
         setIsConnected(true);
       },
       onReconnect: (attempt: number) => {
@@ -178,36 +197,28 @@ function DashXProvider({
         setIsConnected(false);
       },
     });
-
-    wsManagerRef.current = wsManager;
-    wsManager.connect();
+    syncManager();
   }, [dashX, stableWebSocketQueryParams]);
 
   // Forward `identityUid` + `identityToken` into the dashX client so the same
   // identity is used by GraphQL and the WS. Pass the props as-is: `setIdentity`
   // treats `undefined` as "leave unchanged", so setting only `identityToken`
-  // won't clobber an existing account uid (and vice versa).
-  const previousIdentityTokenRef = useRef(identityToken);
+  // won't clobber an existing account uid (and vice versa). A new token
+  // reconnects the client's socket with it.
   useEffect(() => {
     if (!dashX || (identityUid === undefined && identityToken === undefined)) {
       return;
     }
 
     dashX.setIdentity(identityUid, identityToken);
+  }, [ dashX, identityUid, identityToken ]);
 
-    // This provider owns the socket (created via `createWebSocketConnection`,
-    // not the client's internal manager that `setIdentity` reconnects), so on a
-    // token change we recreate it here to put the new identity_token in the WS
-    // URL. GraphQL picks up the new header on its own; tracked chat channels
-    // re-subscribe on the new socket's `onOpen`.
-    const tokenChanged = identityToken !== previousIdentityTokenRef.current;
-    previousIdentityTokenRef.current = identityToken;
-    if (tokenChanged && wsManagerRef.current) {
-      wsManagerRef.current.disconnect();
-      wsManagerRef.current = null;
-      initializeWebSocket(stableWebSocketQueryParams);
-    }
-  }, [ dashX, identityUid, identityToken, initializeWebSocket, stableWebSocketQueryParams ]);
+  // A replaced client (new keys or environment) must not leave its socket running.
+  useEffect(() => () => {
+    dashX?.disconnectWebSocket();
+    wsManagerRef.current = null;
+    setIsConnected(false);
+  }, [ dashX ]);
 
   // Started here rather than passed to `configure`: StrictMode runs the client `useMemo` twice and
   // keeps one, which would leave the discarded client's listeners capturing every page view.
