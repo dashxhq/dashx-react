@@ -149,10 +149,11 @@ function DashXProvider({
       return;
     }
 
-    // Reuse the client's socket - it owns its own throttled reconnect lifecycle, and reconnects
-    // itself for a new identity token. Creating one per call (e.g. when a consumer re-invokes this
-    // as `isConnected` flips to false on each close) would reset that throttle and defeat the backoff.
-    if (dashX.webSocketManager) {
+    // Reuse the client's socket while it is connected or retrying - it owns its own throttled
+    // reconnect lifecycle, and reconnects itself for a new identity token. Starting over then (e.g.
+    // when a consumer re-invokes this as `isConnected` flips to false on each close) would reset that
+    // throttle. After a terminal close the client starts over with a fresh token.
+    if (dashX.isWebSocketActive) {
       return;
     }
 

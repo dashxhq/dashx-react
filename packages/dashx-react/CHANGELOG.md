@@ -10,7 +10,7 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 ### Changed
 
-- **The provider's socket is the client's own (`connectWebSocket`).** A new `identityToken` prop or a renewed token reconnects it inside `@dashx/browser`, and a replaced client now closes its socket instead of leaving it open. `wsManagerRef` follows the current manager.
+- **The provider's socket is the client's own (`connectWebSocket`).** A new `identityToken` prop or a renewed token reconnects it inside `@dashx/browser`, and a replaced client now closes its socket instead of leaving it open. `wsManagerRef` follows the current manager. `initializeWebSocket()` after a terminal close (a refused token, say) starts the socket over, fetching a fresh token when there is a provider; while the socket is connected or retrying it still does nothing.
 - **Requires `@dashx/browser` 0.15** (for `identityTokenProvider` and `connectWebSocket` options). The range moves from `^0.14.4` to `^0.15.0`.
 
 ### [0.5.2] - 2026-10-07
