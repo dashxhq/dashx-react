@@ -4,6 +4,8 @@ All notable changes to `@dashx/react` are documented in this file. Format loosel
 
 ## Unreleased
 
+## [0.6.1] - 2026-11-24
+
 ### Changed
 
 - **Requires `@dashx/browser` 0.15.2.** The range moves from `^0.15.0` to `^0.15.2`, which brings two fixes to the provider's socket: a refreshed identity token for the same user no longer reconnects it (0.15.0 reconnected in a loop for an app that refetches its token whenever the socket opens), and `isConnected` turns false when the socket is closed with `disconnectWebSocket()`.
